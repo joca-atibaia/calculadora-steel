@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import math
 
 # 1. Configuração da Página e Cores do Tema Dinâmico (Seu Padrão)
 st.set_page_config(
@@ -33,28 +34,44 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Título Principal
+# Título Principal (Idêntico ao seu print)
 st.markdown("<h1 style='color: #ffffff; font-family: sans-serif;'>🏗️ Calculadora de Engenharia <span style='color: #ff9f1c;'>Steel Framing</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='color: #8a92a6;'>Ajuste as quantidades e preços abaixo para o cálculo em tempo real do orçamento.</p>", unsafe_allow_html=True)
+st.markdown("<p style='color: #8a92a6;'>Insira as dimensões do projeto abaixo para o cálculo automático dos insumos e m².</p>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Lista de Itens seguindo estritamente a planilha fornecida (Sem Telhas)
+# 📐 SEÇÃO DE DIMENSÕES (Exatamente como o layout da sua imagem)
+st.markdown("<h3 style='color: #ffffff;'>📐 Dimensões do Projeto (SketchUp)</h3>", unsafe_allow_html=True)
+
+# Mantendo os inputs simples e diretos empilhados conforme o seu modelo mobile/tablet
+comp_linear = st.number_input("Comprimento Linear (Metros)", min_value=0.0, value=25.63, step=0.1)
+altura_parede = st.number_input("Altura da Parede / Pé-Direito (Metros)", min_value=0.0, value=2.93, step=0.1)
+
+# CÁLCULO DINÂMICO DA ÁREA
+area_calculada = comp_linear * altura_parede
+
+# Exibição do resultado da área
+st.metric(label="Área Total Calculada (m²)", value=f"{area_calculada:.2f} m²")
+
+st.markdown("---")
+
+# 📋 MOTOR DE PROPORÇÃO MATEMÁTICA (Vinculado diretamente aos inputs acima)
+# Cada insumo usa o fator proporcional derivado da sua planilha base de 90m² e 30m lineares
 itens_projeto = [
-    {"Item": "Perfil 90x0,80", "Qtd_Base": 113.0, "Preco_Base": 50.0},
-    {"Item": "Guia Perimetral", "Qtd_Base": 20.0, "Preco_Base": 50.0},
-    {"Item": "Plywood 8mm", "Qtd_Base": 60.0, "Preco_Base": 80.0},
-    {"Item": "Placa ST 12.5mm", "Qtd_Base": 36.0, "Preco_Base": 40.0},
-    {"Item": "Placa Cimentícia 12mm", "Qtd_Base": 36.0, "Preco_Base": 140.0},
-    {"Item": "Lã PET", "Qtd_Base": 6.0, "Preco_Base": 200.0},
-    {"Item": "Parafusos", "Qtd_Base": 8000.0, "Preco_Base": 0.07},
-    {"Item": "Cola PU 40", "Qtd_Base": 36.0, "Preco_Base": 40.0},
-    {"Item": "Manta Hidrófuga", "Qtd_Base": 3.0, "Preco_Base": 500.0}
+    {"Item": "Perfil 90x0,80", "Qtd_Sugerida": math.ceil(comp_linear * (113.0 / 30.0)), "Preco_Base": 50.0},
+    {"Item": "Guia Perimetral", "Qtd_Sugerida": math.ceil(comp_linear * (20.0 / 30.0)), "Preco_Base": 50.0},
+    {"Item": "Plywood 8mm", "Qtd_Sugerida": math.ceil(area_calculada / 1.5), "Preco_Base": 80.0},
+    {"Item": "Placa ST 12.5mm", "Qtd_Sugerida": math.ceil(area_calculada / 2.5), "Preco_Base": 40.0},
+    {"Item": "Placa Cimentícia 12mm", "Qtd_Sugerida": math.ceil(area_calculada / 2.5), "Preco_Base": 140.0},
+    {"Item": "Lã PET", "Qtd_Sugerida": math.ceil(area_calculada / 15.0), "Preco_Base": 200.0},
+    {"Item": "Parafusos", "Qtd_Sugerida": math.ceil(area_calculada * (8000.0 / 90.0)), "Preco_Base": 0.07},
+    {"Item": "Cola PU 40", "Qtd_Sugerida": math.ceil(area_calculada * (36.0 / 90.0)), "Preco_Base": 40.0},
+    {"Item": "Manta Hidrófuga", "Qtd_Sugerida": math.ceil(area_calculada / 30.0), "Preco_Base": 500.0}
 ]
 
-st.markdown("<h3 style='color: #ffffff;'>📋 Insumos do Projeto</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='color: #ffffff;'>📋 Insumos Calculados Automaticamente</h3>", unsafe_allow_html=True)
 dados_atualizados = []
 
-# Exibição em duas colunas como no seu modelo original
+# Exibição em duas colunas para os cartões inferiores
 col1, col2 = st.columns(2)
 
 for i, item in enumerate(itens_projeto):
@@ -64,11 +81,12 @@ for i, item in enumerate(itens_projeto):
         
         sub_c1, sub_c2 = st.columns(2)
         with sub_c1:
+            # Agora a quantidade reage dinamicamente aos inputs do topo através da variável 'Qtd_Sugerida'
             nova_qtd = st.number_input(
                 f"{item['Item']} (Qtd)", 
                 min_value=0.0, 
-                value=float(item['Qtd_Base']), 
-                step=1.0 if item['Qtd_Base'] >= 1 else 0.1,
+                value=float(item['Qtd_Sugerida']), 
+                step=1.0 if item['Qtd_Sugerida'] >= 1 else 0.1,
                 key=f"qtd_{i}"
             )
         with sub_c2:
@@ -89,11 +107,11 @@ for i, item in enumerate(itens_projeto):
             "Total (R$)": total_item
         })
 
-# Processamento do DataFrame e cálculo do Subtotal de Materiais
+# Processamento do DataFrame e Totais Finais
 df = pd.DataFrame(dados_atualizados)
 subtotal_materiais = df["Total (R$)"].sum()
 
-# Fórmula exata da planilha: Massas, Telas e Perdas correspondem a 5% do subtotal
+# Taxa de 5% de Massas e Telas conforme a planilha original
 taxa_massas_telas = subtotal_materiais * 0.05
 
 # Configuração da Barra Lateral (Painel Financeiro)
@@ -102,17 +120,17 @@ st.sidebar.markdown("---")
 
 st.sidebar.markdown("<b style='color: #ffffff;'>🛠️ Custos Adicionais:</b>", unsafe_allow_html=True)
 
-# Mão de obra parametrizada por diária conforme os dados reais da planilha
+# Mão de obra parametrizada (Padrão: 30 dias a R$ 755,00)
 dias_trabalho = st.sidebar.number_input("Dias de Execução", min_value=0, value=30, step=1)
 valor_diaria = st.sidebar.number_input("Valor da Diária (R$)", min_value=0.0, value=755.0, step=5.0)
 mao_de_obra = dias_trabalho * valor_diaria
 
 st.sidebar.markdown("---")
 
-# Fórmula do Total Geral da Obra unindo todas as variáveis calculadas
+# Cálculo do Custo Total
 total_geral = subtotal_materiais + taxa_massas_telas + mao_de_obra
 
-# Exibição dos Cartões de Custo Avançados na Barra Lateral
+# Painel de Resultados Lateral
 st.sidebar.markdown(f"""
     <div class='card-total'>
         <h4>Subtotal Materiais</h4>
@@ -134,7 +152,7 @@ st.sidebar.markdown(f"""
 
 st.sidebar.markdown("---")
 
-# Opção de exportação para Excel/CSV
+# Exportar Dados
 csv = df.to_csv(index=False).encode('utf-8')
 st.sidebar.download_button(
     label="📥 Exportar Orçamento",
@@ -143,10 +161,3 @@ st.sidebar.download_button(
     mime='text/csv',
     use_container_width=True
 )
-
-# Tabela Analítica Completa Oculta no Rodapé
-with st.expander("🔍 Visualizar Tabela Analítica Completa"):
-    st.dataframe(
-        df.style.format({"Preço Unitário (R$)": "R$ {:.2f}", "Total (R$)": "R$ {:.2f}"}), 
-        use_container_width=True
-    )
