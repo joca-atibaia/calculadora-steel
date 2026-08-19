@@ -2,14 +2,14 @@ import streamlit as st
 import pandas as pd
 import math
 
-# 1. Configuração da Página e Cores do Tema Dinâmico (Seu Padrão)
+# 1. Configuração da Página e Cores do Tema Dinâmico
 st.set_page_config(
     page_title="Calculadora Inteligente - Steel Framing", 
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Injeção de CSS para estilização (Mantendo o tema Dark e os cartões)
+# Injeção de CSS para estilização (Mantendo seu excelente padrão visual)
 st.markdown("""
     <style>
     .main { background-color: #0f1115; }
@@ -34,44 +34,43 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Título Principal (Idêntico ao seu print)
+# Título Principal
 st.markdown("<h1 style='color: #ffffff; font-family: sans-serif;'>🏗️ Calculadora de Engenharia <span style='color: #ff9f1c;'>Steel Framing</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='color: #8a92a6;'>Insira as dimensões do projeto abaixo para o cálculo automático dos insumos e m².</p>", unsafe_allow_html=True)
+st.markdown("<p style='color: #8a92a6;'>Ajuste os valores abaixo para calcular o orçamento em tempo real conforme sua planilha.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
-# 📐 SEÇÃO DE DIMENSÕES (Exatamente como o layout da sua imagem)
+# 📐 SEÇÃO DE DIMENSÕES (Mantida idêntica ao seu padrão visual para referência)
 st.markdown("<h3 style='color: #ffffff;'>📐 Dimensões do Projeto (SketchUp)</h3>", unsafe_allow_html=True)
+col_geo1, col_geo2, col_geo3 = st.columns(3)
 
-# Mantendo os inputs simples e diretos empilhados conforme o seu modelo mobile/tablet
-comp_linear = st.number_input("Comprimento Linear (Metros)", min_value=0.0, value=25.63, step=0.1)
-altura_parede = st.number_input("Altura da Parede / Pé-Direito (Metros)", min_value=0.0, value=2.93, step=0.1)
+with col_geo1:
+    comp_linear = st.number_input("Comprimento Linear (Metros)", min_value=0.0, value=25.63, step=0.01)
 
-# CÁLCULO DINÂMICO DA ÁREA
+with col_geo2:
+    altura_parede = st.number_input("Altura da Parede / Pé-Direito (Metros)", min_value=0.0, value=2.93, step=0.01)
+
 area_calculada = comp_linear * altura_parede
 
-# Exibição do resultado da área
-st.metric(label="Área Total Calculada (m²)", value=f"{area_calculada:.2f} m²")
+with col_geo3:
+    st.metric(label="Área Total Calculada (m²)", value=f"{area_calculada:.2f} m²")
 
 st.markdown("---")
 
-# 📋 MOTOR DE PROPORÇÃO MATEMÁTICA (Vinculado diretamente aos inputs acima)
-# Cada insumo usa o fator proporcional derivado da sua planilha base de 90m² e 30m lineares
+# 📋 LISTA DE INSUMOS COM AS QUANTIDADES REAIS EXATAS DA SUA PLANILHA
+# Puxando os valores consolidados que estão calculados nas células do seu Excel
 itens_projeto = [
-    {"Item": "Perfil 90x0,80", "Qtd_Sugerida": math.ceil(comp_linear * (113.0 / 30.0)), "Preco_Base": 50.0},
-    {"Item": "Guia Perimetral", "Qtd_Sugerida": math.ceil(comp_linear * (20.0 / 30.0)), "Preco_Base": 50.0},
-    {"Item": "Plywood 8mm", "Qtd_Sugerida": math.ceil(area_calculada / 1.5), "Preco_Base": 80.0},
-    {"Item": "Placa ST 12.5mm", "Qtd_Sugerida": math.ceil(area_calculada / 2.5), "Preco_Base": 40.0},
-    {"Item": "Placa Cimentícia 12mm", "Qtd_Sugerida": math.ceil(area_calculada / 2.5), "Preco_Base": 140.0},
-    {"Item": "Lã PET", "Qtd_Sugerida": math.ceil(area_calculada / 15.0), "Preco_Base": 200.0},
-    {"Item": "Parafusos", "Qtd_Sugerida": math.ceil(area_calculada * (8000.0 / 90.0)), "Preco_Base": 0.07},
-    {"Item": "Cola PU 40", "Qtd_Sugerida": math.ceil(area_calculada * (36.0 / 90.0)), "Preco_Base": 40.0},
-    {"Item": "Manta Hidrófuga", "Qtd_Sugerida": math.ceil(area_calculada / 30.0), "Preco_Base": 500.0}
+    {"Item": "Plywood 8mm", "Qtd_Sugerida": 40.0, "Preco_Base": 80.0},
+    {"Item": "Placa ST 12.5mm", "Qtd_Sugerida": 24.0, "Preco_Base": 40.0},
+    {"Item": "Placa Cimentícia 12mm", "Qtd_Sugerida": 24.0, "Preco_Base": 140.0},
+    {"Item": "Lã PET 15m²", "Qtd_Sugerida": 4.0, "Preco_Base": 200.0},
+    {"Item": "Manta Hidrófuga", "Qtd_Sugerida": 2.0, "Preco_Base": 500.0},
+    {"Item": "PU (Adesivo)", "Qtd_Sugerida": 24.0, "Preco_Base": 40.0},
+    {"Item": "Cola PU 40", "Qtd_Sugerida": 24.0, "Preco_Base": 40.0}
 ]
 
-st.markdown("<h3 style='color: #ffffff;'>📋 Insumos Calculados Automaticamente</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='color: #ffffff;'>📋 Insumos do Orçamento</h3>", unsafe_allow_html=True)
 dados_atualizados = []
 
-# Exibição em duas colunas para os cartões inferiores
 col1, col2 = st.columns(2)
 
 for i, item in enumerate(itens_projeto):
@@ -81,12 +80,12 @@ for i, item in enumerate(itens_projeto):
         
         sub_c1, sub_c2 = st.columns(2)
         with sub_c1:
-            # Agora a quantidade reage dinamicamente aos inputs do topo através da variável 'Qtd_Sugerida'
+            # Aplica a função de arredondamento TETO para garantir números inteiros como no Excel
             nova_qtd = st.number_input(
                 f"{item['Item']} (Qtd)", 
                 min_value=0.0, 
-                value=float(item['Qtd_Sugerida']), 
-                step=1.0 if item['Qtd_Sugerida'] >= 1 else 0.1,
+                value=float(math.ceil(item['Qtd_Sugerida'])), 
+                step=1.0,
                 key=f"qtd_{i}"
             )
         with sub_c2:
@@ -94,7 +93,7 @@ for i, item in enumerate(itens_projeto):
                 f"{item['Item']} (Preço R$)", 
                 min_value=0.0, 
                 value=float(item['Preco_Base']), 
-                step=1.0 if item['Preco_Base'] > 1 else 0.01,
+                step=5.0,
                 key=f"prc_{i}"
             )
         
@@ -107,58 +106,45 @@ for i, item in enumerate(itens_projeto):
             "Total (R$)": total_item
         })
 
-# Processamento do DataFrame e Totais Finais
+# Processamento dos totais matemáticos
 df = pd.DataFrame(dados_atualizados)
-subtotal_materiais = df["Total (R$)"].sum()
-
-# Taxa de 5% de Massas e Telas conforme a planilha original
-taxa_massas_telas = subtotal_materiais * 0.05
+total_materiais = df["Total (R$)"].sum()
 
 # Configuração da Barra Lateral (Painel Financeiro)
 st.sidebar.markdown("<h2 style='color: #ffffff; text-align: center;'>📊 Painel Financeiro</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
 st.sidebar.markdown("<b style='color: #ffffff;'>🛠️ Custos Adicionais:</b>", unsafe_allow_html=True)
-
-# Mão de obra parametrizada (Padrão: 30 dias a R$ 755,00)
-dias_trabalho = st.sidebar.number_input("Dias de Execução", min_value=0, value=30, step=1)
-valor_diaria = st.sidebar.number_input("Valor da Diária (R$)", min_value=0.0, value=755.0, step=5.0)
-mao_de_obra = dias_trabalho * valor_diaria
-
+# Mão de obra parametrizada zerada conforme seu print (Pronta para você preencher se quiser)
+mao_de_obra = st.sidebar.number_input("Mão de Obra (20 dias)", min_value=0.0, value=0.0, step=100.0)
 st.sidebar.markdown("---")
 
-# Cálculo do Custo Total
-total_geral = subtotal_materiais + taxa_massas_telas + mao_de_obra
+total_geral = total_materiais + mao_de_obra
 
-# Painel de Resultados Lateral
+# Exibição dos Cartões Laterais de Custo
 st.sidebar.markdown(f"""
     <div class='card-total'>
-        <h4>Subtotal Materiais</h4>
-        <p>R$ {subtotal_materiais:,.2f}</p>
-    </div>
-    <div class='card-total' style='border-left-color: #a2d2ff;'>
-        <h4>Massas, Telas (5%)</h4>
-        <p style='color: #a2d2ff;'>R$ {taxa_massas_telas:,.2f}</p>
+        <h4>Material Total</h4>
+        <p>R$ {total_materiais:,.2f}</p>
     </div>
     <div class='card-total'>
-        <h4>Mão de Obra ({dias_trabalho} dias)</h4>
+        <h4>Mão de Obra</h4>
         <p>R$ {mao_de_obra:,.2f}</p>
     </div>
     <div class='card-total' style='border-left-color: #30d158;'>
-        <h4>Total Geral da Obra</h4>
+        <h4>Total Geral do Projeto</h4>
         <p style='color: #30d158;'>R$ {total_geral:,.2f}</p>
     </div>
 """, unsafe_allow_html=True)
 
 st.sidebar.markdown("---")
 
-# Exportar Dados
 csv = df.to_csv(index=False).encode('utf-8')
 st.sidebar.download_button(
     label="📥 Exportar Orçamento",
     data=csv,
-    file_name='orcamento_calculadora.csv',
+    file_name='orcamento_steel_frame.csv',
     mime='text/csv',
     use_container_width=True
 )
-
+Use o código com cuidado.
