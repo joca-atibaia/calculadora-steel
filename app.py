@@ -34,19 +34,27 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Título Principal com Ícone estilizado
+# Título Principal
 st.markdown("<h1 style='color: #ffffff; font-family: sans-serif;'>🏗️ Calculadora de Engenharia <span style='color: #ff9f1c;'>Steel Framing</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='color: #8a92a6;'>Insira as dimensões do projeto extraídas do SketchUp para calcular o quantitativo real.</p>", unsafe_allow_html=True)
+st.markdown("<p style='color: #8a92a6;'>Insira as dimensões do projeto abaixo para o cálculo automático dos insumos e m².</p>", unsafe_allow_html=True)
 st.markdown("---")
 
-# CAMPOS DE ENTRADA GEOMÉTRICA (Substituindo a digitação manual de quantidade)
+# OS 3 CAMPOS SOLICITADOS NO TOPO LADO A LADO
 st.markdown("<h3 style='color: #ffffff;'>📐 Dimensões do Projeto (SketchUp)</h3>", unsafe_allow_html=True)
-col_geo1, col_geo2 = st.columns(2)
+col_geo1, col_geo2, col_geo3 = st.columns(3)
 
 with col_geo1:
-    comp_linear = st.number_input("Comprimento Linear da Estrutura (Metros)", min_value=0.0, value=25.63, step=1.0)
+    comp_linear = st.number_input("Comprimento Linear (Metros)", min_value=0.0, value=25.63, step=0.1)
+
 with col_geo2:
-    area_total = st.number_input("Área Total de Paredes / Fechamento (m²)", min_value=0.0, value=75.0, step=1.0)
+    altura_parede = st.number_input("Altura da Parede / Pé-Direito (Metros)", min_value=0.0, value=2.93, step=0.1)
+
+# CÁLCULO AUTOMÁTICO DA ÁREA
+area_calculada = comp_linear * altura_parede
+
+with col_geo3:
+    # Exibe o cálculo do Metro Quadrado de forma visualizada e clara
+    st.metric(label="Área Total Calculada (m²)", value=f"{area_calculada:.2f} m²")
 
 st.markdown("---")
 
@@ -54,16 +62,16 @@ st.markdown("---")
 itens_calculados = [
     {"Item": "Perfil 90x0,80", "Quantidade": math.ceil(comp_linear * 2.4581), "Preço Unitário (R$)": 50.0},
     {"Item": "Guia Perimetral", "Quantidade": math.ceil(comp_linear * 1.9508), "Preço Unitário (R$)": 50.0},
-    {"Item": "Plywood 8mm", "Quantidade": math.ceil(area_total / 1.375), "Preço Unitário (R$)": 80.0},
-    {"Item": "Placa ST 12.5mm", "Quantidade": math.ceil(area_total / 1.875), "Preço Unitário (R$)": 40.0},
-    {"Item": "Placa Cimentícia 12mm", "Quantidade": math.ceil(area_total / 2.5), "Preço Unitário (R$)": 140.0},
-    {"Item": "Lã PET", "Quantidade": math.ceil(area_total / 15.0), "Preço Unitário (R$)": 200.0},
-    {"Item": "Parafusos (Cento)", "Quantidade": math.ceil((area_total * 80) / 100), "Preço Unitário (R$)": 35.0},
+    {"Item": "Plywood 8mm", "Quantidade": math.ceil(area_calculada / 1.375), "Preço Unitário (R$)": 80.0},
+    {"Item": "Placa ST 12.5mm", "Quantidade": math.ceil(area_calculada / 1.875), "Preço Unitário (R$)": 40.0},
+    {"Item": "Placa Cimentícia 12mm", "Quantidade": math.ceil(area_calculada / 2.5), "Preço Unitário (R$)": 140.0},
+    {"Item": "Lã PET", "Quantidade": math.ceil(area_calculada / 15.0), "Preço Unitário (R$)": 200.0},
+    {"Item": "Parafusos (Cento)", "Quantidade": math.ceil((area_calculada * 80) / 100), "Preço Unitário (R$)": 35.0},
     {"Item": "Massas (Balde/Saco)", "Quantidade": 1.0, "Preço Unitário (R$)": 500.0},
     {"Item": "Telas (Rolo)", "Quantidade": 1.0, "Preço Unitário (R$)": 500.0},
     {"Item": "Adesivo PU (Cx)", "Quantidade": 1.0, "Preço Unitário (R$)": 150.0},
     {"Item": "Telha Sanduíche", "Quantidade": 10.0, "Preço Unitário (R$)": 400.0},
-    {"Item": "Manta Hidrófuga", "Quantidade": math.ceil(area_total / 37.5), "Preço Unitário (R$)": 500.0},
+    {"Item": "Manta Hidrófuga", "Quantidade": math.ceil(area_calculada / 37.5), "Preço Unitário (R$)": 500.0},
 ]
 
 st.markdown("<h3 style='color: #ffffff;'>📋 Insumos Calculados Automaticamente</h3>", unsafe_allow_html=True)
