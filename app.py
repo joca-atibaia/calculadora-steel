@@ -67,8 +67,6 @@ qtd_la_pet = math.ceil(area_calculada * (6.0 / 90.0))
 qtd_parafusos = math.ceil(area_calculada * (8000.0 / 90.0))
 qtd_cola_pu = math.ceil(area_calculada * (36.0 / 90.0))
 qtd_manta = math.ceil(area_calculada * (3.0 / 90.0))
-
-# Para massas e telas, a planilha trata como um custo acoplado baseado na área (Base: 1 item composto para 90m²)
 qtd_massas_telas = math.ceil(area_calculada * (1.0 / 90.0))
 
 itens_projeto = [
@@ -131,21 +129,21 @@ st.sidebar.markdown("---")
 
 st.sidebar.markdown("<b style='color: #ffffff;'>🛠️ Custos Adicionais:</b>", unsafe_allow_html=True)
 
-# Mão de obra calcula por padrão os 30 dias a R$ 755,00 descritos na planilha original
+# Mão de obra parametrizada (Padrão: 30 dias a R$ 755,00)
 dias_trabalho = st.sidebar.number_input("Dias de Execução", min_value=0, value=30, step=1)
 valor_diaria = st.sidebar.number_input("Valor da Diária (R$)", min_value=0.0, value=755.0, step=5.0)
 mao_de_obra = dias_trabalho * valor_diaria
 
 st.sidebar.markdown("---")
 
-# Total Geral da Obra unindo os insumos e a mão de obra configurada
+# Total Geral da Obra unindo os insumos e a mão de obra
 total_geral = total_materiais + mao_de_obra
 
-# Exibição dos Cartões Laterais de Custo
+# Exibição dos Cartões Laterais de Custo (Corrigida a variável para total_materiais)
 st.sidebar.markdown(f"""
     <div class='card-total'>
         <h4>Material Total</h4>
-        <p>R$ {total_materials:,.2f}</p>
+        <p>R$ {total_materiais:,.2f}</p>
     </div>
     <div class='card-total'>
         <h4>Mão de Obra ({dias_trabalho} dias)</h4>
