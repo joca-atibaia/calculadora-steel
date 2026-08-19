@@ -31,6 +31,14 @@ st.markdown("""
         border: 1px solid #2e3440;
         margin-bottom: 15px;
     }
+    .total-item-text {
+        font-size: 1rem;
+        color: #ff9f1c;
+        font-weight: bold;
+        margin-top: 8px;
+        border-top: 1px dashed #2e3440;
+        padding-top: 8px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -110,8 +118,11 @@ for i, item in enumerate(itens_projeto):
                 key=f"prc_{i}"
             )
         
-        st.markdown("</div>", unsafe_allow_html=True)
+        # CÁLCULO E EXIBIÇÃO DO TOTAL INDIVIDUAL DO ITEM DENTRO DO CARTÃO
         total_item = nova_qtd * novo_preco
+        st.markdown(f"<p class='total-item-text'>Total do Item: R$ {total_item:,.2f}</p>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+        
         dados_atualizados.append({
             "Item": item['Item'],
             "Quantidade": nova_qtd,
@@ -139,7 +150,7 @@ st.sidebar.markdown("---")
 # Total Geral da Obra unindo os insumos e a mão de obra
 total_geral = total_materiais + mao_de_obra
 
-# Exibição dos Cartões Laterais de Custo (Corrigida a variável para total_materiais)
+# Exibição dos Cartões Laterais de Custo
 st.sidebar.markdown(f"""
     <div class='card-total'>
         <h4>Material Total</h4>
