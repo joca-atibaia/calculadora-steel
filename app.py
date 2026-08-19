@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Injeção de CSS para estilização avançada
+# Injeção de CSS para estilização avançada (Mantendo seu excelente padrão visual)
 st.markdown("""
     <style>
     .main { background-color: #0f1115; }
@@ -39,39 +39,36 @@ st.markdown("<h1 style='color: #ffffff; font-family: sans-serif;'>🏗️ Calcul
 st.markdown("<p style='color: #8a92a6;'>Insira as dimensões do projeto abaixo para o cálculo automático dos insumos e m².</p>", unsafe_allow_html=True)
 st.markdown("---")
 
-# OS 3 CAMPOS SOLICITADOS NO TOPO LADO A LADO
+# Dimensões do Projeto lado a lado
 st.markdown("<h3 style='color: #ffffff;'>📐 Dimensões do Projeto (SketchUp)</h3>", unsafe_allow_html=True)
 col_geo1, col_geo2, col_geo3 = st.columns(3)
 
 with col_geo1:
-    comp_linear = st.number_input("Comprimento Linear (Metros)", min_value=0.0, value=25.63, step=0.1)
+    comp_linear = st.number_input("Comprimento Linear (Metros)", min_value=0.0, value=30.0, step=0.1) # Ajustado padrão para coincidir com os 30m lineares da planilha
 
 with col_geo2:
-    altura_parede = st.number_input("Altura da Parede / Pé-Direito (Metros)", min_value=0.0, value=2.93, step=0.1)
+    altura_parede = st.number_input("Altura da Parede / Pé-Direito (Metros)", min_value=0.0, value=3.0, step=0.1) # Ajustado padrão para os 3m de altura da planilha
 
 # CÁLCULO AUTOMÁTICO DA ÁREA
 area_calculada = comp_linear * altura_parede
 
 with col_geo3:
-    # Exibe o cálculo do Metro Quadrado de forma visualizada e clara
     st.metric(label="Área Total Calculada (m²)", value=f"{area_calculada:.2f} m²")
 
 st.markdown("---")
 
-# Definição dos itens e suas fórmulas matemáticas com base no Excel
+# RECONCILIAÇÃO MATEMÁTICA BASEADA NA SUA PLANILHA ORIGINAL (Área Base = 90m²)
+# As fórmulas foram ajustadas dividindo a quantidade original por 90 (para área) ou por 30 (para comp_linear)
 itens_calculados = [
-    {"Item": "Perfil 90x0,80", "Quantidade": math.ceil(comp_linear * 2.4581), "Preço Unitário (R$)": 50.0},
-    {"Item": "Guia Perimetral", "Quantidade": math.ceil(comp_linear * 1.9508), "Preço Unitário (R$)": 50.0},
-    {"Item": "Plywood 8mm", "Quantidade": math.ceil(area_calculada / 1.375), "Preço Unitário (R$)": 80.0},
-    {"Item": "Placa ST 12.5mm", "Quantidade": math.ceil(area_calculada / 1.875), "Preço Unitário (R$)": 40.0},
-    {"Item": "Placa Cimentícia 12mm", "Quantidade": math.ceil(area_calculada / 2.5), "Preço Unitário (R$)": 140.0},
-    {"Item": "Lã PET", "Quantidade": math.ceil(area_calculada / 15.0), "Preço Unitário (R$)": 200.0},
-    {"Item": "Parafusos (Cento)", "Quantidade": math.ceil((area_calculada * 80) / 100), "Preço Unitário (R$)": 35.0},
-    {"Item": "Massas (Balde/Saco)", "Quantidade": 1.0, "Preço Unitário (R$)": 500.0},
-    {"Item": "Telas (Rolo)", "Quantidade": 1.0, "Preço Unitário (R$)": 500.0},
-    {"Item": "Adesivo PU (Cx)", "Quantidade": 1.0, "Preço Unitário (R$)": 150.0},
-    {"Item": "Telha Sanduíche", "Quantidade": 10.0, "Preço Unitário (R$)": 400.0},
-    {"Item": "Manta Hidrófuga", "Quantidade": math.ceil(area_calculada / 37.5), "Preço Unitário (R$)": 500.0},
+    {"Item": "Perfil 90x0,80", "Quantidade": math.ceil(comp_linear * 3.766), "Preço Unitário (R$)": 50.0}, # 113 m / 30m linear
+    {"Item": "Guia Perimetral", "Quantidade": math.ceil(comp_linear * 0.666), "Preço Unitário (R$)": 50.0}, # 20 m / 30m linear
+    {"Item": "Plywood 8mm", "Quantidade": math.ceil(area_calculada / 1.5), "Preço Unitário (R$)": 80.0}, # Rendimento exato: 1.5m² por placa
+    {"Item": "Placa ST 12.5mm", "Quantidade": math.ceil(area_calculada / 2.5), "Preço Unitário (R$)": 40.0}, # Rendimento exato: 2.5m² por placa
+    {"Item": "Placa Cimentícia 12mm", "Quantidade": math.ceil(area_calculada / 2.5), "Preço Unitário (R$)": 140.0}, # Rendimento exato: 2.5m² por placa
+    {"Item": "Lã PET 15m²", "Quantidade": math.ceil(area_calculada / 15.0), "Preço Unitário (R$)": 200.0}, # Rendimento exato: 15m² por rolo
+    {"Item": "Parafusos (Unidade)", "Quantidade": math.ceil((area_calculada * 88.88)), "Preço Unitário (R$)": 0.07}, # 8000 parafusos / 90m²
+    {"Item": "Cola PU 40", "Quantidade": math.ceil(area_calculada * 0.4), "Preço Unitário (R$)": 40.0}, # 36 tubos / 90m²
+    {"Item": "Manta Hidrófuga", "Quantidade": math.ceil(area_calculada / 30.0), "Preço Unitário (R$)": 500.0}, # 3 rolos / 90m² -> 30m² por rolo
 ]
 
 st.markdown("<h3 style='color: #ffffff;'>📋 Insumos Calculados Automaticamente</h3>", unsafe_allow_html=True)
@@ -92,7 +89,7 @@ for i, item in enumerate(itens_calculados):
                 f"Preço Unitário (R$)", 
                 min_value=0.0, 
                 value=float(item['Preço Unitário (R$)']), 
-                step=5.0,
+                step=1.0 if item['Preço Unitário (R$)'] < 1 else 5.0,
                 key=f"prc_{i}"
             )
         
@@ -109,25 +106,38 @@ for i, item in enumerate(itens_calculados):
 df = pd.DataFrame(dados_atualizados)
 total_materiais = df["Total (R$)"].sum()
 
+# Cálculo dinâmico da taxa de Massas, Telas e Perdas (5% do subtotal)
+taxa_massas_telas = total_materiais * 0.05
+
 # Configuração da Barra Lateral
 st.sidebar.markdown("<h2 style='color: #ffffff; text-align: center;'>📊 Painel Financeiro</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-st.sidebar.markdown("<b style='color: #ffffff;'>Ajuste Operacional:</b>", unsafe_allow_html=True)
-mao_de_obra = st.sidebar.number_input("Mão de Obra", min_value=0.0, value=11635.0, step=100.0)
+st.sidebar.markdown("<b style='color: #ffffff;'>Configuração de Mão de Obra:</b>", unsafe_allow_html=True)
+# Escalona os dias dinamicamente com base na área (Base: 30 dias para 90m²)
+dias_estimados = math.ceil((area_calculada / 90) * 30)
+valor_diaria = st.sidebar.number_input("Valor da Diária (R$)", min_value=0.0, value=755.0, step=10.0)
+mao_de_obra_total = dias_estimados * valor_diaria
+
+st.sidebar.markdown(f"<p style='color: #8a92a6; font-size:13px;'>Tempo estimado para execução: <b>{dias_estimados} dias</b></p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-total_geral = total_materiais + mao_de_obra
+# Cálculo do Total Geral
+total_geral = total_materiais + taxa_massas_telas + mao_de_obra_total
 
 # Exibição dos novos Cartões de Custo Avançados na Barra Lateral
 st.sidebar.markdown(f"""
     <div class='card-total'>
-        <h4>Material Total</h4>
+        <h4>Insumos Base</h4>
         <p>R$ {total_materiais:,.2f}</p>
     </div>
+    <div class='card-total' style='border-left-color: #a2d2ff;'>
+        <h4>Massas, Telas e Perdas (5%)</h4>
+        <p style='color: #a2d2ff;'>R$ {taxa_massas_telas:,.2f}</p>
+    </div>
     <div class='card-total'>
-        <h4>Mão de Obra</h4>
-        <p>R$ {mao_de_obra:,.2f}</p>
+        <h4>Mão de Obra ({dias_estimados} dias)</h4>
+        <p>R$ {mao_de_obra_total:,.2f}</p>
     </div>
     <div class='card-total' style='border-left-color: #00b4d8;'>
         <h4>Total do Projeto</h4>
@@ -142,7 +152,7 @@ csv = df.to_csv(index=False).encode('utf-8')
 st.sidebar.download_button(
     label="📥 Exportar Planilha (Excel/CSV)",
     data=csv,
-    file_name='orcamento_automatizado.csv',
+    file_name='orcamento_steel_frame.csv',
     mime='text/csv',
     use_container_width=True
 )
