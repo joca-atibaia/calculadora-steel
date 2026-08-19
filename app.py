@@ -161,4 +161,4 @@ st.sidebar.download_button(
     mime='text/csv',
     use_container_width=True
 )
-Use o código com cuidado.
+
