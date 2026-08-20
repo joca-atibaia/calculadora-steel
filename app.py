@@ -6,7 +6,7 @@ import math
 st.set_page_config(
     page_title="Calculadora Inteligente - Steel Framing", 
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed" # Começa recolhido para focar na tela principal
 )
 
 # Injeção de CSS para estilização avançada (DRYARTE Estilo)
@@ -16,14 +16,16 @@ st.markdown("""
     div[data-testid="stMetricValue"] { font-size: 28px !important; color: #ff9f1c !important; }
     .card-total {
         background-color: #1e222b;
-        padding: 20px;
+        padding: 25px;
         border-radius: 12px;
-        border-left: 5px solid #ff9f1c;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-        margin-bottom: 15px;
+        border-left: 6px solid #ff9f1c;
+        box-shadow: 2px 4px 15px rgba(0,0,0,0.4);
+        margin-top: 15px;
+        margin-bottom: 25px;
+        text-align: center;
     }
-    .card-total h4 { color: #8a92a6; margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-    .card-total p { color: #ffffff; margin: 5px 0 0 0; font-size: 32px; font-weight: bold; }
+    .card-total h4 { color: #8a92a6; margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; }
+    .card-total p { color: #ffffff; margin: 8px 0 0 0; font-size: 38px; font-weight: bold; }
     .card-item {
         background-color: #161a22;
         padding: 15px;
@@ -191,60 +193,64 @@ dados_atualizados.append({
 df = pd.DataFrame(dados_atualizados)
 total_materiais = df["Total (R$)"].sum()
 
-# 📊 PASSO 3: MÃO DE OBRA 100% DINÂMICA (Baseada na área proporcional aos 90m² / 30 dias)
+# 📊 PASSO 3: MÃO DE OBRA MUDADA PARA A TELA PRINCIPAL (NÃO MAIS NA SIDEBAR)
 dias_sugeridos = math.ceil((area_calculada / 90.0) * 30)
 
-# Configuração da Barra Lateral (Painel Financeiro)
-st.sidebar.markdown("<h2 style='color: #ffffff; text-align: center;'>📊 Painel Financeiro</h2>", unsafe_allow_html=True)
-st.sidebar.markdown("---")
+st.markdown("---")
+st.markdown("<h3 style='color: #ffffff;'>🛠️ Custos Adicionais (Mão de Obra)</h3>", unsafe_allow_html=True)
 
-st.sidebar.markdown("<b style='color: #ffffff;'>🛠️ Custos Adicionais:</b>", unsafe_allow_html=True)
+col_mo1, col_mo2 = st.columns(2)
 
-# Os inputs de Mão de Obra agora reagem dinamicamente ao id_metragem do topo!
-dias_trabalho = st.sidebar.number_input(
-    "Dias de Execução", 
-    min_value=0, 
-    value=int(dias_sugeridos), 
-    step=1, 
-    key=f"dias_exec_{id_metragem}"
-)
-valor_diaria = st.sidebar.number_input(
-    "Valor da Diária (R$)", 
-    min_value=0.0, 
-    value=755.0, 
-    step=5.0, 
-    key=f"v_diaria_{id_metragem}"
-)
+with col_mo1:
+    dias_trabalho = st.number_input(
+        "Dias de Execução", 
+        min_value=0, 
+        value=int(dias_sugeridos), 
+        step=1, 
+        key=f"dias_exec_{id_metragem}"
+    )
+
+with col_mo2:
+    valor_diaria = st.number_input(
+        "Valor da Diária (R$)", 
+        min_value=0.0, 
+        value=755.0, 
+        step=5.0, 
+        key=f"v_diaria_{id_metragem}"
+    )
+
 mao_de_obra = dias_trabalho * valor_diaria
-
-st.sidebar.markdown("---")
-
-# Cálculo consolidado geral da obra
 total_geral = total_materiais + mao_de_obra
 
-# Exibição dos Cartões Finais Laterais
-st.sidebar.markdown(f"""
+# --- 📊 SEÇÃO DO TOTAL INTERATIVO (ALTERA O TIPO TOTAL) ---
+st.markdown("---")
+st.markdown("<h3 style='color: #ffffff;'>📊 Resumo e Fechamento</h3>", unsafe_allow_html=True)
+
+# Cria a caixa de seleção para o usuário decidir qual total quer visualizar na tela principal
+tipo_total_selecionado = st.selectbox(
+    "Selecione o tipo de total que deseja visualizar no painel:",
+    ["Material Total", "Mão de Obra Total", "Custo Geral da Obra (Global)"]
+)
+
+# Define dinamicamente o título interno do card e o valor correspondente
+if tipo_total_selecionado == "Material Total":
+    rotulo_card = "Material Total"
+    valor_card = total_materials
+elif tipo_total_selecionado == "Mão de Obra Total":
+    rotulo_card = "Mão de Obra Total"
+    valor_card = mao_de_obra
+else:
+    rotulo_card = "Custo Geral da Obra"
+    valor_card = total_geral
+
+# Exibe o Card Principal atualizado dinamicamente de acordo com a seleção
+st.markdown(f"""
     <div class='card-total'>
-        <h4>Material Total</h4>
-        <p>R$ {total_materiais:,.2f}</p>
-    </div>
-    <div class='card-total'>
-        <h4>Mão de Obra ({dias_trabalho} dias)</h4>
-        <p>R$ {mao_de_obra:,.2f}</p>
-    </div>
-    <div class='card-total' style='border-left-color: #30d158;'>
-        <h4>Total Geral do Projeto</h4>
-        <p style='color: #30d158;'>R$ {total_geral:,.2f}</p>
+        <h4>{rotulo_card}</h4>
+        <p>R$ {valor_card:,.2f}</p>
     </div>
 """, unsafe_allow_html=True)
 
-st.sidebar.markdown("---")
-
-csv = df.to_csv(index=False).encode('utf-8')
-st.sidebar.download_button(
-    label="📥 Exportar Orçamento",
-    data=csv,
-    file_name='orcamento_steel_frame.csv',
-    mime='text/csv',
-    use_container_width=True
-)
+# Informações adicionais na barra lateral que servem apenas como apoio de marca
+st.sidebar.markdown("<h2 style='color: #ffffff; text-align: center;'>DRYARTE</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='text-align: center; color: #8a92a6;'>Sistema de Engenharia Inteligente</p>", unsafe_allow_html=True)
