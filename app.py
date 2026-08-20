@@ -103,7 +103,6 @@ id_metragem = f"{comp_linear}_{altura_parede}"
 st.markdown("<h3 style='color: #ffffff;'>📋 Insumos Calculados Automaticamente</h3>", unsafe_allow_html=True)
 dados_atualizados = []
 
-# Exibir os 9 materiais iniciais em duas colunas e coletar os dados editados pelo usuário
 col1, col2 = st.columns(2)
 
 for i, item in enumerate(itens_parciais):
@@ -145,11 +144,10 @@ for i, item in enumerate(itens_parciais):
             "Total (R$)": total_item
         })
 
-# 📋 PASSO 2: CALCULAR O VALOR DE MASSAS E TELAS COM BASE NO ACUMULADO DOS INPUTS DA TELA
+# 📋 PASSO 2: CALCULAR O VALOR DE MASSAS E TELAS (5% DO ACUMULADO)
 subtotal_acumulado_tela = sum(d["Total (R$)"] for d in dados_atualizados)
 preco_sugerido_massas_telas = subtotal_acumulado_tela * 0.05
 
-# Criar o cartão de Massas e Telas de forma independente no final
 st.markdown("---")
 st.markdown("<h3 style='color: #ffffff;'>🎨 Acabamento e Perdas</h3>", unsafe_allow_html=True)
 
@@ -183,7 +181,6 @@ with col_m1:
     """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-# Inclui Massas e Telas no DataFrame final para somar no painel financeiro
 dados_atualizados.append({
     "Item": "Massas e Telas",
     "Quantidade": qtd_massas,
@@ -191,9 +188,11 @@ dados_atualizados.append({
     "Total (R$)": total_massas
 })
 
-# Processamento consolidado da planilha completa
 df = pd.DataFrame(dados_atualizados)
 total_materiais = df["Total (R$)"].sum()
+
+# 📊 PASSO 3: MÃO DE OBRA 100% DINÂMICA (Baseada na área proporcional aos 90m² / 30 dias)
+dias_sugeridos = math.ceil((area_calculada / 90.0) * 30)
 
 # Configuração da Barra Lateral (Painel Financeiro)
 st.sidebar.markdown("<h2 style='color: #ffffff; text-align: center;'>📊 Painel Financeiro</h2>", unsafe_allow_html=True)
@@ -201,9 +200,21 @@ st.sidebar.markdown("---")
 
 st.sidebar.markdown("<b style='color: #ffffff;'>🛠️ Custos Adicionais:</b>", unsafe_allow_html=True)
 
-# Mão de obra baseada no padrão original da planilha
-dias_trabalho = st.sidebar.number_input("Dias de Execução", min_value=0, value=30, step=1, key="dias_exec")
-valor_diaria = st.sidebar.number_input("Valor da Diária (R$)", min_value=0.0, value=755.0, step=5.0, key="v_diaria")
+# Os inputs de Mão de Obra agora reagem dinamicamente ao id_metragem do topo!
+dias_trabalho = st.sidebar.number_input(
+    "Dias de Execução", 
+    min_value=0, 
+    value=int(dias_sugeridos), 
+    step=1, 
+    key=f"dias_exec_{id_metragem}"
+)
+valor_diaria = st.sidebar.number_input(
+    "Valor da Diária (R$)", 
+    min_value=0.0, 
+    value=755.0, 
+    step=5.0, 
+    key=f"v_diaria_{id_metragem}"
+)
 mao_de_obra = dias_trabalho * valor_diaria
 
 st.sidebar.markdown("---")
