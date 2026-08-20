@@ -31,20 +31,29 @@ st.markdown("""
         border: 1px solid #2e3440;
         margin-bottom: 15px;
     }
-    .total-item-text {
-        font-size: 1rem;
+    .total-item-container {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #2e3440;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .total-item-label {
+        font-size: 0.9rem;
+        color: #8a92a6;
+    }
+    .total-item-value {
+        font-size: 1.1rem;
         color: #ff9f1c;
         font-weight: bold;
-        margin-top: 8px;
-        border-top: 1px dashed #2e3440;
-        padding-top: 8px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Título Principal
-st.markdown("<h1 style='color: #ffffff; font-family: sans-serif;'>🏗️ Calculadora de Engenharia <span style='color: #ff9f1c;'>Steel Framing</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='color: #8a92a6;'>Insira as dimensões do projeto abaixo para o cálculo automático com base nos coeficientes reais da planilha.</p>", unsafe_allow_html=True)
+# --- SUBSTITUIÇÃO DO TÍTULO PELA SUA LOGO OFICIAL ---
+st.image("LOGO IA.png 002.png", width=280)
+st.markdown("<p style='color: #8a92a6; margin-top: -10px;'>Insira as dimensões do projeto abaixo para o cálculo automático com base nos coeficientes reais da planilha.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # 📐 SEÇÃO DE DIMENSÕES
@@ -118,9 +127,14 @@ for i, item in enumerate(itens_projeto):
                 key=f"prc_{i}"
             )
         
-        # CÁLCULO E EXIBIÇÃO DO TOTAL INDIVIDUAL DO ITEM DENTRO DO CARTÃO
+        # Subtotal de cada Item dentro do cartão
         total_item = nova_qtd * novo_preco
-        st.markdown(f"<p class='total-item-text'>Total do Item: R$ {total_item:,.2f}</p>", unsafe_allow_html=True)
+        st.markdown(f"""
+            <div class='total-item-container'>
+                <span class='total-item-label'>Subtotal do Item:</span>
+                <span class='total-item-value'>R$ {total_item:,.2f}</span>
+            </div>
+        """, unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
         
         dados_atualizados.append({
