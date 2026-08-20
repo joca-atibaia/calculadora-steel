@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Injeção de CSS para estilização (Mantendo seu excelente padrão visual)
+# Injeção de CSS para estilização avançada (DRYARTE Estilo)
 st.markdown("""
     <style>
     .main { background-color: #0f1115; }
@@ -51,12 +51,12 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- SUBSTITUIÇÃO DO TÍTULO PELA SUA LOGO OFICIAL ---
+# --- CABEÇALHO COM A LOGO DA DRYARTE ---
 st.image("LOGO IA.png 002.png", width=280)
 st.markdown("<p style='color: #8a92a6; margin-top: -10px;'>Insira as dimensões do projeto abaixo para o cálculo automático com base nos coeficientes reais da planilha.</p>", unsafe_allow_html=True)
 st.markdown("---")
 
-# 📐 SEÇÃO DE DIMENSÕES
+# 📐 SEÇÃO DE DIMENSÕES DO PROJETO
 st.markdown("<h3 style='color: #ffffff;'>📐 Dimensões do Projeto (SketchUp)</h3>", unsafe_allow_html=True)
 col_geo1, col_geo2, col_geo3 = st.columns(3)
 
@@ -74,7 +74,7 @@ with col_geo3:
 
 st.markdown("---")
 
-# 📋 PROPORÇÕES REAIS EXTRAÍDAS DA PLANILHA (BASE DA OBRA = 90m² / 30m linear)
+# 📋 MOTOR MATEMÁTICO REAL (Geração das bases proporcionais com base nos 90m²)
 qtd_perfil = math.ceil(comp_linear * (113.0 / 30.0))
 qtd_guia = math.ceil(comp_linear * (20.0 / 30.0))
 qtd_plywood = math.ceil(area_calculada * (60.0 / 90.0))
@@ -99,6 +99,10 @@ itens_projeto = [
     {"Item": "Massas e Telas", "Qtd_Sugerida": qtd_massas_telas, "Preco_Base": 1200.0}
 ]
 
+# 🔄 GERENCIADOR DE ESTADO DINÂMICO (Força a atualização dos cartões se a metragem mudar)
+# Cria um identificador único unindo as metragens. Se mudar, a chave muda e o widget atualiza na hora.
+id_metragem = f"{comp_linear}_{altura_parede}"
+
 st.markdown("<h3 style='color: #ffffff;'>📋 Insumos Calculados Automaticamente</h3>", unsafe_allow_html=True)
 dados_atualizados = []
 
@@ -111,12 +115,13 @@ for i, item in enumerate(itens_projeto):
         
         sub_c1, sub_c2 = st.columns(2)
         with sub_c1:
+            # Ao concatenar o id_metragem no 'key', obrigamos o Streamlit a recalcular o valor padrão na tela
             nova_qtd = st.number_input(
                 f"{item['Item']} (Qtd)", 
                 min_value=0.0, 
                 value=float(item['Qtd_Sugerida']), 
                 step=1.0,
-                key=f"qtd_{i}"
+                key=f"qtd_{i}_{id_metragem}"
             )
         with sub_c2:
             novo_preco = st.number_input(
@@ -124,10 +129,10 @@ for i, item in enumerate(itens_projeto):
                 min_value=0.0, 
                 value=float(item['Preco_Base']), 
                 step=1.0 if item['Preco_Base'] > 1 else 0.01,
-                key=f"prc_{i}"
+                key=f"prc_{i}_{id_metragem}"
             )
         
-        # Subtotal de cada Item dentro do cartão
+        # Subtotal dinâmico por linha do cartão
         total_item = nova_qtd * novo_preco
         st.markdown(f"""
             <div class='total-item-container'>
@@ -144,7 +149,7 @@ for i, item in enumerate(itens_projeto):
             "Total (R$)": total_item
         })
 
-# Processamento do DataFrame e Custo Total de Insumos
+# Processamento consolidado da planilha
 df = pd.DataFrame(dados_atualizados)
 total_materiais = df["Total (R$)"].sum()
 
@@ -154,17 +159,17 @@ st.sidebar.markdown("---")
 
 st.sidebar.markdown("<b style='color: #ffffff;'>🛠️ Custos Adicionais:</b>", unsafe_allow_html=True)
 
-# Mão de obra parametrizada (Padrão: 30 dias a R$ 755,00)
-dias_trabalho = st.sidebar.number_input("Dias de Execução", min_value=0, value=30, step=1)
-valor_diaria = st.sidebar.number_input("Valor da Diária (R$)", min_value=0.0, value=755.0, step=5.0)
+# Mão de obra baseada no padrão original da planilha
+dias_trabalho = st.sidebar.number_input("Dias de Execução", min_value=0, value=30, step=1, key="dias_exec")
+valor_diaria = st.sidebar.number_input("Valor da Diária (R$)", min_value=0.0, value=755.0, step=5.0, key="v_diaria")
 mao_de_obra = dias_trabalho * valor_diaria
 
 st.sidebar.markdown("---")
 
-# Total Geral da Obra unindo os insumos e a mão de obra
+# Cálculo consolidado geral da obra
 total_geral = total_materiais + mao_de_obra
 
-# Exibição dos Cartões Laterais de Custo
+# Exibição dos Cartões Finais Laterais
 st.sidebar.markdown(f"""
     <div class='card-total'>
         <h4>Material Total</h4>
