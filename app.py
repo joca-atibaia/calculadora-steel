@@ -74,19 +74,18 @@ with col_geo3:
 
 st.markdown("---")
 
-# 📋 MOTOR MATEMÁTICO REAL (Geração das bases proporcionais com base nos 90m²)
+# 📋 PASSO 1: CALCULAR AS QUANTIDADES DOS 9 MATERIAIS DE FORMA PROPORCIONAL À METRAGEM
 qtd_perfil = math.ceil(comp_linear * (113.0 / 30.0))
 qtd_guia = math.ceil(comp_linear * (20.0 / 30.0))
 qtd_plywood = math.ceil(area_calculada * (60.0 / 90.0))
 qtd_placa_st = math.ceil(area_calculada * (36.0 / 90.0))
 qtd_placa_cimenticia = math.ceil(area_calculada * (36.0 / 90.0))
 qtd_la_pet = math.ceil(area_calculada * (6.0 / 90.0))
-qtd_parafusos = math.ceil(area_calculada * (8000.0 / 90.0))
+qtd_parafusos = math.ceil(area_calculada * 80.0)  # Exatamente 80 unidades por m²
 qtd_cola_pu = math.ceil(area_calculada * (36.0 / 90.0))
 qtd_manta = math.ceil(area_calculada * (3.0 / 90.0))
-qtd_massas_telas = math.ceil(area_calculada * (1.0 / 90.0))
 
-itens_projeto = [
+itens_parciais = [
     {"Item": "Perfil 90x0,80", "Qtd_Sugerida": qtd_perfil, "Preco_Base": 50.0},
     {"Item": "Guia Perimetral", "Qtd_Sugerida": qtd_guia, "Preco_Base": 50.0},
     {"Item": "Plywood 8mm", "Qtd_Sugerida": qtd_plywood, "Preco_Base": 80.0},
@@ -95,27 +94,25 @@ itens_projeto = [
     {"Item": "Lã PET", "Qtd_Sugerida": qtd_la_pet, "Preco_Base": 200.0},
     {"Item": "Parafusos", "Qtd_Sugerida": qtd_parafusos, "Preco_Base": 0.07},
     {"Item": "Cola PU 40", "Qtd_Sugerida": qtd_cola_pu, "Preco_Base": 40.0},
-    {"Item": "Manta Hidrófuga", "Qtd_Sugerida": qtd_manta, "Preco_Base": 500.0},
-    {"Item": "Massas e Telas", "Qtd_Sugerida": qtd_massas_telas, "Preco_Base": 1200.0}
+    {"Item": "Manta Hidrófuga", "Qtd_Sugerida": qtd_manta, "Preco_Base": 500.0}
 ]
 
-# 🔄 GERENCIADOR DE ESTADO DINÂMICO (Força a atualização dos cartões se a metragem mudar)
-# Cria um identificador único unindo as metragens. Se mudar, a chave muda e o widget atualiza na hora.
+# 🔄 CRIAR ID DE RESET PARA GARANTIR DINAMISMO NA INTERFACE
 id_metragem = f"{comp_linear}_{altura_parede}"
 
 st.markdown("<h3 style='color: #ffffff;'>📋 Insumos Calculados Automaticamente</h3>", unsafe_allow_html=True)
 dados_atualizados = []
 
+# Exibir os 9 materiais iniciais em duas colunas e coletar os dados editados pelo usuário
 col1, col2 = st.columns(2)
 
-for i, item in enumerate(itens_projeto):
+for i, item in enumerate(itens_parciais):
     target_col = col1 if i % 2 == 0 else col2
     with target_col:
         st.markdown(f"<div class='card-item'><b style='color: #ff9f1c;'>{item['Item']}</b>", unsafe_allow_html=True)
         
         sub_c1, sub_c2 = st.columns(2)
         with sub_c1:
-            # Ao concatenar o id_metragem no 'key', obrigamos o Streamlit a recalcular o valor padrão na tela
             nova_qtd = st.number_input(
                 f"{item['Item']} (Qtd)", 
                 min_value=0.0, 
@@ -132,7 +129,6 @@ for i, item in enumerate(itens_projeto):
                 key=f"prc_{i}_{id_metragem}"
             )
         
-        # Subtotal dinâmico por linha do cartão
         total_item = nova_qtd * novo_preco
         st.markdown(f"""
             <div class='total-item-container'>
@@ -149,7 +145,53 @@ for i, item in enumerate(itens_projeto):
             "Total (R$)": total_item
         })
 
-# Processamento consolidado da planilha
+# 📋 PASSO 2: CALCULAR O VALOR DE MASSAS E TELAS COM BASE NO ACUMULADO DOS INPUTS DA TELA
+subtotal_acumulado_tela = sum(d["Total (R$)"] for d in dados_atualizados)
+preco_sugerido_massas_telas = subtotal_acumulado_tela * 0.05
+
+# Criar o cartão de Massas e Telas de forma independente no final
+st.markdown("---")
+st.markdown("<h3 style='color: #ffffff;'>🎨 Acabamento e Perdas</h3>", unsafe_allow_html=True)
+
+col_m1, col_m2 = st.columns(2)
+with col_m1:
+    st.markdown(f"<div class='card-item'><b style='color: #ff9f1c;'>Massas e Telas</b>", unsafe_allow_html=True)
+    sub_cm1, sub_cm2 = st.columns(2)
+    with sub_cm1:
+        qtd_massas = st.number_input(
+            "Massas e Telas (Qtd)", 
+            min_value=0.0, 
+            value=1.0, 
+            step=1.0, 
+            key=f"qtd_massas_{id_metragem}"
+        )
+    with sub_cm2:
+        preco_massas = st.number_input(
+            "Massas e Telas (Preço R$)", 
+            min_value=0.0, 
+            value=float(preco_sugerido_massas_telas), 
+            step=10.0, 
+            key=f"prc_massas_{id_metragem}"
+        )
+    
+    total_massas = qtd_massas * preco_massas
+    st.markdown(f"""
+        <div class='total-item-container'>
+            <span class='total-item-label'>Subtotal do Item:</span>
+            <span class='total-item-value'>R$ {total_massas:,.2f}</span>
+        </div>
+    """, unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# Inclui Massas e Telas no DataFrame final para somar no painel financeiro
+dados_atualizados.append({
+    "Item": "Massas e Telas",
+    "Quantidade": qtd_massas,
+    "Preço Unitário (R$)": preco_massas,
+    "Total (R$)": total_massas
+})
+
+# Processamento consolidado da planilha completa
 df = pd.DataFrame(dados_atualizados)
 total_materiais = df["Total (R$)"].sum()
 
