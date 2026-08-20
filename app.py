@@ -235,7 +235,7 @@ tipo_total_selecionado = st.selectbox(
 # Define dinamicamente o título interno do card e o valor correspondente
 if tipo_total_selecionado == "Material Total":
     rotulo_card = "Material Total"
-    valor_card = total_materials
+    valor_card = total_materiais
 elif tipo_total_selecionado == "Mão de Obra Total":
     rotulo_card = "Mão de Obra Total"
     valor_card = mao_de_obra
