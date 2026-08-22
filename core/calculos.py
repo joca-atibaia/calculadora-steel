@@ -1,117 +1,240 @@
+```python
 """
-Motor de cálculos da Calculadora Steel Framing.
+Motor de cálculo da Calculadora Steel Framing.
 
-Este arquivo contém somente regras de cálculo.
-A interface do Streamlit fica separada.
+As fórmulas deste módulo ficam separadas da interface do Streamlit.
+Isso permite futuramente utilizar o mesmo motor em:
+- aplicativo Android;
+- aplicativo desktop;
+- API;
+- versão web;
+- geração de orçamento.
 """
 
 import math
 
+from .dados import (
+    COEFICIENTES,
+    PRECOS_BASE,
+    CONFIGURACAO_PROJETO,
+)
 
-def calcular_area(comprimento: float, altura: float) -> float:
-    """Calcula a área da parede."""
-    return comprimento * altura
 
-
-def calcular_perfis(
-    comprimento: float,
-    altura: float,
-    espacamento: float = 0.40,
-) -> dict:
+def calcular_area(comprimento, altura):
     """
-    Calcula quantidade aproximada de montantes e guias.
+    Calcula a área da parede.
 
-    comprimento e altura em metros.
-    espacamento em metros.
+    Fórmula:
+        área = comprimento × altura
     """
-
     if comprimento <= 0 or altura <= 0:
         raise ValueError("Comprimento e altura devem ser maiores que zero.")
 
-    if espacamento <= 0:
-        raise ValueError("O espaçamento deve ser maior que zero.")
-
-    montantes = math.ceil(comprimento / espacamento) + 1
-
-    guias = math.ceil(comprimento / 3.0) * 2
-
-    return {
-        "montantes": montantes,
-        "guias": guias,
-    }
+    return comprimento * altura
 
 
-def calcular_placas(
-    area: float,
-    largura_placa: float = 1.20,
-    altura_placa: float = 1.80,
-) -> int:
-    """Calcula quantidade de placas necessárias."""
+def calcular_quantidade_material(area, coeficiente):
+    """
+    Calcula a quantidade de material com base na área.
 
+    quantidade = área × coeficiente
+    """
     if area <= 0:
-        return 0
+        return 0.0
 
-    area_placa = largura_placa * altura_placa
-
-    return math.ceil(area / area_placa)
+    return area * coeficiente
 
 
-def calcular_material(
-    quantidade: float,
-    preco_unitario: float,
-) -> float:
-    """Calcula o custo de um material."""
-
+def calcular_custo_material(quantidade, preco_unitario):
+    """
+    Calcula o custo individual de um material.
+    """
     return quantidade * preco_unitario
 
 
-def calcular_custo_total(
-    materiais: list,
-    mao_de_obra: float = 0.0,
-) -> float:
+def calcular_materiais(area, coeficientes=None, precos=None):
     """
-    Soma os custos dos materiais e da mão de obra.
+    Calcula quantidades e custos de todos os materiais.
 
-    Cada item de materiais deve possuir:
+    Retorna um dicionário contendo:
+        material
         quantidade
-        preco
+        preço unitário
+        custo total
     """
 
-    total_materiais = 0.0
+    if coeficientes is None:
+        coeficientes = COEFICIENTES
 
-    for material in materiais:
-        quantidade = float(material.get("quantidade", 0))
-        preco = float(material.get("preco", 0))
+    if precos is None:
+        precos = PRECOS_BASE
 
-        total_materiais += quantidade * preco
+    materiais = {}
 
-    return total_materiais + float(mao_de_obra)
+    for nome, coeficiente in coeficientes.items():
+
+        preco = precos.get(nome, 0.0)
+
+        quantidade = calcular_quantidade_material(
+            area,
+            coeficiente
+        )
+
+        custo = calcular_custo_material(
+            quantidade,
+            preco
+        )
+
+        materiais[nome] = {
+            "quantidade": quantidade,
+            "preco_unitario": preco,
+            "custo": custo,
+        }
+
+    return materiais
+
+
+def calcular_subtotal_materiais(materiais):
+    """
+    Soma o custo de todos os materiais.
+    """
+
+    return sum(
+        item["custo"]
+        for item in materiais.values()
+    )
+
+
+def calcular_massas_telas(subtotal_materiais):
+    """
+    Calcula massas e telas.
+
+    Regra atual:
+        5% do subtotal dos materiais.
+    """
+
+    percentual = CONFIGURACAO_PROJETO[
+        "percentual_massas_telas"
+    ]
+
+    return subtotal_materiais * percentual
+
+
+def calcular_mao_de_obra(area, diaria=None):
+    """
+    Calcula a mão de obra.
+
+    Regra atual:
+
+        dias = área ÷ 90 × 30
+
+        custo = dias × diária
+    """
+
+    if diaria is None:
+        diaria = CONFIGURACAO_PROJETO[
+            "diaria_mao_de_obra"
+        ]
+
+    area_referencia = CONFIGURACAO_PROJETO[
+        "area_referencia_mao_de_obra"
+    ]
+
+    coeficiente_dias = CONFIGURACAO_PROJETO[
+        "coeficiente_dias_mao_de_obra"
+    ]
+
+    dias = (
+        area / area_referencia
+    ) * coeficiente_dias
+
+    custo = dias * diaria
+
+    return {
+        "dias": dias,
+        "diaria": diaria,
+        "custo": custo,
+    }
 
 
 def calcular_projeto(
-    comprimento: float,
-    altura: float,
-    espacamento: float = 0.40,
-) -> dict:
+    comprimento,
+    altura,
+    diaria=None,
+    coeficientes=None,
+    precos=None,
+):
     """
-    Executa os principais cálculos de um projeto.
+    Executa o cálculo completo do projeto.
     """
 
-    area = calcular_area(comprimento, altura)
-
-    perfis = calcular_perfis(
+    area = calcular_area(
         comprimento,
-        altura,
-        espacamento,
+        altura
     )
 
-    placas = calcular_placas(area)
+    materiais = calcular_materiais(
+        area,
+        coeficientes=coeficientes,
+        precos=precos,
+    )
+
+    subtotal_materiais = calcular_subtotal_materiais(
+        materiais
+    )
+
+    massas_telas = calcular_massas_telas(
+        subtotal_materiais
+    )
+
+    mao_de_obra = calcular_mao_de_obra(
+        area,
+        diaria=diaria,
+    )
+
+    custo_geral = (
+        subtotal_materiais
+        + massas_telas
+        + mao_de_obra["custo"]
+    )
 
     return {
         "comprimento": comprimento,
         "altura": altura,
         "area": area,
-        "montantes": perfis["montantes"],
-        "guias": perfis["guias"],
-        "placas": placas,
+        "materiais": materiais,
+        "subtotal_materiais": subtotal_materiais,
+        "massas_telas": massas_telas,
+        "mao_de_obra": mao_de_obra,
+        "custo_geral": custo_geral,
     }
+
+
+def calcular_resumo(
+    comprimento,
+    altura,
+    diaria=None,
+    coeficientes=None,
+    precos=None,
+):
+    """
+    Retorna somente os principais resultados
+    para utilização em telas de resumo.
+    """
+
+    projeto = calcular_projeto(
+        comprimento=comprimento,
+        altura=altura,
+        diaria=diaria,
+        coeficientes=coeficientes,
+        precos=precos,
+    )
+
+    return {
+        "Área": projeto["area"],
+        "Materiais": projeto["subtotal_materiais"],
+        "Massas e Telas": projeto["massas_telas"],
+        "Mão de Obra": projeto["mao_de_obra"]["custo"],
+        "Custo Geral": projeto["custo_geral"],
+    }
+```
