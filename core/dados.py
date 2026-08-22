@@ -1,10 +1,3 @@
-```python
-"""
-Dados reais da Calculadora Steel Framing.
-
-Os valores foram transferidos da versão atual do app.py.
-"""
-
 COEFICIENTES = {
     "Perfil 90x0,80": 113.0 / 30.0,
     "Guia Perimetral": 20.0 / 30.0,
@@ -42,16 +35,12 @@ CONFIGURACAO_PROJETO = {
 
 
 def obter_coeficientes():
-    """Retorna os coeficientes dos materiais."""
     return COEFICIENTES.copy()
 
 
 def obter_precos():
-    """Retorna os preços-base dos materiais."""
     return PRECOS_BASE.copy()
 
 
 def obter_configuracao():
-    """Retorna as configurações padrão do projeto."""
     return CONFIGURACAO_PROJETO.copy()
-```
