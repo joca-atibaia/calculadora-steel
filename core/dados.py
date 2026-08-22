@@ -1,74 +1,57 @@
+```python
 """
-Dados padrão da Calculadora Steel Framing.
+Dados reais da Calculadora Steel Framing.
 
-Os valores abaixo são apenas valores iniciais.
-Depois vamos transferir para cá os valores reais
-que já existem na sua calculadora atual.
+Os valores foram transferidos da versão atual do app.py.
 """
 
-MATERIAIS_PADRAO = {
-    "Perfil Montante": {
-        "unidade": "barra",
-        "comprimento": 3.00,
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
-
-    "Perfil Guia": {
-        "unidade": "barra",
-        "comprimento": 3.00,
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
-
-    "Placa de Drywall": {
-        "unidade": "un",
-        "largura": 1.20,
-        "altura": 1.80,
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
-
-    "Plywood": {
-        "unidade": "un",
-        "largura": 1.22,
-        "altura": 2.44,
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
-
-    "Lã Mineral": {
-        "unidade": "m²",
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
-
-    "Manta": {
-        "unidade": "m²",
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
-
-    "Parafusos": {
-        "unidade": "un",
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
-
-    "Massa": {
-        "unidade": "kg",
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
-
-    "Tela": {
-        "unidade": "m",
-        "coeficiente": 0.0,
-        "preco": 0.0,
-    },
+COEFICIENTES = {
+    "Perfil 90x0,80": 113.0 / 30.0,
+    "Guia Perimetral": 20.0 / 30.0,
+    "Plywood 8mm": 60.0 / 90.0,
+    "Placa ST 12.5mm": 36.0 / 90.0,
+    "Placa Cimentícia 12mm": 36.0 / 90.0,
+    "Lã PET": 6.0 / 90.0,
+    "Parafusos": 80.0,
+    "Cola PU 40": 36.0 / 90.0,
+    "Manta Hidrófuga": 3.0 / 90.0,
 }
 
 
-def obter_materiais():
-    """Retorna uma cópia dos materiais padrão."""
-    return MATERIAIS_PADRAO.copy()
+PRECOS_BASE = {
+    "Perfil 90x0,80": 50.0,
+    "Guia Perimetral": 50.0,
+    "Plywood 8mm": 80.0,
+    "Placa ST 12.5mm": 40.0,
+    "Placa Cimentícia 12mm": 140.0,
+    "Lã PET": 200.0,
+    "Parafusos": 0.07,
+    "Cola PU 40": 40.0,
+    "Manta Hidrófuga": 500.0,
+}
+
+
+CONFIGURACAO_PROJETO = {
+    "comprimento_padrao": 30.00,
+    "altura_padrao": 3.00,
+    "diaria_mao_de_obra": 755.0,
+    "coeficiente_dias_mao_de_obra": 30.0,
+    "area_referencia_mao_de_obra": 90.0,
+    "percentual_massas_telas": 0.05,
+}
+
+
+def obter_coeficientes():
+    """Retorna os coeficientes dos materiais."""
+    return COEFICIENTES.copy()
+
+
+def obter_precos():
+    """Retorna os preços-base dos materiais."""
+    return PRECOS_BASE.copy()
+
+
+def obter_configuracao():
+    """Retorna as configurações padrão do projeto."""
+    return CONFIGURACAO_PROJETO.copy()
+```
