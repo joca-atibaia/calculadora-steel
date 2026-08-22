@@ -1,8 +1,6 @@
-```python
 import streamlit as st
 
 from core.calculos import calcular_projeto
-from core.dados import PRECOS_BASE
 
 
 st.set_page_config(
@@ -11,17 +9,10 @@ st.set_page_config(
     layout="wide",
 )
 
-
 st.title("📐 Novo Projeto")
 st.caption("Calculadora Steel Framing")
 
-
 st.divider()
-
-
-# ==============================
-# DADOS DO PROJETO
-# ==============================
 
 st.subheader("Dados do projeto")
 
@@ -49,13 +40,7 @@ with col3:
         step=0.10,
     )
 
-
 st.divider()
-
-
-# ==============================
-# CÁLCULO
-# ==============================
 
 if st.button(
     "🧮 CALCULAR PROJETO",
@@ -72,15 +57,11 @@ if st.button(
     st.session_state["nome_projeto"] = nome_projeto
 
 
-# ==============================
-# RESULTADO
-# ==============================
-
 if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
-    st.subheader("Resultado")
+    st.subheader("📊 Resultado")
 
     col1, col2, col3, col4 = st.columns(4)
 
@@ -117,19 +98,19 @@ if "projeto" in st.session_state:
             .replace("X", "."),
         )
 
-
     st.divider()
-
-
-    # ==============================
-    # MATERIAIS
-    # ==============================
 
     st.subheader("📋 Quantitativo de materiais")
 
+    st.write(
+        "Material | Quantidade | Preço unitário | Custo"
+    )
+
+    st.divider()
+
     for nome, material in projeto["materiais"].items():
 
-        col1, col2, col3 = st.columns([4, 2, 2])
+        col1, col2, col3, col4 = st.columns([4, 2, 2, 2])
 
         with col1:
             st.write(nome)
@@ -140,22 +121,22 @@ if "projeto" in st.session_state:
             )
 
         with col3:
-            custo = material["custo"]
-
             st.write(
-                f'R$ {custo:,.2f}'
+                f'R$ {material["preco_unitario"]:,.2f}'
                 .replace(",", "X")
                 .replace(".", ",")
                 .replace("X", ".")
             )
 
+        with col4:
+            st.write(
+                f'R$ {material["custo"]:,.2f}'
+                .replace(",", "X")
+                .replace(".", ",")
+                .replace("X", ".")
+            )
 
     st.divider()
-
-
-    # ==============================
-    # MASSAS E TELAS
-    # ==============================
 
     st.subheader("🧱 Massas e Telas")
 
@@ -166,10 +147,7 @@ if "projeto" in st.session_state:
         .replace("X", ".")
     )
 
-
-    # ==============================
-    # MÃO DE OBRA
-    # ==============================
+    st.divider()
 
     st.subheader("👷 Mão de obra")
 
@@ -194,20 +172,14 @@ if "projeto" in st.session_state:
 
     with col3:
         st.metric(
-            "Custo",
+            "Custo da mão de obra",
             f'R$ {mao_de_obra["custo"]:,.2f}'
             .replace(",", "X")
             .replace(".", ",")
             .replace("X", "."),
         )
 
-
     st.divider()
-
-
-    # ==============================
-    # TOTAL
-    # ==============================
 
     st.success(
         f'💰 CUSTO GERAL: '
@@ -216,4 +188,3 @@ if "projeto" in st.session_state:
         .replace(".", ",")
         .replace("X", ".")
     )
-```
