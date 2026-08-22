@@ -1,16 +1,3 @@
-```python
-"""
-Motor de cálculo da Calculadora Steel Framing.
-
-As fórmulas deste módulo ficam separadas da interface do Streamlit.
-Isso permite futuramente utilizar o mesmo motor em:
-- aplicativo Android;
-- aplicativo desktop;
-- API;
-- versão web;
-- geração de orçamento.
-"""
-
 import math
 
 from .dados import (
@@ -21,24 +8,15 @@ from .dados import (
 
 
 def calcular_area(comprimento, altura):
-    """
-    Calcula a área da parede.
-
-    Fórmula:
-        área = comprimento × altura
-    """
     if comprimento <= 0 or altura <= 0:
-        raise ValueError("Comprimento e altura devem ser maiores que zero.")
+        raise ValueError(
+            "Comprimento e altura devem ser maiores que zero."
+        )
 
     return comprimento * altura
 
 
 def calcular_quantidade_material(area, coeficiente):
-    """
-    Calcula a quantidade de material com base na área.
-
-    quantidade = área × coeficiente
-    """
     if area <= 0:
         return 0.0
 
@@ -46,22 +24,10 @@ def calcular_quantidade_material(area, coeficiente):
 
 
 def calcular_custo_material(quantidade, preco_unitario):
-    """
-    Calcula o custo individual de um material.
-    """
     return quantidade * preco_unitario
 
 
 def calcular_materiais(area, coeficientes=None, precos=None):
-    """
-    Calcula quantidades e custos de todos os materiais.
-
-    Retorna um dicionário contendo:
-        material
-        quantidade
-        preço unitário
-        custo total
-    """
 
     if coeficientes is None:
         coeficientes = COEFICIENTES
@@ -95,9 +61,6 @@ def calcular_materiais(area, coeficientes=None, precos=None):
 
 
 def calcular_subtotal_materiais(materiais):
-    """
-    Soma o custo de todos os materiais.
-    """
 
     return sum(
         item["custo"]
@@ -106,12 +69,6 @@ def calcular_subtotal_materiais(materiais):
 
 
 def calcular_massas_telas(subtotal_materiais):
-    """
-    Calcula massas e telas.
-
-    Regra atual:
-        5% do subtotal dos materiais.
-    """
 
     percentual = CONFIGURACAO_PROJETO[
         "percentual_massas_telas"
@@ -121,15 +78,6 @@ def calcular_massas_telas(subtotal_materiais):
 
 
 def calcular_mao_de_obra(area, diaria=None):
-    """
-    Calcula a mão de obra.
-
-    Regra atual:
-
-        dias = área ÷ 90 × 30
-
-        custo = dias × diária
-    """
 
     if diaria is None:
         diaria = CONFIGURACAO_PROJETO[
@@ -162,11 +110,8 @@ def calcular_projeto(
     altura,
     diaria=None,
     coeficientes=None,
-    precos=None,
+    precos=None
 ):
-    """
-    Executa o cálculo completo do projeto.
-    """
 
     area = calcular_area(
         comprimento,
@@ -176,7 +121,7 @@ def calcular_projeto(
     materiais = calcular_materiais(
         area,
         coeficientes=coeficientes,
-        precos=precos,
+        precos=precos
     )
 
     subtotal_materiais = calcular_subtotal_materiais(
@@ -189,7 +134,7 @@ def calcular_projeto(
 
     mao_de_obra = calcular_mao_de_obra(
         area,
-        diaria=diaria,
+        diaria=diaria
     )
 
     custo_geral = (
@@ -215,19 +160,15 @@ def calcular_resumo(
     altura,
     diaria=None,
     coeficientes=None,
-    precos=None,
+    precos=None
 ):
-    """
-    Retorna somente os principais resultados
-    para utilização em telas de resumo.
-    """
 
     projeto = calcular_projeto(
         comprimento=comprimento,
         altura=altura,
         diaria=diaria,
         coeficientes=coeficientes,
-        precos=precos,
+        precos=precos
     )
 
     return {
@@ -237,4 +178,3 @@ def calcular_resumo(
         "Mão de Obra": projeto["mao_de_obra"]["custo"],
         "Custo Geral": projeto["custo_geral"],
     }
-```
