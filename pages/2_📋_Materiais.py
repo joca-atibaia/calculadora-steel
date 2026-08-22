@@ -1,9 +1,6 @@
 import streamlit as st
 
-from core.dados import (
-    COEFICIENTES,
-    PRECOS_BASE,
-)
+from core.dados import COEFICIENTES, PRECOS_BASE
 
 
 st.set_page_config(
@@ -19,113 +16,72 @@ st.caption("Coeficientes e preços utilizados nos cálculos")
 st.divider()
 
 
-st.subheader("⚙️ Configuração dos materiais")
-
-st.info(
-    "Altere os coeficientes e preços abaixo. "
-    "As alterações ficam disponíveis durante a sessão "
-    "atual do aplicativo."
-)
-
-
 if "coeficientes" not in st.session_state:
-
-    st.session_state["coeficientes"] = (
-        COEFICIENTES.copy()
-    )
+    st.session_state["coeficientes"] = COEFICIENTES.copy()
 
 
 if "precos" not in st.session_state:
-
-    st.session_state["precos"] = (
-        PRECOS_BASE.copy()
-    )
+    st.session_state["precos"] = PRECOS_BASE.copy()
 
 
-coeficientes = st.session_state["coeficientes"]
-precos = st.session_state["precos"]
+st.subheader("⚙️ Configuração dos materiais")
+
+st.info(
+    "Altere os coeficientes e preços dos materiais. "
+    "As alterações serão utilizadas nos próximos cálculos."
+)
 
 
-for nome in coeficientes:
+for nome in COEFICIENTES:
 
-    st.markdown(f"### {nome}")
-
-    col1, col2, col3 = st.columns([2, 2, 1])
+    col1, col2 = st.columns(2)
 
     with col1:
 
-        novo_coeficiente = st.number_input(
-            "Coeficiente",
+        st.session_state["coeficientes"][nome] = st.number_input(
+            f"{nome} — Coeficiente",
             min_value=0.0,
-            value=float(coeficientes[nome]),
+            value=float(
+                st.session_state["coeficientes"].get(
+                    nome,
+                    COEFICIENTES[nome]
+                )
+            ),
             step=0.01,
-            key=f"coef_{nome}",
+            key=f"coeficiente_{nome}",
         )
 
     with col2:
 
-        novo_preco = st.number_input(
-            "Preço unitário (R$)",
+        st.session_state["precos"][nome] = st.number_input(
+            f"{nome} — Preço unitário (R$)",
             min_value=0.0,
-            value=float(precos.get(nome, 0.0)),
+            value=float(
+                st.session_state["precos"].get(
+                    nome,
+                    PRECOS_BASE[nome]
+                )
+            ),
             step=0.01,
             key=f"preco_{nome}",
         )
 
-    with col3:
-
-        st.write("")
-
-        st.write("Atual")
-
-        st.write(
-            f"R$ {precos.get(nome, 0.0):,.2f}"
-            .replace(",", "X")
-            .replace(".", ",")
-            .replace("X", ".")
-        )
-
-    coeficientes[nome] = novo_coeficiente
-    precos[nome] = novo_preco
-
     st.divider()
 
 
-if st.button(
-    "💾 SALVAR ALTERAÇÕES",
-    type="primary",
-    use_container_width=True,
-):
-
-    st.session_state["coeficientes"] = (
-        coeficientes.copy()
-    )
-
-    st.session_state["precos"] = (
-        precos.copy()
-    )
-
-    st.success(
-        "Alterações salvas nesta sessão."
-    )
+st.subheader("📊 Resumo atual")
 
 
-st.divider()
+resumo = []
 
+for nome in COEFICIENTES:
 
-st.subheader("📊 Resumo dos parâmetros")
-
-
-dados = []
-
-for nome in coeficientes:
-
-    dados.append(
+    resumo.append(
         {
             "Material": nome,
-            "Coeficiente": coeficientes[nome],
+            "Coeficiente": st.session_state["coeficientes"][nome],
             "Preço unitário": (
-                f'R$ {precos[nome]:,.2f}'
+                f'R$ {st.session_state["precos"][nome]:,.2f}'
                 .replace(",", "X")
                 .replace(".", ",")
                 .replace("X", ".")
@@ -135,7 +91,13 @@ for nome in coeficientes:
 
 
 st.dataframe(
-    dados,
+    resumo,
     use_container_width=True,
     hide_index=True,
+)
+
+
+st.success(
+    "✅ Os valores acima estão carregados na sessão atual. "
+    "Volte para 📐 Novo Projeto e faça um novo cálculo."
 )
