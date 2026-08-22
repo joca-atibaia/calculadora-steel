@@ -1,6 +1,7 @@
 import streamlit as st
 
 from core.calculos import calcular_projeto
+from core.dados import COEFICIENTES, PRECOS_BASE
 
 
 st.set_page_config(
@@ -9,20 +10,25 @@ st.set_page_config(
     layout="wide",
 )
 
+
 st.title("📐 Novo Projeto")
 st.caption("Calculadora Steel Framing")
 
 st.divider()
 
+
 st.subheader("Dados do projeto")
 
+
 col1, col2, col3 = st.columns(3)
+
 
 with col1:
     nome_projeto = st.text_input(
         "Nome do projeto",
         placeholder="Ex.: Residência Atibaia",
     )
+
 
 with col2:
     comprimento = st.number_input(
@@ -32,6 +38,7 @@ with col2:
         step=0.10,
     )
 
+
 with col3:
     altura = st.number_input(
         "Altura (m)",
@@ -40,7 +47,17 @@ with col3:
         step=0.10,
     )
 
+
 st.divider()
+
+
+if "coeficientes" not in st.session_state:
+    st.session_state["coeficientes"] = COEFICIENTES.copy()
+
+
+if "precos" not in st.session_state:
+    st.session_state["precos"] = PRECOS_BASE.copy()
+
 
 if st.button(
     "🧮 CALCULAR PROJETO",
@@ -51,6 +68,8 @@ if st.button(
     resultado = calcular_projeto(
         comprimento=comprimento,
         altura=altura,
+        coeficientes=st.session_state["coeficientes"],
+        precos=st.session_state["precos"],
     )
 
     st.session_state["projeto"] = resultado
@@ -61,15 +80,19 @@ if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
+
     st.subheader("📊 Resultado")
 
+
     col1, col2, col3, col4 = st.columns(4)
+
 
     with col1:
         st.metric(
             "Área",
             f'{projeto["area"]:.2f} m²',
         )
+
 
     with col2:
         st.metric(
@@ -80,6 +103,7 @@ if "projeto" in st.session_state:
             .replace("X", "."),
         )
 
+
     with col3:
         st.metric(
             "Mão de obra",
@@ -88,6 +112,7 @@ if "projeto" in st.session_state:
             .replace(".", ",")
             .replace("X", "."),
         )
+
 
     with col4:
         st.metric(
@@ -98,27 +123,29 @@ if "projeto" in st.session_state:
             .replace("X", "."),
         )
 
+
     st.divider()
+
 
     st.subheader("📋 Quantitativo de materiais")
 
-    st.write(
-        "Material | Quantidade | Preço unitário | Custo"
-    )
-
-    st.divider()
 
     for nome, material in projeto["materiais"].items():
 
-        col1, col2, col3, col4 = st.columns([4, 2, 2, 2])
+        col1, col2, col3, col4 = st.columns(
+            [4, 2, 2, 2]
+        )
+
 
         with col1:
             st.write(nome)
+
 
         with col2:
             st.write(
                 f'{material["quantidade"]:.2f}'
             )
+
 
         with col3:
             st.write(
@@ -128,6 +155,7 @@ if "projeto" in st.session_state:
                 .replace("X", ".")
             )
 
+
         with col4:
             st.write(
                 f'R$ {material["custo"]:,.2f}'
@@ -136,9 +164,12 @@ if "projeto" in st.session_state:
                 .replace("X", ".")
             )
 
+
     st.divider()
 
+
     st.subheader("🧱 Massas e Telas")
+
 
     st.write(
         f'R$ {projeto["massas_telas"]:,.2f}'
@@ -147,19 +178,25 @@ if "projeto" in st.session_state:
         .replace("X", ".")
     )
 
+
     st.divider()
+
 
     st.subheader("👷 Mão de obra")
 
+
     mao_de_obra = projeto["mao_de_obra"]
 
+
     col1, col2, col3 = st.columns(3)
+
 
     with col1:
         st.metric(
             "Dias estimados",
             f'{mao_de_obra["dias"]:.1f}',
         )
+
 
     with col2:
         st.metric(
@@ -170,6 +207,7 @@ if "projeto" in st.session_state:
             .replace("X", "."),
         )
 
+
     with col3:
         st.metric(
             "Custo da mão de obra",
@@ -179,7 +217,9 @@ if "projeto" in st.session_state:
             .replace("X", "."),
         )
 
+
     st.divider()
+
 
     st.success(
         f'💰 CUSTO GERAL: '
