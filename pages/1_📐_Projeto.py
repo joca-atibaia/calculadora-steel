@@ -1,3 +1,54 @@
+st.markdown(
+    """
+    <div class="sf-title-box">
+
+        <div class="sf-title">
+            📐 CALCULADORA STEEL FRAMING
+        </div>
+
+        <div class="sf-description">
+            Sistema profissional para orçamento de materiais,
+            quantitativos e mão de obra.
+        </div>
+
+        <div class="sf-version">
+            ORÇAMENTO PROFISSIONAL • VERSÃO 6C
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+E só alterar as três propriedades de cor:
+
+.sf-title {
+    color: #6fa8c9 !important;
+}
+
+.sf-description {
+    color: #000000 !important;
+}
+
+.sf-version {
+    color: #000000 !important;
+}
+
+O restante do seu código não deveria ter sido mexido.
+
+Então sim: foi erro meu, não seu. Você tinha conseguido deixar o cabeçalho funcionando e eu compliquei uma alteração que era simples.
+
+refaça o codigo completo por ultima vez, já me cansou
+
+Você tem razão. Vamos encerrar essa parte sem inventar mais nada.
+
+Vou manter a estrutura que você enviou e alterar somente as cores do cabeçalho:
+
+Título: azul-aço.
+Subtítulo: preto.
+Versão: preto.
+HTML renderizado corretamente.
+Todo o restante permanece igual.
 import streamlit as st
 import pandas as pd
 from datetime import date
