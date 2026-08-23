@@ -111,29 +111,35 @@ st.markdown(
         letter-spacing: -0.5px;
         line-height: 1.2;
         margin-bottom: 10px;
-        color: #ffffff;
+        color: #ffffff !important;
     }
 
     .hero-subtitle {
         font-size: 1rem;
         font-weight: 400;
-        color: #dce3e8;
+        color: #dce3e8 !important;
         line-height: 1.6;
         margin-bottom: 18px;
     }
 
     .hero-badge {
         display: inline-block;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.22);
+
+        background:
+            rgba(255, 255, 255, 0.12);
+
+        border:
+            1px solid rgba(255, 255, 255, 0.22);
+
         border-radius: 999px;
+
         padding: 7px 14px;
 
         font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.6px;
 
-        color: #ffffff;
+        color: #ffffff !important;
     }
 
     /* ======================================================
@@ -148,13 +154,13 @@ st.markdown(
     .section-title {
         font-size: 1.35rem;
         font-weight: 800;
-        color: #17202a;
+        color: #17202a !important;
         margin-bottom: 3px;
         line-height: 1.3;
     }
 
     .section-subtitle {
-        color: #6b7280;
+        color: #6b7280 !important;
         font-size: 0.9rem;
         margin-bottom: 18px;
         line-height: 1.5;
@@ -166,9 +172,14 @@ st.markdown(
 
     .info-card {
         background: #ffffff;
-        border: 1px solid #e1e6eb;
+
+        border:
+            1px solid #e1e6eb;
+
         border-radius: 14px;
+
         padding: 18px 20px;
+
         margin-bottom: 14px;
 
         box-shadow:
@@ -181,8 +192,12 @@ st.markdown(
 
     div[data-testid="stMetric"] {
         background: #ffffff;
-        border: 1px solid #e1e6eb;
+
+        border:
+            1px solid #e1e6eb;
+
         border-radius: 14px;
+
         padding: 15px;
 
         box-shadow:
@@ -278,6 +293,7 @@ st.markdown(
 st.markdown(
     """
     <div class="hero">
+
         <div class="hero-title">
             📐 CALCULADORA STEEL FRAMING
         </div>
@@ -290,6 +306,7 @@ st.markdown(
         <div class="hero-badge">
             ORÇAMENTO PROFISSIONAL • VERSÃO 6C
         </div>
+
     </div>
     """,
     unsafe_allow_html=True,
@@ -417,18 +434,25 @@ cabecalho_secao(
 
 
 if "precos" not in st.session_state:
+
     st.session_state["precos"] = PRECOS_BASE.copy()
 
 
 precos_atualizados = {}
 
 
-for nome, preco_padrao in st.session_state["precos"].items():
+for nome, preco_padrao in PRECOS_BASE.items():
+
+    if nome not in st.session_state["precos"]:
+
+        st.session_state["precos"][nome] = preco_padrao
 
     preco_atual = st.number_input(
         nome,
         min_value=0.00,
-        value=float(preco_padrao),
+        value=float(
+            st.session_state["precos"][nome]
+        ),
         step=0.01,
         format="%.2f",
         key=f"preco_{nome}",
@@ -466,6 +490,7 @@ cabecalho_secao(
 
 
 if "quantidades" not in st.session_state:
+
     st.session_state["quantidades"] = {}
 
 
@@ -474,7 +499,9 @@ quantidades_atualizadas = {}
 
 for nome, material in previa["materiais"].items():
 
-    quantidade_automatica = material["quantidade"]
+    quantidade_automatica = float(
+        material["quantidade"]
+    )
 
     if nome not in st.session_state["quantidades"]:
 
@@ -496,7 +523,9 @@ for nome, material in previa["materiais"].items():
     quantidades_atualizadas[nome] = quantidade_atual
 
 
-st.session_state["quantidades"] = quantidades_atualizadas
+st.session_state["quantidades"] = (
+    quantidades_atualizadas
+)
 
 
 st.divider()
@@ -528,8 +557,6 @@ if st.button(
     st.session_state["data_orcamento"] = data_orcamento
     st.session_state["observacoes"] = observacoes
 
-    st.success("Orçamento calculado com sucesso!")
-
 
 # ============================================================
 # RESULTADO
@@ -540,6 +567,11 @@ if "projeto" in st.session_state:
     projeto = st.session_state["projeto"]
 
     st.divider()
+
+
+    # ========================================================
+    # CABEÇALHO DO RESULTADO
+    # ========================================================
 
     cabecalho_secao(
         "📊 Orçamento",
@@ -594,7 +626,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # RESUMO
+    # RESUMO DO ORÇAMENTO
     # ========================================================
 
     st.subheader("📊 Resumo do orçamento")
@@ -648,7 +680,9 @@ if "projeto" in st.session_state:
     # QUANTITATIVO DE MATERIAIS
     # ========================================================
 
-    st.subheader("📋 Quantitativo de materiais")
+    st.subheader(
+        "📋 Quantitativo de materiais"
+    )
 
 
     tabela_materiais = []
@@ -692,7 +726,9 @@ if "projeto" in st.session_state:
     # MASSAS E TELAS
     # ========================================================
 
-    st.subheader("🧱 Massas e Telas")
+    st.subheader(
+        "🧱 Massas e Telas"
+    )
 
 
     st.metric(
@@ -710,7 +746,9 @@ if "projeto" in st.session_state:
     # MÃO DE OBRA
     # ========================================================
 
-    st.subheader("👷 Mão de obra")
+    st.subheader(
+        "👷 Mão de obra"
+    )
 
 
     mao_de_obra = projeto["mao_de_obra"]
@@ -762,15 +800,19 @@ if "projeto" in st.session_state:
 
     if observacoes_salvas:
 
-        st.subheader("📝 Observações")
+        st.subheader(
+            "📝 Observações"
+        )
 
-        st.write(observacoes_salvas)
+        st.write(
+            observacoes_salvas
+        )
 
         st.divider()
 
 
     # ========================================================
-    # TOTAL
+    # TOTAL FINAL
     # ========================================================
 
     st.success(
