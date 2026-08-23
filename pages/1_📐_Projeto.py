@@ -95,7 +95,7 @@ st.markdown(
     .sf-title {
         color: #6fa8c9;
 
-        font-size: 3.0rem;
+        font-size: 3.2rem;
 
         line-height: 1.2;
 
