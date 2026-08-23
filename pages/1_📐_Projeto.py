@@ -23,10 +23,45 @@ st.set_page_config(
 
 def formatar_moeda(valor):
     return (
-        f"R$ {float(valor):,.2f}"
+        f"R$ {valor:,.2f}"
         .replace(",", "X")
         .replace(".", ",")
         .replace("X", ".")
+    )
+
+
+def titulo_secao(titulo, subtitulo=None):
+    st.markdown(
+        f"""
+        <div style="
+            margin-top: 28px;
+            margin-bottom: 16px;
+        ">
+            <div style="
+                font-size: 1.35rem;
+                font-weight: 800;
+                color: #17202a;
+                line-height: 1.3;
+                margin-bottom: 4px;
+            ">
+                {titulo}
+            </div>
+            {
+                f'''
+                <div style="
+                    color: #6b7280;
+                    font-size: 0.9rem;
+                    line-height: 1.5;
+                ">
+                    {subtitulo}
+                </div>
+                '''
+                if subtitulo
+                else ""
+            }
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
 
@@ -69,111 +104,21 @@ st.markdown(
         background: transparent;
     }
 
-    /* ======================================================
-       CABEÇALHO
-       ====================================================== */
-
-    .hero {
-        background:
-            linear-gradient(
-                135deg,
-                #17202a 0%,
-                #263746 55%,
-                #34495e 100%
-            );
-
-        border-radius: 18px;
-        padding: 34px 38px;
-        margin-bottom: 30px;
-
-        box-shadow:
-            0 10px 30px rgba(0, 0, 0, 0.12);
-
-        color: #ffffff;
-    }
-
-    .hero-title {
-        font-size: 2.15rem;
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        line-height: 1.2;
-        margin-bottom: 10px;
-        color: #ffffff !important;
-    }
-
-    .hero-subtitle {
-        font-size: 1rem;
-        font-weight: 400;
-        color: #dce3e8 !important;
-        line-height: 1.6;
-        margin-bottom: 18px;
-    }
-
-    .hero-badge {
-        display: inline-block;
-
-        background:
-            rgba(255, 255, 255, 0.12);
-
-        border:
-            1px solid rgba(255, 255, 255, 0.22);
-
-        border-radius: 999px;
-
-        padding: 7px 14px;
-
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.6px;
-
-        color: #ffffff !important;
-    }
-
-    /* ======================================================
-       SEÇÕES
-       ====================================================== */
-
-    .section-header {
-        margin-top: 28px;
-        margin-bottom: 16px;
-    }
-
-    .section-title {
-        font-size: 1.35rem;
-        font-weight: 800;
-        color: #17202a !important;
-        margin-bottom: 3px;
-        line-height: 1.3;
-    }
-
-    .section-subtitle {
-        color: #6b7280 !important;
-        font-size: 0.9rem;
-        margin-bottom: 18px;
-        line-height: 1.5;
-    }
-
-    /* ======================================================
+    /* ========================================================
        MÉTRICAS
-       ====================================================== */
+       ======================================================== */
 
     div[data-testid="stMetric"] {
         background: #ffffff;
-
-        border:
-            1px solid #e1e6eb;
-
+        border: 1px solid #e1e6eb;
         border-radius: 14px;
-
         padding: 15px;
-
-        box-shadow:
-            0 3px 12px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
     }
 
-    /* ======================================================
+    /* ========================================================
        CAMPOS
-       ====================================================== */
+       ======================================================== */
 
     .stTextInput label,
     .stNumberInput label,
@@ -199,9 +144,9 @@ st.markdown(
             sans-serif !important;
     }
 
-    /* ======================================================
+    /* ========================================================
        BOTÕES
-       ====================================================== */
+       ======================================================== */
 
     .stButton > button,
     .stDownloadButton > button {
@@ -210,40 +155,24 @@ st.markdown(
         min-height: 42px;
     }
 
-    /* ======================================================
+    /* ========================================================
        TABELAS
-       ====================================================== */
+       ======================================================== */
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
         overflow: hidden;
     }
 
-    /* ======================================================
+    /* ========================================================
        RESPONSIVIDADE
-       ====================================================== */
+       ======================================================== */
 
     @media (max-width: 768px) {
 
         .block-container {
             padding-left: 1rem;
             padding-right: 1rem;
-        }
-
-        .hero {
-            padding: 25px 22px;
-        }
-
-        .hero-title {
-            font-size: 1.65rem;
-        }
-
-        .hero-subtitle {
-            font-size: 0.9rem;
-        }
-
-        .section-title {
-            font-size: 1.15rem;
         }
 
     }
@@ -256,25 +185,57 @@ st.markdown(
 
 # ============================================================
 # CABEÇALHO PRINCIPAL
-#
-# IMPORTANTE:
-# O HTML está dentro de st.markdown e NÃO é exibido como código.
 # ============================================================
 
 st.markdown(
     """
-    <div class="hero">
+    <div style="
+        background: linear-gradient(
+            135deg,
+            #17202a 0%,
+            #263746 55%,
+            #34495e 100%
+        );
+        border-radius: 18px;
+        padding: 34px 38px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        color: white;
+    ">
 
-        <div class="hero-title">
+        <div style="
+            font-size: 2.15rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            color: white;
+        ">
             📐 CALCULADORA STEEL FRAMING
         </div>
 
-        <div class="hero-subtitle">
+        <div style="
+            font-size: 1rem;
+            font-weight: 400;
+            color: #dce3e8;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        ">
             Sistema profissional para orçamento de
             materiais, quantitativos e mão de obra.
         </div>
 
-        <div class="hero-badge">
+        <div style="
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            color: white;
+        ">
             ORÇAMENTO PROFISSIONAL • VERSÃO 6C
         </div>
 
@@ -288,21 +249,9 @@ st.markdown(
 # IDENTIFICAÇÃO DO PROJETO
 # ============================================================
 
-st.markdown(
-    """
-    <div class="section-header">
-
-        <div class="section-title">
-            📋 Identificação do projeto
-        </div>
-
-        <div class="section-subtitle">
-            Informe os dados principais do orçamento.
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
+titulo_secao(
+    "📋 Identificação do projeto",
+    "Informe os dados principais do orçamento.",
 )
 
 
@@ -351,24 +300,12 @@ st.divider()
 
 
 # ============================================================
-# DIMENSÕES
+# DIMENSÕES DO PROJETO
 # ============================================================
 
-st.markdown(
-    """
-    <div class="section-header">
-
-        <div class="section-title">
-            📐 Dimensões do projeto
-        </div>
-
-        <div class="section-subtitle">
-            Informe as dimensões utilizadas no cálculo.
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
+titulo_secao(
+    "📐 Dimensões do projeto",
+    "Informe as dimensões utilizadas no cálculo.",
 )
 
 
@@ -414,22 +351,9 @@ st.divider()
 # PREÇOS DOS MATERIAIS
 # ============================================================
 
-st.markdown(
-    """
-    <div class="section-header">
-
-        <div class="section-title">
-            💰 Preços dos materiais
-        </div>
-
-        <div class="section-subtitle">
-            Altere os preços conforme fornecedor, região
-            ou condição de compra.
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
+titulo_secao(
+    "💰 Preços dos materiais",
+    "Altere os preços conforme fornecedor, região ou condição de compra.",
 )
 
 
@@ -441,17 +365,12 @@ if "precos" not in st.session_state:
 precos_atualizados = {}
 
 
-for nome, preco_padrao in PRECOS_BASE.items():
+for nome, preco_padrao in st.session_state["precos"].items():
 
     preco_atual = st.number_input(
         nome,
         min_value=0.00,
-        value=float(
-            st.session_state["precos"].get(
-                nome,
-                preco_padrao,
-            )
-        ),
+        value=float(preco_padrao),
         step=0.01,
         format="%.2f",
         key=f"preco_{nome}",
@@ -478,26 +397,13 @@ previa = calcular_projeto(
 
 
 # ============================================================
-# QUANTIDADES
+# QUANTIDADES DOS MATERIAIS
 # ============================================================
 
-st.markdown(
-    """
-    <div class="section-header">
-
-        <div class="section-title">
-            📦 Quantidades dos materiais
-        </div>
-
-        <div class="section-subtitle">
-            As quantidades são calculadas automaticamente.
-            Você pode alterar qualquer quantidade conforme
-            a necessidade da obra.
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
+titulo_secao(
+    "📦 Quantidades dos materiais",
+    "As quantidades são calculadas automaticamente. "
+    "Você pode alterar qualquer quantidade conforme a necessidade da obra.",
 )
 
 
@@ -511,9 +417,7 @@ quantidades_atualizadas = {}
 
 for nome, material in previa["materiais"].items():
 
-    quantidade_automatica = float(
-        material["quantidade"]
-    )
+    quantidade_automatica = material["quantidade"]
 
 
     if nome not in st.session_state["quantidades"]:
@@ -535,14 +439,10 @@ for nome, material in previa["materiais"].items():
     )
 
 
-    quantidades_atualizadas[nome] = (
-        quantidade_atual
-    )
+    quantidades_atualizadas[nome] = quantidade_atual
 
 
-st.session_state["quantidades"] = (
-    quantidades_atualizadas
-)
+st.session_state["quantidades"] = quantidades_atualizadas
 
 
 st.divider()
@@ -568,29 +468,12 @@ if st.button(
 
     st.session_state["projeto"] = resultado
 
-    st.session_state["nome_projeto"] = (
-        nome_projeto
-    )
-
-    st.session_state["cliente"] = (
-        cliente
-    )
-
-    st.session_state["local_obra"] = (
-        local_obra
-    )
-
-    st.session_state["responsavel"] = (
-        responsavel
-    )
-
-    st.session_state["data_orcamento"] = (
-        data_orcamento
-    )
-
-    st.session_state["observacoes"] = (
-        observacoes
-    )
+    st.session_state["nome_projeto"] = nome_projeto
+    st.session_state["cliente"] = cliente
+    st.session_state["local_obra"] = local_obra
+    st.session_state["responsavel"] = responsavel
+    st.session_state["data_orcamento"] = data_orcamento
+    st.session_state["observacoes"] = observacoes
 
 
 # ============================================================
@@ -603,11 +486,11 @@ if "projeto" in st.session_state:
 
     st.divider()
 
-    st.markdown("## 📊 Orçamento")
+    st.header("📊 Orçamento")
 
 
     # ========================================================
-    # IDENTIFICAÇÃO
+    # IDENTIFICAÇÃO DO ORÇAMENTO
     # ========================================================
 
     col1, col2 = st.columns(2)
@@ -638,10 +521,12 @@ if "projeto" in st.session_state:
             f"{st.session_state.get('responsavel', '')}"
         )
 
+
         data_salva = st.session_state.get(
             "data_orcamento",
             data_orcamento,
         )
+
 
         st.write(
             f"**Data:** "
@@ -656,9 +541,7 @@ if "projeto" in st.session_state:
     # RESUMO
     # ========================================================
 
-    st.subheader(
-        "📊 Resumo do orçamento"
-    )
+    st.subheader("📊 Resumo do orçamento")
 
 
     col1, col2, col3, col4 = st.columns(4)
@@ -709,17 +592,13 @@ if "projeto" in st.session_state:
     # QUANTITATIVO
     # ========================================================
 
-    st.subheader(
-        "📋 Quantitativo de materiais"
-    )
+    st.subheader("📋 Quantitativo de materiais")
 
 
     tabela_materiais = []
 
 
-    for nome, material in (
-        projeto["materiais"].items()
-    ):
+    for nome, material in projeto["materiais"].items():
 
         tabela_materiais.append(
             {
@@ -757,9 +636,7 @@ if "projeto" in st.session_state:
     # MASSAS E TELAS
     # ========================================================
 
-    st.subheader(
-        "🧱 Massas e Telas"
-    )
+    st.subheader("🧱 Massas e Telas")
 
 
     st.metric(
@@ -777,9 +654,7 @@ if "projeto" in st.session_state:
     # MÃO DE OBRA
     # ========================================================
 
-    st.subheader(
-        "👷 Mão de obra"
-    )
+    st.subheader("👷 Mão de obra")
 
 
     mao_de_obra = projeto["mao_de_obra"]
@@ -831,13 +706,9 @@ if "projeto" in st.session_state:
 
     if observacoes_salvas:
 
-        st.subheader(
-            "📝 Observações"
-        )
+        st.subheader("📝 Observações")
 
-        st.write(
-            observacoes_salvas
-        )
+        st.write(observacoes_salvas)
 
         st.divider()
 
