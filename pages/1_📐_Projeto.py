@@ -124,8 +124,6 @@ st.markdown(
         line-height: 1.6;
 
         margin-bottom: 14px;
-
-        font-weight: 500;
     }
 
 
@@ -138,9 +136,9 @@ st.markdown(
 
         color: #000000;
 
-        background: rgba(255, 255, 255, 0.80);
+        background: rgba(255, 255, 255, 0.12);
 
-        border: 1px solid rgba(255, 255, 255, 0.90);
+        border: 1px solid rgba(255, 255, 255, 0.22);
 
         border-radius: 999px;
 
