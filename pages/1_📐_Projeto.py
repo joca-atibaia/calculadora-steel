@@ -94,7 +94,7 @@ st.markdown(
 
 
     /* ========================================================
-       TÍTULO
+       TÍTULO DO CABEÇALHO
        ======================================================== */
 
     .sf-title {
@@ -108,12 +108,12 @@ st.markdown(
 
         letter-spacing: -0.5px;
 
-        margin-bottom: 8px;
+        margin: 0 0 8px 0;
     }
 
 
     /* ========================================================
-       DESCRIÇÃO
+       DESCRIÇÃO DO CABEÇALHO
        ======================================================== */
 
     .sf-description {
@@ -123,7 +123,7 @@ st.markdown(
 
         line-height: 1.6;
 
-        margin-bottom: 14px;
+        margin: 0 0 14px 0;
     }
 
 
@@ -144,7 +144,7 @@ st.markdown(
 
         padding: 7px 14px;
 
-        font-size: 0.75rem;
+        font-size: 0.75rem !important;
 
         font-weight: 700;
 
@@ -254,7 +254,7 @@ st.markdown(
         }
 
         .sf-title {
-            font-size: 2.1rem !important;
+            font-size: 2.2rem !important;
         }
 
         .sf-description {
