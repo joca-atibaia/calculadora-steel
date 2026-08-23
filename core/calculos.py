@@ -40,23 +40,15 @@ def calcular_quantidade_material(
     coeficiente,
 ):
     """
-    Calcula a quantidade do material.
+    Calcula a quantidade automática do material.
 
-    Metodologia atual da Calculadora Steel:
+    Metodologia atual:
 
         quantidade =
         (área do projeto ÷ área de referência)
         × coeficiente
 
     A área de referência padrão é 30 m².
-
-    Exemplo:
-
-        Projeto = 90 m²
-        Coeficiente do Perfil = 113
-
-        (90 ÷ 30) × 113
-        = 339 unidades
     """
 
     if area <= 0:
@@ -95,17 +87,25 @@ def calcular_materiais(
     area,
     materiais=None,
     precos=None,
+    quantidades=None,
 ):
     """
-    Calcula quantitativo e custo de todos
-    os materiais ativos.
+    Calcula quantitativo e custo dos materiais.
 
-    Os preços enviados pela interface têm
-    prioridade sobre os preços padrão.
+    O sistema calcula automaticamente a quantidade.
+
+    Se uma quantidade manual for informada,
+    ela substitui a quantidade automática.
+
+    Os preços personalizados têm prioridade
+    sobre os preços padrão.
     """
 
     if materiais is None:
         materiais = MATERIAIS
+
+    if quantidades is None:
+        quantidades = {}
 
     resultado = {}
 
@@ -136,18 +136,30 @@ def calcular_materiais(
             0.0,
         )
 
-        # Preço personalizado tem prioridade
         if precos is not None and nome in precos:
             preco = precos[nome]
 
         # ----------------------------------------------------
-        # QUANTIDADE
+        # QUANTIDADE AUTOMÁTICA
         # ----------------------------------------------------
 
-        quantidade = calcular_quantidade_material(
-            area=area,
-            coeficiente=coeficiente,
+        quantidade_automatica = (
+            calcular_quantidade_material(
+                area=area,
+                coeficiente=coeficiente,
+            )
         )
+
+        # ----------------------------------------------------
+        # QUANTIDADE FINAL
+        # ----------------------------------------------------
+
+        if nome in quantidades:
+            quantidade = float(
+                quantidades[nome]
+            )
+        else:
+            quantidade = quantidade_automatica
 
         # ----------------------------------------------------
         # CUSTO
@@ -164,6 +176,7 @@ def calcular_materiais(
 
         resultado[nome] = {
             "quantidade": quantidade,
+            "quantidade_automatica": quantidade_automatica,
             "preco_unitario": preco,
             "custo": custo,
             "unidade": dados.get(
@@ -231,12 +244,6 @@ def calcular_mao_de_obra(
     Calcula a mão de obra.
 
     O número de dias é proporcional à área.
-
-    Exemplo:
-
-        30 m² → 10 dias
-        90 m² → 30 dias
-        120 m² → 40 dias
     """
 
     if area <= 0:
@@ -290,6 +297,7 @@ def calcular_projeto(
     diaria=None,
     precos=None,
     materiais=None,
+    quantidades=None,
     valor_massas_telas=None,
 ):
     """
@@ -321,6 +329,7 @@ def calcular_projeto(
         area=area,
         materiais=materiais,
         precos=precos,
+        quantidades=quantidades,
     )
 
     subtotal_materiais = (
@@ -383,6 +392,7 @@ def calcular_resumo(
     diaria=None,
     precos=None,
     materiais=None,
+    quantidades=None,
     valor_massas_telas=None,
 ):
     """
@@ -396,6 +406,7 @@ def calcular_resumo(
         diaria=diaria,
         precos=precos,
         materiais=materiais,
+        quantidades=quantidades,
         valor_massas_telas=valor_massas_telas,
     )
 
