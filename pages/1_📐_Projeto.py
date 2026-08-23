@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from datetime import date
 
 from core.calculos import calcular_projeto
@@ -118,9 +119,7 @@ with col2:
 
 with col3:
 
-    area_preview = (
-        comprimento * altura
-    )
+    area_preview = comprimento * altura
 
     st.metric(
         "Área do projeto",
@@ -166,14 +165,10 @@ for nome, preco_padrao in (
         key=f"preco_{nome}",
     )
 
-    precos_atualizados[nome] = (
-        preco_atual
-    )
+    precos_atualizados[nome] = preco_atual
 
 
-st.session_state["precos"] = (
-    precos_atualizados
-)
+st.session_state["precos"] = precos_atualizados
 
 
 st.divider()
@@ -211,9 +206,7 @@ if "quantidades" not in st.session_state:
 quantidades_atualizadas = {}
 
 
-for nome, material in (
-    previa["materiais"].items()
-):
+for nome, material in previa["materiais"].items():
 
     quantidade_automatica = material[
         "quantidade"
@@ -252,7 +245,7 @@ st.divider()
 
 
 # ============================================================
-# CALCULAR
+# CALCULAR ORÇAMENTO
 # ============================================================
 
 if st.button(
@@ -304,9 +297,7 @@ if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
-
     st.divider()
-
 
     st.header("📊 Orçamento")
 
@@ -343,9 +334,14 @@ if "projeto" in st.session_state:
             f"{st.session_state.get('responsavel', '')}"
         )
 
+        data_salva = st.session_state.get(
+            "data_orcamento",
+            data_orcamento,
+        )
+
         st.write(
             f"**Data:** "
-            f"{st.session_state.get('data_orcamento', data_orcamento).strftime('%d/%m/%Y')}"
+            f"{data_salva.strftime('%d/%m/%Y')}"
         )
 
 
@@ -404,7 +400,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # QUANTITATIVO
+    # TABELA PROFISSIONAL DE MATERIAIS
     # ========================================================
 
     st.subheader(
@@ -412,43 +408,38 @@ if "projeto" in st.session_state:
     )
 
 
+    tabela_materiais = []
+
+
     for nome, material in (
         projeto["materiais"].items()
     ):
 
-        col1, col2, col3, col4 = st.columns(
-            [4, 2, 2, 2]
+        tabela_materiais.append(
+            {
+                "Material": nome,
+                "Unidade": material["unidade"],
+                "Quantidade": f'{material["quantidade"]:.2f}',
+                "Preço unitário": formatar_moeda(
+                    material["preco_unitario"]
+                ),
+                "Total": formatar_moeda(
+                    material["custo"]
+                ),
+            }
         )
 
 
-        with col1:
-
-            st.write(nome)
-
-
-        with col2:
-
-            st.write(
-                f'{material["quantidade"]:.2f}'
-            )
+    df_materiais = pd.DataFrame(
+        tabela_materiais
+    )
 
 
-        with col3:
-
-            st.write(
-                formatar_moeda(
-                    material["preco_unitario"]
-                )
-            )
-
-
-        with col4:
-
-            st.write(
-                formatar_moeda(
-                    material["custo"]
-                )
-            )
+    st.dataframe(
+        df_materiais,
+        use_container_width=True,
+        hide_index=True,
+    )
 
 
     st.divider()
@@ -463,10 +454,11 @@ if "projeto" in st.session_state:
     )
 
 
-    st.write(
+    st.metric(
+        "Custo",
         formatar_moeda(
             projeto["massas_telas"]
-        )
+        ),
     )
 
 
@@ -525,15 +517,18 @@ if "projeto" in st.session_state:
     # OBSERVAÇÕES
     # ========================================================
 
-    if st.session_state.get(
+    observacoes_salvas = st.session_state.get(
         "observacoes",
         "",
-    ):
+    )
+
+
+    if observacoes_salvas:
 
         st.subheader("📝 Observações")
 
         st.write(
-            st.session_state["observacoes"]
+            observacoes_salvas
         )
 
         st.divider()
