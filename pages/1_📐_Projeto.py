@@ -38,19 +38,20 @@ st.markdown(
     """
     <style>
 
+    /* ========================================================
+       FONTE
+       ======================================================== */
+
     @import url(
         'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
     );
 
 
-    /* ========================================================
-       FONTE GERAL
-       ======================================================== */
-
     html,
     body,
     [data-testid="stAppViewContainer"],
     .stApp {
+
         font-family:
             "Inter",
             "Segoe UI",
@@ -61,12 +62,18 @@ st.markdown(
     }
 
 
+    /* ========================================================
+       FUNDO
+       ======================================================== */
+
     .stApp {
         background: #f5f7fa;
+        color: #17202a;
     }
 
 
     .block-container {
+
         max-width: 1400px;
 
         padding-top: 2rem;
@@ -85,6 +92,7 @@ st.markdown(
        ======================================================== */
 
     .sf-title-box {
+
         background: linear-gradient(
             135deg,
             #17202a 0%,
@@ -104,10 +112,11 @@ st.markdown(
 
 
     /* ========================================================
-       TÍTULO DO CABEÇALHO
+       TÍTULO
        ======================================================== */
 
     .sf-title {
+
         color: #ffffff !important;
 
         font-family:
@@ -134,6 +143,7 @@ st.markdown(
        ======================================================== */
 
     .sf-description {
+
         color: #dce3e8 !important;
 
         font-family:
@@ -158,6 +168,7 @@ st.markdown(
        ======================================================== */
 
     .sf-version {
+
         display: inline-block;
 
         color: #ffffff !important;
@@ -184,10 +195,11 @@ st.markdown(
 
 
     /* ========================================================
-       SEÇÕES
+       TÍTULOS DAS SEÇÕES
        ======================================================== */
 
     .section-title {
+
         font-family:
             "Inter",
             "Segoe UI",
@@ -197,7 +209,7 @@ st.markdown(
 
         font-weight: 800;
 
-        color: #17202a;
+        color: #17202a !important;
 
         margin-top: 28px;
 
@@ -206,6 +218,7 @@ st.markdown(
 
 
     .section-description {
+
         font-family:
             "Inter",
             "Segoe UI",
@@ -213,14 +226,14 @@ st.markdown(
 
         font-size: 0.9rem;
 
-        color: #6b7280;
+        color: #6b7280 !important;
 
         margin-bottom: 16px;
     }
 
 
     /* ========================================================
-       CAMPOS
+       LABELS DOS CAMPOS
        ======================================================== */
 
     .stTextInput label,
@@ -242,9 +255,33 @@ st.markdown(
     }
 
 
-    div[data-baseweb="input"] > div,
-    div[data-baseweb="textarea"] > div {
-        border-radius: 9px;
+    /* ========================================================
+       TEXTO DOS CAMPOS
+       ======================================================== */
+
+    .stTextInput input,
+    .stNumberInput input,
+    .stDateInput input,
+    .stTextArea textarea {
+
+        color: #17202a !important;
+
+        font-family:
+            "Inter",
+            "Segoe UI",
+            sans-serif !important;
+    }
+
+
+    /* Placeholder */
+
+    .stTextInput input::placeholder,
+    .stNumberInput input::placeholder,
+    .stTextArea textarea::placeholder {
+
+        color: #9ca3af !important;
+
+        opacity: 1 !important;
     }
 
 
@@ -264,6 +301,28 @@ st.markdown(
 
         box-shadow:
             0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+
+    div[data-testid="stMetricLabel"] {
+
+        color: #374151 !important;
+
+        font-weight: 600 !important;
+    }
+
+
+    div[data-testid="stMetricValue"] {
+
+        color: #17202a !important;
+
+        font-weight: 800 !important;
+    }
+
+
+    div[data-testid="stMetricDelta"] {
+
+        color: #374151 !important;
     }
 
 
@@ -287,6 +346,14 @@ st.markdown(
     }
 
 
+    /* Botão primário */
+
+    .stButton > button[kind="primary"] {
+
+        color: #ffffff !important;
+    }
+
+
     /* ========================================================
        TABELAS
        ======================================================== */
@@ -296,6 +363,46 @@ st.markdown(
         border-radius: 12px;
 
         overflow: hidden;
+    }
+
+
+    /* ========================================================
+       CABEÇALHOS NATIVOS DO RESULTADO
+       ======================================================== */
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+
+        color: #17202a !important;
+
+        font-family:
+            "Inter",
+            "Segoe UI",
+            sans-serif !important;
+    }
+
+
+    /* ========================================================
+       TEXTOS GERAIS
+       ======================================================== */
+
+    .stMarkdown p {
+
+        color: #17202a;
+    }
+
+
+    /* ========================================================
+       DIVISORES
+       ======================================================== */
+
+    hr {
+
+        border-color: #dfe4e8 !important;
     }
 
 
@@ -312,15 +419,18 @@ st.markdown(
             padding-right: 1rem;
         }
 
+
         .sf-title {
 
             font-size: 1.65rem !important;
         }
 
+
         .sf-description {
 
             font-size: 0.9rem !important;
         }
+
 
         .section-title {
 
@@ -589,6 +699,7 @@ for nome, material in previa["materiais"].items():
 
     quantidade_automatica = material["quantidade"]
 
+
     if nome not in st.session_state["quantidades"]:
 
         st.session_state["quantidades"][nome] = (
@@ -633,6 +744,7 @@ if st.button(
         precos=st.session_state["precos"],
         quantidades=st.session_state["quantidades"],
     )
+
 
     st.session_state["projeto"] = resultado
 
@@ -895,9 +1007,11 @@ if "projeto" in st.session_state:
             "📝 Observações"
         )
 
+
         st.write(
             observacoes_salvas
         )
+
 
         st.divider()
 
