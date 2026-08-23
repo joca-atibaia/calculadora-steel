@@ -76,115 +76,56 @@ st.markdown(
 
 
     /* ========================================================
-       CABEÇALHO
+       ESTILIZAÇÃO NATIVA DO CABEÇALHO (ESTRATÉGIA COMPATÍVEL)
        ======================================================== */
 
-    .sf-title-box {
+    /* Caixa de fundo do cabeçalho */
+    div[data-testid="stVerticalBlock"] > div:has(h1) {
         background: linear-gradient(
             135deg,
             #17202a 0%,
             #263746 55%,
             #34495e 100%
         );
-
         border-radius: 18px;
-
         padding: 35px 38px 30px 38px;
-
         margin-bottom: 25px;
-
-        box-shadow:
-            0 10px 30px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     }
 
-
-    /* ========================================================
-       TÍTULO
-       ======================================================== */
-
-    .sf-title {
+    /* Título principal interno */
+    div[data-testid="stVerticalBlock"] h1 {
         color: #6fa8c9 !important;
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            Roboto,
-            Helvetica,
-            Arial,
-            sans-serif !important;
-
         font-size: 3.5rem !important;
-
         line-height: 1.2 !important;
-
         font-weight: 900 !important;
-
         letter-spacing: -1px !important;
-
         margin: 0 0 10px 0 !important;
-
         padding: 0 !important;
+        border: none !important;
     }
 
-
-    /* ========================================================
-       SUBTÍTULO
-       ======================================================== */
-
-    .sf-description {
+    /* Subtítulo / Descrição interna */
+    div[data-testid="stVerticalBlock"] h1 + p {
         color: #ffffff !important;
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            Roboto,
-            Helvetica,
-            Arial,
-            sans-serif !important;
-
         font-size: 1.2rem !important;
-
         line-height: 1.6 !important;
-
         font-weight: 500 !important;
-
         margin: 0 0 16px 0 !important;
-
         padding: 0 !important;
     }
 
-
-    /* ========================================================
-       VERSÃO
-       ======================================================== */
-
-    .sf-version {
-        display: inline-block;
-
+    /* Versão interna / Caption */
+    div[data-testid="stVerticalBlock"] .stCaption span {
+        display: inline-block !important;
         color: #ffffff !important;
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            Roboto,
-            Helvetica,
-            Arial,
-            sans-serif !important;
-
-        background: rgba(255, 255, 255, 0.15);
-
-        border: 1px solid rgba(255, 255, 255, 0.25);
-
-        border-radius: 999px;
-
-        padding: 7px 14px;
-
+        background: rgba(255, 255, 255, 0.15) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        border-radius: 999px !important;
+        padding: 7px 14px !important;
         font-size: 0.75rem !important;
-
         font-weight: 700 !important;
-
-        letter-spacing: 0.6px;
-
+        letter-spacing: 0.6px !important;
         margin: 0 !important;
     }
 
@@ -195,21 +136,15 @@ st.markdown(
 
     .section-title {
         font-size: 1.35rem;
-
         font-weight: 800;
-
         color: #17202a;
-
         margin-top: 28px;
-
         margin-bottom: 4px;
     }
 
     .section-description {
         font-size: 0.9rem;
-
         color: #6b7280;
-
         margin-bottom: 16px;
     }
 
@@ -224,9 +159,7 @@ st.markdown(
     .stTextArea label,
     .stSelectbox label {
         font-size: 0.88rem !important;
-
         font-weight: 600 !important;
-
         color: #374151 !important;
     }
 
@@ -242,15 +175,10 @@ st.markdown(
 
     div[data-testid="stMetric"] {
         background: #ffffff;
-
         border: 1px solid #e1e6eb;
-
         border-radius: 14px;
-
         padding: 15px;
-
-        box-shadow:
-            0 3px 12px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
     }
 
 
@@ -261,9 +189,7 @@ st.markdown(
     .stButton > button,
     .stDownloadButton > button {
         border-radius: 9px;
-
         font-weight: 700;
-
         min-height: 42px;
     }
 
@@ -274,7 +200,6 @@ st.markdown(
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
-
         overflow: hidden;
     }
 
@@ -284,20 +209,16 @@ st.markdown(
        ======================================================== */
 
     @media (max-width: 768px) {
-
         .block-container {
             padding-left: 1rem;
             padding-right: 1rem;
         }
-
-        .sf-title {
+        div[data-testid="stVerticalBlock"] h1 {
             font-size: 2.2rem !important;
         }
-
-        .sf-description {
+        div[data-testid="stVerticalBlock"] h1 + p {
             font-size: 1rem !important;
         }
-
         .section-title {
             font-size: 1.15rem;
         }
@@ -310,30 +231,14 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO PRINCIPAL
+# CABEÇALHO PRINCIPAL (MÉTODOS NATIVOS APLICADOS)
 # ============================================================
 
-st.markdown(
-    """
-    <div class="sf-title-box">
+st.title("📐 CALCULADORA STEEL FRAMING")
 
-        <div class="sf-title">
-            📐 CALCULADORA STEEL FRAMING
-        </div>
+st.markdown("Sistema profissional para orçamento de materiais, quantitativos e mão de obra.")
 
-        <div class="sf-description">
-            Sistema profissional para orçamento de materiais,
-            quantitativos e mão de obra.
-        </div>
-
-        <div class="sf-version">
-            ORÇAMENTO PROFISSIONAL • VERSÃO 6C
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+st.caption("ORÇAMENTO PROFISSIONAL • VERSÃO 6C")
 
 
 # ============================================================
@@ -458,10 +363,7 @@ st.divider()
 
 st.markdown(
     '<div class="section-title">💰 Preços dos materiais</div>',
-    unsafe_allow_html=True,
-)
-
-st.markdown(
+    thought=st.markdown(
     '<div class="section-description">'
     'Altere os preços conforme fornecedor, região ou condição de compra.'
     '</div>',
@@ -478,6 +380,4 @@ precos_atualizados = {}
 
 
 for nome, preco_padrao in st.session_state["precos"].items():
-    # O loop original foi cortado na mensagem anterior do usuário, 
-    # mantido estruturado apenas para fechar o escopo básico.
     pass
