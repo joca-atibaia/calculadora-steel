@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+
 from datetime import date
 
 from core.calculos import calcular_projeto
@@ -7,7 +8,7 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO
+# CONFIGURAÇÃO DA PÁGINA
 # ============================================================
 
 st.set_page_config(
@@ -22,6 +23,7 @@ st.set_page_config(
 # ============================================================
 
 def formatar_moeda(valor):
+    """Formata um número para moeda brasileira."""
     return (
         f"R$ {valor:,.2f}"
         .replace(",", "X")
@@ -30,25 +32,17 @@ def formatar_moeda(valor):
     )
 
 
-def titulo_secao(titulo, subtitulo):
-    st.markdown(
-        f"""
-        <div class="section-header">
-            <div class="section-title">{titulo}</div>
-            <div class="section-subtitle">{subtitulo}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 # ============================================================
-# CSS — VERSÃO 6C
+# CSS — VISUAL PROFISSIONAL 6C
 # ============================================================
 
 st.markdown(
     """
     <style>
+
+    /* ======================================================
+       BASE
+       ====================================================== */
 
     @import url(
         'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
@@ -81,17 +75,19 @@ st.markdown(
         background: transparent;
     }
 
-    /* ========================================================
+
+    /* ======================================================
        HERO
-       ======================================================== */
+       ====================================================== */
 
     .hero {
-        background: linear-gradient(
-            135deg,
-            #17202a 0%,
-            #263746 55%,
-            #34495e 100%
-        );
+        background:
+            linear-gradient(
+                135deg,
+                #17202a 0%,
+                #263746 55%,
+                #34495e 100%
+            );
 
         border-radius: 18px;
         padding: 34px 38px;
@@ -100,7 +96,7 @@ st.markdown(
         box-shadow:
             0 10px 30px rgba(0, 0, 0, 0.12);
 
-        color: white;
+        color: #ffffff;
     }
 
     .hero-title {
@@ -109,7 +105,7 @@ st.markdown(
         letter-spacing: -0.5px;
         line-height: 1.2;
         margin-bottom: 10px;
-        color: white;
+        color: #ffffff;
     }
 
     .hero-subtitle {
@@ -122,19 +118,28 @@ st.markdown(
 
     .hero-badge {
         display: inline-block;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.22);
+
+        background:
+            rgba(255, 255, 255, 0.12);
+
+        border:
+            1px solid rgba(255, 255, 255, 0.22);
+
         border-radius: 999px;
+
         padding: 7px 14px;
+
         font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.6px;
-        color: white;
+
+        color: #ffffff;
     }
 
-    /* ========================================================
-       SEÇÕES
-       ======================================================== */
+
+    /* ======================================================
+       TÍTULOS DAS SEÇÕES
+       ====================================================== */
 
     .section-header {
         margin-top: 28px;
@@ -145,7 +150,7 @@ st.markdown(
         font-size: 1.35rem;
         font-weight: 800;
         color: #17202a;
-        margin-bottom: 4px;
+        margin-bottom: 3px;
         line-height: 1.3;
     }
 
@@ -156,21 +161,45 @@ st.markdown(
         line-height: 1.5;
     }
 
-    /* ========================================================
-       MÉTRICAS
-       ======================================================== */
 
-    div[data-testid="stMetric"] {
-        background: white;
+    /* ======================================================
+       CARDS
+       ====================================================== */
+
+    .info-card {
+        background: #ffffff;
         border: 1px solid #e1e6eb;
         border-radius: 14px;
-        padding: 15px;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+        padding: 18px 20px;
+        margin-bottom: 14px;
+
+        box-shadow:
+            0 3px 12px rgba(0, 0, 0, 0.04);
     }
 
-    /* ========================================================
+
+    /* ======================================================
+       MÉTRICAS
+       ====================================================== */
+
+    div[data-testid="stMetric"] {
+        background: #ffffff;
+
+        border:
+            1px solid #e1e6eb;
+
+        border-radius: 14px;
+
+        padding: 15px;
+
+        box-shadow:
+            0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+
+    /* ======================================================
        CAMPOS
-       ======================================================== */
+       ====================================================== */
 
     .stTextInput label,
     .stNumberInput label,
@@ -196,9 +225,10 @@ st.markdown(
             sans-serif !important;
     }
 
-    /* ========================================================
+
+    /* ======================================================
        BOTÕES
-       ======================================================== */
+       ====================================================== */
 
     .stButton > button,
     .stDownloadButton > button {
@@ -207,18 +237,20 @@ st.markdown(
         min-height: 42px;
     }
 
-    /* ========================================================
+
+    /* ======================================================
        TABELAS
-       ======================================================== */
+       ====================================================== */
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
         overflow: hidden;
     }
 
-    /* ========================================================
+
+    /* ======================================================
        RESPONSIVIDADE
-       ======================================================== */
+       ====================================================== */
 
     @media (max-width: 768px) {
 
@@ -251,7 +283,7 @@ st.markdown(
 
 
 # ============================================================
-# HERO
+# CABEÇALHO PRINCIPAL
 # ============================================================
 
 st.markdown(
@@ -281,9 +313,21 @@ st.markdown(
 # IDENTIFICAÇÃO DO PROJETO
 # ============================================================
 
-titulo_secao(
-    "📋 Identificação do projeto",
-    "Informe os dados principais do orçamento.",
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📋 Identificação do projeto
+        </div>
+
+        <div class="section-subtitle">
+            Informe os dados principais do orçamento.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -338,12 +382,24 @@ st.divider()
 
 
 # ============================================================
-# DIMENSÕES
+# DIMENSÕES DO PROJETO
 # ============================================================
 
-titulo_secao(
-    "📐 Dimensões do projeto",
-    "Informe as dimensões utilizadas no cálculo.",
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📐 Dimensões do projeto
+        </div>
+
+        <div class="section-subtitle">
+            Informe as dimensões utilizadas no cálculo.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -358,7 +414,7 @@ with col1:
         value=30.00,
         step=0.10,
         format="%.2f",
-        key="comprimento_input",
+        key="comprimento",
     )
 
 
@@ -370,7 +426,7 @@ with col2:
         value=3.00,
         step=0.10,
         format="%.2f",
-        key="altura_input",
+        key="altura",
     )
 
 
@@ -388,16 +444,30 @@ st.divider()
 
 
 # ============================================================
-# PREÇOS
+# PREÇOS DOS MATERIAIS
 # ============================================================
 
-titulo_secao(
-    "💰 Preços dos materiais",
-    "Altere os preços conforme fornecedor, região ou condição de compra.",
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            💰 Preços dos materiais
+        </div>
+
+        <div class="section-subtitle">
+            Altere os preços conforme fornecedor, região
+            ou condição de compra.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
 if "precos" not in st.session_state:
+
     st.session_state["precos"] = PRECOS_BASE.copy()
 
 
@@ -436,17 +506,31 @@ previa = calcular_projeto(
 
 
 # ============================================================
-# QUANTIDADES
+# QUANTIDADES DOS MATERIAIS
 # ============================================================
 
-titulo_secao(
-    "📦 Quantidades dos materiais",
-    "As quantidades são calculadas automaticamente. "
-    "Você pode alterar qualquer quantidade conforme a necessidade da obra.",
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📦 Quantidades dos materiais
+        </div>
+
+        <div class="section-subtitle">
+            As quantidades são calculadas automaticamente.
+            Você pode alterar qualquer quantidade conforme
+            a necessidade da obra.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
 if "quantidades" not in st.session_state:
+
     st.session_state["quantidades"] = {}
 
 
@@ -457,13 +541,11 @@ for nome, material in previa["materiais"].items():
 
     quantidade_automatica = material["quantidade"]
 
-
     if nome not in st.session_state["quantidades"]:
 
         st.session_state["quantidades"][nome] = (
             quantidade_automatica
         )
-
 
     quantidade_atual = st.number_input(
         nome,
@@ -476,7 +558,6 @@ for nome, material in previa["materiais"].items():
         key=f"quantidade_{nome}",
     )
 
-
     quantidades_atualizadas[nome] = quantidade_atual
 
 
@@ -487,17 +568,14 @@ st.divider()
 
 
 # ============================================================
-# CALCULAR ORÇAMENTO
+# BOTÃO CALCULAR ORÇAMENTO
 # ============================================================
 
-calcular = st.button(
+if st.button(
     "🧮 CALCULAR ORÇAMENTO",
     type="primary",
     use_container_width=True,
-)
-
-
-if calcular:
+):
 
     resultado = calcular_projeto(
         comprimento=comprimento,
@@ -506,51 +584,40 @@ if calcular:
         quantidades=st.session_state["quantidades"],
     )
 
-
     st.session_state["projeto"] = resultado
 
-    st.session_state["projeto_dados"] = {
-        "nome_projeto": nome_projeto,
-        "cliente": cliente,
-        "local_obra": local_obra,
-        "responsavel": responsavel,
-        "data_orcamento": data_orcamento,
-        "observacoes": observacoes,
-        "comprimento": comprimento,
-        "altura": altura,
-    }
+    st.session_state["nome_projeto"] = nome_projeto
+    st.session_state["cliente"] = cliente
+    st.session_state["local_obra"] = local_obra
+    st.session_state["responsavel"] = responsavel
+    st.session_state["data_orcamento"] = data_orcamento
+    st.session_state["observacoes"] = observacoes
+
+    st.success("Orçamento calculado com sucesso!")
 
 
 # ============================================================
-# RESULTADO
+# RESULTADO DO ORÇAMENTO
 # ============================================================
 
 if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
-    dados = st.session_state.get(
-        "projeto_dados",
-        {},
-    )
-
-
     st.divider()
-
-
-    # ========================================================
-    # CABEÇALHO DO ORÇAMENTO
-    # ========================================================
 
     st.markdown(
         """
         <div class="section-header">
+
             <div class="section-title">
                 📊 Orçamento
             </div>
+
             <div class="section-subtitle">
-                Resumo completo do orçamento calculado.
+                Resultado calculado para o projeto.
             </div>
+
         </div>
         """,
         unsafe_allow_html=True,
@@ -558,7 +625,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # IDENTIFICAÇÃO
+    # IDENTIFICAÇÃO DO ORÇAMENTO
     # ========================================================
 
     col1, col2 = st.columns(2)
@@ -568,17 +635,17 @@ if "projeto" in st.session_state:
 
         st.write(
             f"**Projeto:** "
-            f"{dados.get('nome_projeto', '')}"
+            f"{st.session_state.get('nome_projeto', '')}"
         )
 
         st.write(
             f"**Cliente:** "
-            f"{dados.get('cliente', '')}"
+            f"{st.session_state.get('cliente', '')}"
         )
 
         st.write(
             f"**Local da obra:** "
-            f"{dados.get('local_obra', '')}"
+            f"{st.session_state.get('local_obra', '')}"
         )
 
 
@@ -586,15 +653,13 @@ if "projeto" in st.session_state:
 
         st.write(
             f"**Responsável:** "
-            f"{dados.get('responsavel', '')}"
+            f"{st.session_state.get('responsavel', '')}"
         )
 
-
-        data_salva = dados.get(
+        data_salva = st.session_state.get(
             "data_orcamento",
             date.today(),
         )
-
 
         st.write(
             f"**Data:** "
@@ -606,7 +671,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # RESUMO
+    # RESUMO DO ORÇAMENTO
     # ========================================================
 
     st.subheader("📊 Resumo do orçamento")
@@ -657,12 +722,10 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # QUANTITATIVO
+    # QUANTITATIVO DE MATERIAIS
     # ========================================================
 
-    st.subheader(
-        "📋 Quantitativo de materiais"
-    )
+    st.subheader("📋 Quantitativo de materiais")
 
 
     tabela_materiais = []
@@ -706,9 +769,7 @@ if "projeto" in st.session_state:
     # MASSAS E TELAS
     # ========================================================
 
-    st.subheader(
-        "🧱 Massas e Telas"
-    )
+    st.subheader("🧱 Massas e Telas")
 
 
     st.metric(
@@ -726,9 +787,7 @@ if "projeto" in st.session_state:
     # MÃO DE OBRA
     # ========================================================
 
-    st.subheader(
-        "👷 Mão de obra"
-    )
+    st.subheader("👷 Mão de obra")
 
 
     mao_de_obra = projeto["mao_de_obra"]
@@ -772,7 +831,7 @@ if "projeto" in st.session_state:
     # OBSERVAÇÕES
     # ========================================================
 
-    observacoes_salvas = dados.get(
+    observacoes_salvas = st.session_state.get(
         "observacoes",
         "",
     )
@@ -780,9 +839,7 @@ if "projeto" in st.session_state:
 
     if observacoes_salvas:
 
-        st.subheader(
-            "📝 Observações"
-        )
+        st.subheader("📝 Observações")
 
         st.write(
             observacoes_salvas
@@ -792,7 +849,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # TOTAL
+    # TOTAL FINAL
     # ========================================================
 
     st.success(
