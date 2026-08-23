@@ -1,21 +1,19 @@
 """
 Motor de cálculo da Calculadora Profissional de Steel Framing.
 
-Versão: 6B
+Versão 6B
 
-Responsabilidades deste módulo:
-- calcular área do projeto;
-- calcular quantitativos automáticos;
-- aceitar quantidades manuais;
-- aceitar preços personalizados;
-- calcular custos dos materiais;
-- calcular subtotal de materiais;
-- calcular Massas e Telas separadamente;
-- calcular mão de obra;
-- calcular custo geral;
-- fornecer indicadores para a interface.
+Responsável por:
+- cálculo da área;
+- cálculo automático dos materiais;
+- alteração manual das quantidades;
+- alteração dos preços;
+- cálculo de massas e telas;
+- cálculo de mão de obra;
+- custo total;
+- indicadores financeiros.
 
-A interface do Streamlit fica fora deste módulo.
+A interface gráfica fica nas páginas do Streamlit.
 """
 
 from .dados import (
@@ -31,15 +29,6 @@ from .dados import (
 def _numero(valor, padrao=0.0):
     """
     Converte um valor para float com segurança.
-
-    Aceita:
-        - int
-        - float
-        - strings numéricas
-        - None
-
-    Retorna:
-        float
     """
 
     if valor is None:
@@ -47,6 +36,7 @@ def _numero(valor, padrao=0.0):
 
     try:
         return float(valor)
+
     except (TypeError, ValueError):
         return float(padrao)
 
@@ -67,7 +57,7 @@ def _validar_positivo(valor, nome):
 
 
 # ============================================================
-# PROJETO
+# ÁREA DO PROJETO
 # ============================================================
 
 def calcular_area(comprimento, altura):
@@ -77,13 +67,6 @@ def calcular_area(comprimento, altura):
     Fórmula:
 
         área = comprimento × altura
-
-    Parâmetros:
-        comprimento: dimensão horizontal em metros
-        altura: dimensão vertical em metros
-
-    Retorna:
-        área em m²
     """
 
     comprimento = _validar_positivo(
@@ -122,14 +105,18 @@ def calcular_quantidade_material(
     """
 
     area = _numero(area)
-    coeficiente = _numero(coeficiente)
+
+    coeficiente = _numero(
+        coeficiente
+    )
 
     if area <= 0:
         return 0.0
 
     if coeficiente < 0:
         raise ValueError(
-            "O coeficiente do material não pode ser negativo."
+            "O coeficiente do material "
+            "não pode ser negativo."
         )
 
     area_referencia = _numero(
@@ -141,14 +128,13 @@ def calcular_quantidade_material(
 
     if area_referencia <= 0:
         raise ValueError(
-            "A área de referência deve ser maior que zero."
+            "A área de referência "
+            "deve ser maior que zero."
         )
 
-    quantidade = (
+    return (
         area / area_referencia
     ) * coeficiente
-
-    return quantidade
 
 
 # ============================================================
@@ -160,15 +146,18 @@ def calcular_custo_material(
     preco_unitario,
 ):
     """
-    Calcula o custo total de um material.
-
-    Fórmula:
+    Calcula:
 
         custo = quantidade × preço unitário
     """
 
-    quantidade = _numero(quantidade)
-    preco_unitario = _numero(preco_unitario)
+    quantidade = _numero(
+        quantidade
+    )
+
+    preco_unitario = _numero(
+        preco_unitario
+    )
 
     if quantidade < 0:
         raise ValueError(
@@ -201,32 +190,20 @@ def calcular_materiais(
 
     Regras:
 
-    1. Materiais inativos não entram no cálculo.
+    1. Materiais inativos não entram.
 
     2. O coeficiente cadastrado em dados.py
        determina a quantidade automática.
 
-    3. Se existir uma quantidade manual,
-       ela substitui a quantidade automática.
+    3. Se houver quantidade manual,
+       ela substitui a automática.
 
-    4. Se não existir quantidade manual,
-       permanece a quantidade automática.
-
-    5. Se existir preço personalizado,
+    4. Se houver preço personalizado,
        ele substitui o preço padrão.
 
-    6. O resultado registra:
-       - quantidade final;
-       - quantidade automática;
-       - se houve alteração manual;
-       - origem da quantidade;
-       - coeficiente;
-       - preço unitário;
-       - preço padrão;
-       - se houve preço personalizado;
-       - custo;
-       - unidade;
-       - categoria.
+    5. O resultado mantém informações
+       necessárias para a interface,
+       PDF e Excel.
     """
 
     area = _numero(area)
@@ -240,21 +217,6 @@ def calcular_materiais(
     if quantidades is None:
         quantidades = {}
 
-    if not isinstance(materiais, dict):
-        raise ValueError(
-            "O catálogo de materiais deve ser um dicionário."
-        )
-
-    if not isinstance(precos, dict):
-        raise ValueError(
-            "Os preços devem ser informados como dicionário."
-        )
-
-    if not isinstance(quantidades, dict):
-        raise ValueError(
-            "As quantidades devem ser informadas como dicionário."
-        )
-
     resultado = {}
 
     for nome, dados in materiais.items():
@@ -263,14 +225,20 @@ def calcular_materiais(
         # SEGURANÇA
         # ----------------------------------------------------
 
-        if not isinstance(dados, dict):
+        if not isinstance(
+            dados,
+            dict,
+        ):
             continue
 
         # ----------------------------------------------------
         # MATERIAL ATIVO
         # ----------------------------------------------------
 
-        if not dados.get("ativo", True):
+        if not dados.get(
+            "ativo",
+            True,
+        ):
             continue
 
         # ----------------------------------------------------
@@ -284,12 +252,6 @@ def calcular_materiais(
             )
         )
 
-        if coeficiente < 0:
-            raise ValueError(
-                f"O coeficiente do material '{nome}' "
-                "não pode ser negativo."
-            )
-
         # ----------------------------------------------------
         # PREÇO PADRÃO
         # ----------------------------------------------------
@@ -301,21 +263,11 @@ def calcular_materiais(
             )
         )
 
-        if preco_padrao < 0:
-            raise ValueError(
-                f"O preço padrão do material '{nome}' "
-                "não pode ser negativo."
-            )
-
         # ----------------------------------------------------
         # PREÇO FINAL
         # ----------------------------------------------------
 
-        preco_personalizado = (
-            nome in precos
-        )
-
-        if preco_personalizado:
+        if nome in precos:
 
             preco = _numero(
                 precos[nome],
@@ -328,8 +280,8 @@ def calcular_materiais(
 
         if preco < 0:
             raise ValueError(
-                f"O preço do material '{nome}' "
-                "não pode ser negativo."
+                f"O preço do material "
+                f"'{nome}' não pode ser negativo."
             )
 
         # ----------------------------------------------------
@@ -347,11 +299,11 @@ def calcular_materiais(
         # QUANTIDADE FINAL
         # ----------------------------------------------------
 
-        quantidade_manual = (
+        possui_quantidade_manual = (
             nome in quantidades
         )
 
-        if quantidade_manual:
+        if possui_quantidade_manual:
 
             quantidade = _numero(
                 quantidades[nome],
@@ -396,7 +348,7 @@ def calcular_materiais(
                 quantidade_automatica,
 
             "quantidade_manual":
-                quantidade_manual,
+                possui_quantidade_manual,
 
             "origem_quantidade":
                 origem_quantidade,
@@ -411,7 +363,7 @@ def calcular_materiais(
                 preco_padrao,
 
             "preco_personalizado":
-                preco_personalizado,
+                nome in precos,
 
             "custo":
                 custo,
@@ -436,9 +388,11 @@ def calcular_materiais(
 # SUBTOTAL DOS MATERIAIS
 # ============================================================
 
-def calcular_subtotal_materiais(materiais):
+def calcular_subtotal_materiais(
+    materiais,
+):
     """
-    Soma o custo de todos os materiais calculados.
+    Soma o custo de todos os materiais.
     """
 
     if not materiais:
@@ -448,7 +402,10 @@ def calcular_subtotal_materiais(materiais):
 
     for item in materiais.values():
 
-        if not isinstance(item, dict):
+        if not isinstance(
+            item,
+            dict,
+        ):
             continue
 
         subtotal += _numero(
@@ -472,25 +429,12 @@ def calcular_massas_telas(
     """
     Calcula o custo de Massas e Telas.
 
-    IMPORTANTE:
-
-    Massas e Telas continuam separadas do
-    quantitativo de materiais, conforme definido
-    na versão 6B.
-
-    Se valor_manual for informado:
-
-        utiliza o valor manual.
+    Se valor_manual for informado,
+    utiliza esse valor.
 
     Caso contrário:
 
-        subtotal_materiais × percentual
-
-    O percentual padrão vem de:
-
-        CONFIGURACAO_PROJETO[
-            "percentual_massas_telas"
-        ]
+        subtotal × percentual
     """
 
     subtotal_materiais = _numero(
@@ -562,35 +506,12 @@ def calcular_mao_de_obra(
     area = _numero(area)
 
     # --------------------------------------------------------
-    # PROJETO SEM ÁREA
-    # --------------------------------------------------------
-
-    if area <= 0:
-
-        diaria_final = (
-            _numero(diaria)
-            if diaria is not None
-            else _numero(
-                CONFIGURACAO_PROJETO.get(
-                    "diaria_mao_de_obra",
-                    755.00,
-                )
-            )
-        )
-
-        return {
-            "dias": 0.0,
-            "diaria": diaria_final,
-            "custo": 0.0,
-        }
-
-    # --------------------------------------------------------
     # DIÁRIA
     # --------------------------------------------------------
 
     if diaria is None:
 
-        diaria = _numero(
+        diaria_final = _numero(
             CONFIGURACAO_PROJETO.get(
                 "diaria_mao_de_obra",
                 755.00,
@@ -599,15 +520,27 @@ def calcular_mao_de_obra(
 
     else:
 
-        diaria = _numero(
+        diaria_final = _numero(
             diaria
         )
 
-    if diaria < 0:
+    if diaria_final < 0:
         raise ValueError(
             "A diária de mão de obra "
             "não pode ser negativa."
         )
+
+    # --------------------------------------------------------
+    # SEM ÁREA
+    # --------------------------------------------------------
+
+    if area <= 0:
+
+        return {
+            "dias": 0.0,
+            "diaria": diaria_final,
+            "custo": 0.0,
+        }
 
     # --------------------------------------------------------
     # ÁREA DE REFERÊNCIA
@@ -622,8 +555,8 @@ def calcular_mao_de_obra(
 
     if area_referencia <= 0:
         raise ValueError(
-            "A área de referência deve "
-            "ser maior que zero."
+            "A área de referência "
+            "deve ser maior que zero."
         )
 
     # --------------------------------------------------------
@@ -658,12 +591,12 @@ def calcular_mao_de_obra(
 
     custo = (
         dias *
-        diaria
+        diaria_final
     )
 
     return {
         "dias": dias,
-        "diaria": diaria,
+        "diaria": diaria_final,
         "custo": custo,
     }
 
@@ -684,43 +617,16 @@ def calcular_projeto(
     """
     Executa todos os cálculos do projeto.
 
-    Parâmetros:
-
-        comprimento:
-            comprimento do projeto em metros.
-
-        altura:
-            altura do projeto em metros.
-
-        diaria:
-            valor personalizado da diária
-            de mão de obra.
-
-        precos:
-            dicionário com preços personalizados.
-
-        materiais:
-            catálogo alternativo de materiais.
-
-        quantidades:
-            dicionário com quantidades manuais.
-
-        valor_massas_telas:
-            permite substituir o cálculo percentual
-            por um valor manual.
-
     Retorna:
 
-        {
-            "comprimento": ...,
-            "altura": ...,
-            "area": ...,
-            "materiais": ...,
-            "subtotal_materiais": ...,
-            "massas_telas": ...,
-            "mao_de_obra": ...,
-            "custo_geral": ...
-        }
+        comprimento
+        altura
+        área
+        materiais
+        subtotal_materiais
+        massas_telas
+        mão_de_obra
+        custo_geral
     """
 
     # ========================================================
@@ -746,7 +652,7 @@ def calcular_projeto(
     )
 
     # ========================================================
-    # SUBTOTAL MATERIAIS
+    # SUBTOTAL
     # ========================================================
 
     subtotal_materiais = (
@@ -796,10 +702,10 @@ def calcular_projeto(
     return {
 
         "comprimento":
-            comprimento,
+            _numero(comprimento),
 
         "altura":
-            altura,
+            _numero(altura),
 
         "area":
             area,
@@ -835,7 +741,7 @@ def calcular_resumo(
     valor_massas_telas=None,
 ):
     """
-    Retorna somente os principais indicadores
+    Retorna os principais indicadores
     financeiros do projeto.
     """
 
@@ -861,7 +767,9 @@ def calcular_resumo(
             projeto["massas_telas"],
 
         "Mão de Obra":
-            projeto["mao_de_obra"]["custo"],
+            projeto[
+                "mao_de_obra"
+            ]["custo"],
 
         "Custo Geral":
             projeto["custo_geral"],
@@ -877,12 +785,7 @@ def calcular_custo_por_m2(
     area,
 ):
     """
-    Calcula o custo total por metro quadrado.
-
-    Fórmula:
-
-        custo por m² =
-            custo total ÷ área
+    Calcula custo total por metro quadrado.
     """
 
     custo_total = _numero(
@@ -932,15 +835,14 @@ def calcular_indicadores_projeto(
     projeto,
 ):
     """
-    Calcula indicadores complementares
-    para apresentação na interface.
+    Calcula indicadores complementares.
 
     Retorna:
 
-        custo por m²
-        percentual de materiais
-        percentual de Massas e Telas
-        percentual de mão de obra
+        custo_por_m2
+        percentual_materiais
+        percentual_massas_telas
+        percentual_mao_de_obra
     """
 
     if not projeto:
@@ -978,17 +880,21 @@ def calcular_indicadores_projeto(
         {},
     )
 
-    custo_mao_de_obra = _numero(
-        mao_de_obra.get(
-            "custo",
-            0.0,
+    if isinstance(
+        mao_de_obra,
+        dict,
+    ):
+
+        custo_mao_de_obra = _numero(
+            mao_de_obra.get(
+                "custo",
+                0.0,
+            )
         )
-        if isinstance(
-            mao_de_obra,
-            dict,
-        )
-        else 0.0
-    )
+
+    else:
+
+        custo_mao_de_obra = 0.0
 
     custo_geral = _numero(
         projeto.get(
@@ -1001,33 +907,25 @@ def calcular_indicadores_projeto(
 
         "custo_por_m2":
             calcular_custo_por_m2(
-                custo_total=
-                    custo_geral,
-                area=
-                    area,
+                custo_total=custo_geral,
+                area=area,
             ),
 
         "percentual_materiais":
             calcular_percentual(
-                valor=
-                    subtotal_materiais,
-                total=
-                    custo_geral,
+                valor=subtotal_materiais,
+                total=custo_geral,
             ),
 
         "percentual_massas_telas":
             calcular_percentual(
-                valor=
-                    massas_telas,
-                total=
-                    custo_geral,
+                valor=massas_telas,
+                total=custo_geral,
             ),
 
         "percentual_mao_de_obra":
             calcular_percentual(
-                valor=
-                    custo_mao_de_obra,
-                total=
-                    custo_geral,
+                valor=custo_mao_de_obra,
+                total=custo_geral,
             ),
     }
