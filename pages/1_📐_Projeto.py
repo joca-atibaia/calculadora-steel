@@ -35,9 +35,17 @@ def formatar_moeda(valor):
 # CSS — VISUAL 6C
 # ============================================================
 
+# ============================================================
+# CSS — VISUAL PROFISSIONAL 6C
+# ============================================================
+
 st.markdown(
     """
     <style>
+
+    /* ======================================================
+       BASE
+       ====================================================== */
 
     @import url(
         'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
@@ -45,8 +53,8 @@ st.markdown(
 
     html,
     body,
-    .stApp,
-    [data-testid="stAppViewContainer"] {
+    [data-testid="stAppViewContainer"],
+    .stApp {
         font-family:
             "Inter",
             "Segoe UI",
@@ -120,7 +128,6 @@ st.markdown(
             1px solid rgba(255, 255, 255, 0.22);
 
         border-radius: 999px;
-
         padding: 7px 14px;
 
         font-size: 0.75rem;
@@ -130,6 +137,141 @@ st.markdown(
         color: #ffffff;
     }
 
+    /* ======================================================
+       TÍTULOS DAS SEÇÕES
+       ====================================================== */
+
+    .section-header {
+        margin-top: 28px;
+        margin-bottom: 16px;
+    }
+
+    .section-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #17202a;
+        margin-bottom: 3px;
+        line-height: 1.3;
+    }
+
+    .section-subtitle {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 18px;
+        line-height: 1.5;
+    }
+
+    /* ======================================================
+       CARDS
+       ====================================================== */
+
+    .info-card {
+        background: #ffffff;
+
+        border:
+            1px solid #e1e6eb;
+
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-bottom: 14px;
+
+        box-shadow:
+            0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    /* ======================================================
+       MÉTRICAS
+       ====================================================== */
+
+    div[data-testid="stMetric"] {
+        background: #ffffff;
+
+        border:
+            1px solid #e1e6eb;
+
+        border-radius: 14px;
+        padding: 15px;
+
+        box-shadow:
+            0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    /* ======================================================
+       INPUTS
+       ====================================================== */
+
+    .stTextInput label,
+    .stNumberInput label,
+    .stDateInput label,
+    .stTextArea label,
+    .stSelectbox label {
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
+        color: #374151 !important;
+    }
+
+    div[data-baseweb="input"] > div,
+    div[data-baseweb="textarea"] > div {
+        border-radius: 9px;
+    }
+
+    input,
+    textarea,
+    [data-baseweb="select"] {
+        font-family:
+            "Inter",
+            "Segoe UI",
+            sans-serif !important;
+    }
+
+    /* ======================================================
+       BOTÕES
+       ====================================================== */
+
+    .stButton > button {
+        border-radius: 9px;
+        font-weight: 700;
+        min-height: 42px;
+    }
+
+    /* ======================================================
+       TABELAS
+       ====================================================== */
+
+    div[data-testid="stDataFrame"] {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    /* ======================================================
+       RESPONSIVIDADE
+       ====================================================== */
+
+    @media (max-width: 768px) {
+
+        .block-container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .hero {
+            padding: 25px 22px;
+        }
+
+        .hero-title {
+            font-size: 1.65rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+        }
+
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
     /* ======================================================
        SEÇÕES
        ====================================================== */
