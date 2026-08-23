@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import date
 
 from core.calculos import calcular_projeto
 from core.dados import PRECOS_BASE
@@ -9,7 +10,7 @@ from core.dados import PRECOS_BASE
 # ============================================================
 
 st.set_page_config(
-    page_title="Projeto | Calculadora Steel",
+    page_title="Orçamento | Calculadora Steel",
     page_icon="📐",
     layout="wide",
 )
@@ -32,8 +33,57 @@ def formatar_moeda(valor):
 # CABEÇALHO
 # ============================================================
 
-st.title("📐 Novo Projeto")
-st.caption("Calculadora Steel Framing")
+st.title("📐 CALCULADORA STEEL FRAMING")
+st.caption("Orçamento de materiais e mão de obra")
+
+st.divider()
+
+
+# ============================================================
+# IDENTIFICAÇÃO DO PROJETO
+# ============================================================
+
+st.subheader("📋 Identificação do projeto")
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    nome_projeto = st.text_input(
+        "Nome do projeto",
+        placeholder="Ex.: Residência Atibaia",
+    )
+
+    cliente = st.text_input(
+        "Cliente",
+        placeholder="Nome do cliente",
+    )
+
+
+with col2:
+
+    local_obra = st.text_input(
+        "Local da obra",
+        placeholder="Ex.: Atibaia - SP",
+    )
+
+    responsavel = st.text_input(
+        "Responsável pelo orçamento",
+        placeholder="Nome do profissional",
+    )
+
+
+data_orcamento = st.date_input(
+    "Data do orçamento",
+    value=date.today(),
+)
+
+
+observacoes = st.text_area(
+    "Observações",
+    placeholder="Informações adicionais sobre o orçamento...",
+)
+
 
 st.divider()
 
@@ -42,17 +92,12 @@ st.divider()
 # DADOS DO PROJETO
 # ============================================================
 
-st.subheader("Dados do projeto")
+st.subheader("📐 Dimensões do projeto")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    nome_projeto = st.text_input(
-        "Nome do projeto",
-        placeholder="Ex.: Residência Atibaia",
-    )
 
-with col2:
     comprimento = st.number_input(
         "Comprimento (m)",
         min_value=0.01,
@@ -60,12 +105,26 @@ with col2:
         step=0.10,
     )
 
-with col3:
+
+with col2:
+
     altura = st.number_input(
         "Altura (m)",
         min_value=0.01,
         value=3.00,
         step=0.10,
+    )
+
+
+with col3:
+
+    area_preview = (
+        comprimento * altura
+    )
+
+    st.metric(
+        "Área do projeto",
+        f"{area_preview:.2f} m²",
     )
 
 
@@ -77,14 +136,17 @@ st.divider()
 # ============================================================
 
 if "precos" not in st.session_state:
-    st.session_state["precos"] = PRECOS_BASE.copy()
+
+    st.session_state["precos"] = (
+        PRECOS_BASE.copy()
+    )
 
 
 st.subheader("💰 Preços dos materiais")
 
 st.caption(
-    "Os preços podem ser alterados conforme "
-    "fornecedor, região ou condição de compra."
+    "Altere os preços conforme fornecedor, "
+    "região ou condição de compra."
 )
 
 
@@ -104,21 +166,22 @@ for nome, preco_padrao in (
         key=f"preco_{nome}",
     )
 
-    precos_atualizados[nome] = preco_atual
+    precos_atualizados[nome] = (
+        preco_atual
+    )
 
 
-st.session_state["precos"] = precos_atualizados
+st.session_state["precos"] = (
+    precos_atualizados
+)
 
 
 st.divider()
 
 
 # ============================================================
-# PRÉ-CÁLCULO DAS QUANTIDADES
+# PRÉ-CÁLCULO
 # ============================================================
-
-# Calculamos uma prévia somente para descobrir
-# as quantidades automáticas do projeto.
 
 previa = calcular_projeto(
     comprimento=comprimento,
@@ -128,7 +191,7 @@ previa = calcular_projeto(
 
 
 # ============================================================
-# QUANTIDADES DOS MATERIAIS
+# QUANTIDADES
 # ============================================================
 
 st.subheader("📦 Quantidades dos materiais")
@@ -141,25 +204,27 @@ st.caption(
 
 
 if "quantidades" not in st.session_state:
+
     st.session_state["quantidades"] = {}
 
 
 quantidades_atualizadas = {}
 
 
-for nome, material in previa["materiais"].items():
+for nome, material in (
+    previa["materiais"].items()
+):
 
     quantidade_automatica = material[
         "quantidade"
     ]
 
-    # Se ainda não existir quantidade salva,
-    # utiliza o cálculo automático.
-
     if nome not in st.session_state["quantidades"]:
+
         st.session_state["quantidades"][nome] = (
             quantidade_automatica
         )
+
 
     quantidade_atual = st.number_input(
         nome,
@@ -171,6 +236,7 @@ for nome, material in previa["materiais"].items():
         format="%.2f",
         key=f"quantidade_{nome}",
     )
+
 
     quantidades_atualizadas[nome] = (
         quantidade_atual
@@ -186,11 +252,11 @@ st.divider()
 
 
 # ============================================================
-# BOTÃO CALCULAR
+# CALCULAR
 # ============================================================
 
 if st.button(
-    "🧮 CALCULAR PROJETO",
+    "🧮 CALCULAR ORÇAMENTO",
     type="primary",
     use_container_width=True,
 ):
@@ -202,10 +268,31 @@ if st.button(
         quantidades=st.session_state["quantidades"],
     )
 
+
     st.session_state["projeto"] = resultado
 
     st.session_state["nome_projeto"] = (
         nome_projeto
+    )
+
+    st.session_state["cliente"] = (
+        cliente
+    )
+
+    st.session_state["local_obra"] = (
+        local_obra
+    )
+
+    st.session_state["responsavel"] = (
+        responsavel
+    )
+
+    st.session_state["data_orcamento"] = (
+        data_orcamento
+    )
+
+    st.session_state["observacoes"] = (
+        observacoes
     )
 
 
@@ -217,22 +304,74 @@ if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
-    st.subheader("📊 Resultado")
+
+    st.divider()
 
 
-    # --------------------------------------------------------
-    # INDICADORES PRINCIPAIS
-    # --------------------------------------------------------
+    st.header("📊 Orçamento")
+
+
+    # ========================================================
+    # IDENTIFICAÇÃO
+    # ========================================================
+
+    col1, col2 = st.columns(2)
+
+
+    with col1:
+
+        st.write(
+            f"**Projeto:** "
+            f"{st.session_state.get('nome_projeto', '')}"
+        )
+
+        st.write(
+            f"**Cliente:** "
+            f"{st.session_state.get('cliente', '')}"
+        )
+
+        st.write(
+            f"**Local da obra:** "
+            f"{st.session_state.get('local_obra', '')}"
+        )
+
+
+    with col2:
+
+        st.write(
+            f"**Responsável:** "
+            f"{st.session_state.get('responsavel', '')}"
+        )
+
+        st.write(
+            f"**Data:** "
+            f"{st.session_state.get('data_orcamento', data_orcamento).strftime('%d/%m/%Y')}"
+        )
+
+
+    st.divider()
+
+
+    # ========================================================
+    # RESUMO
+    # ========================================================
+
+    st.subheader("📊 Resumo do orçamento")
+
 
     col1, col2, col3, col4 = st.columns(4)
 
+
     with col1:
+
         st.metric(
             "Área",
             f'{projeto["area"]:.2f} m²',
         )
 
+
     with col2:
+
         st.metric(
             "Materiais",
             formatar_moeda(
@@ -240,7 +379,9 @@ if "projeto" in st.session_state:
             ),
         )
 
+
     with col3:
+
         st.metric(
             "Mão de obra",
             formatar_moeda(
@@ -248,7 +389,9 @@ if "projeto" in st.session_state:
             ),
         )
 
+
     with col4:
+
         st.metric(
             "Custo geral",
             formatar_moeda(
@@ -261,7 +404,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # QUANTITATIVO DE MATERIAIS
+    # QUANTITATIVO
     # ========================================================
 
     st.subheader(
@@ -277,22 +420,30 @@ if "projeto" in st.session_state:
             [4, 2, 2, 2]
         )
 
+
         with col1:
+
             st.write(nome)
 
+
         with col2:
+
             st.write(
                 f'{material["quantidade"]:.2f}'
             )
 
+
         with col3:
+
             st.write(
                 formatar_moeda(
                     material["preco_unitario"]
                 )
             )
 
+
         with col4:
+
             st.write(
                 formatar_moeda(
                     material["custo"]
@@ -310,6 +461,7 @@ if "projeto" in st.session_state:
     st.subheader(
         "🧱 Massas e Telas"
     )
+
 
     st.write(
         formatar_moeda(
@@ -329,6 +481,7 @@ if "projeto" in st.session_state:
         "👷 Mão de obra"
     )
 
+
     mao_de_obra = projeto[
         "mao_de_obra"
     ]
@@ -336,13 +489,17 @@ if "projeto" in st.session_state:
 
     col1, col2, col3 = st.columns(3)
 
+
     with col1:
+
         st.metric(
             "Dias estimados",
             f'{mao_de_obra["dias"]:.1f}',
         )
 
+
     with col2:
+
         st.metric(
             "Diária",
             formatar_moeda(
@@ -350,7 +507,9 @@ if "projeto" in st.session_state:
             ),
         )
 
+
     with col3:
+
         st.metric(
             "Custo da mão de obra",
             formatar_moeda(
@@ -360,6 +519,24 @@ if "projeto" in st.session_state:
 
 
     st.divider()
+
+
+    # ========================================================
+    # OBSERVAÇÕES
+    # ========================================================
+
+    if st.session_state.get(
+        "observacoes",
+        "",
+    ):
+
+        st.subheader("📝 Observações")
+
+        st.write(
+            st.session_state["observacoes"]
+        )
+
+        st.divider()
 
 
     # ========================================================
