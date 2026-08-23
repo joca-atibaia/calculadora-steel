@@ -42,6 +42,11 @@ st.markdown(
         'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
     );
 
+
+    /* ========================================================
+       CONFIGURAÇÃO GERAL
+       ======================================================== */
+
     html,
     body,
     [data-testid="stAppViewContainer"],
@@ -100,15 +105,25 @@ st.markdown(
     .sf-title {
         color: #6fa8c9 !important;
 
-        font-size: 3.0rem !important;
+        font-family:
+            "Inter",
+            "Segoe UI",
+            Roboto,
+            Helvetica,
+            Arial,
+            sans-serif !important;
 
-        line-height: 1.2;
+        font-size: 3rem !important;
+
+        line-height: 1.2 !important;
 
         font-weight: 800 !important;
 
-        letter-spacing: -0.5px;
+        letter-spacing: -0.5px !important;
 
-        margin: 0 0 8px 0;
+        margin: 0 0 8px 0 !important;
+
+        padding: 0 !important;
     }
 
 
@@ -119,11 +134,23 @@ st.markdown(
     .sf-description {
         color: #000000 !important;
 
+        font-family:
+            "Inter",
+            "Segoe UI",
+            Roboto,
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
         font-size: 1.15rem !important;
 
-        line-height: 1.6;
+        line-height: 1.6 !important;
 
-        margin: 0 0 14px 0;
+        font-weight: 500 !important;
+
+        margin: 0 0 14px 0 !important;
+
+        padding: 0 !important;
     }
 
 
@@ -136,6 +163,14 @@ st.markdown(
 
         color: #000000 !important;
 
+        font-family:
+            "Inter",
+            "Segoe UI",
+            Roboto,
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
         background: rgba(255, 255, 255, 0.12);
 
         border: 1px solid rgba(255, 255, 255, 0.22);
@@ -146,9 +181,11 @@ st.markdown(
 
         font-size: 0.75rem !important;
 
-        font-weight: 700;
+        font-weight: 700 !important;
 
         letter-spacing: 0.6px;
+
+        margin: 0 !important;
     }
 
 
@@ -264,7 +301,6 @@ st.markdown(
         .section-title {
             font-size: 1.15rem;
         }
-
     }
 
     </style>
@@ -274,7 +310,7 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO
+# CABEÇALHO PRINCIPAL
 # ============================================================
 
 st.markdown(
@@ -417,7 +453,7 @@ st.divider()
 
 
 # ============================================================
-# PREÇOS
+# PREÇOS DOS MATERIAIS
 # ============================================================
 
 st.markdown(
@@ -473,7 +509,7 @@ previa = calcular_projeto(
 
 
 # ============================================================
-# QUANTIDADES
+# QUANTIDADES DOS MATERIAIS
 # ============================================================
 
 st.markdown(
@@ -671,7 +707,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # QUANTITATIVO
+    # QUANTITATIVO DE MATERIAIS
     # ========================================================
 
     st.subheader(
