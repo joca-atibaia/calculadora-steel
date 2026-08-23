@@ -1,8 +1,12 @@
 import streamlit as st
 
 from core.calculos import calcular_projeto
-from core.dados import COEFICIENTES, PRECOS_BASE
+from core.dados import PRECOS_BASE
 
+
+# ============================================================
+# CONFIGURAÇÃO DA PÁGINA
+# ============================================================
 
 st.set_page_config(
     page_title="Projeto | Calculadora Steel",
@@ -11,14 +15,21 @@ st.set_page_config(
 )
 
 
+# ============================================================
+# CABEÇALHO
+# ============================================================
+
 st.title("📐 Novo Projeto")
 st.caption("Calculadora Steel Framing")
 
 st.divider()
 
 
-st.subheader("Dados do projeto")
+# ============================================================
+# DADOS DO PROJETO
+# ============================================================
 
+st.subheader("Dados do projeto")
 
 col1, col2, col3 = st.columns(3)
 
@@ -51,13 +62,17 @@ with col3:
 st.divider()
 
 
-if "coeficientes" not in st.session_state:
-    st.session_state["coeficientes"] = COEFICIENTES.copy()
-
+# ============================================================
+# PREÇOS
+# ============================================================
 
 if "precos" not in st.session_state:
     st.session_state["precos"] = PRECOS_BASE.copy()
 
+
+# ============================================================
+# BOTÃO CALCULAR
+# ============================================================
 
 if st.button(
     "🧮 CALCULAR PROJETO",
@@ -68,7 +83,6 @@ if st.button(
     resultado = calcular_projeto(
         comprimento=comprimento,
         altura=altura,
-        coeficientes=st.session_state["coeficientes"],
         precos=st.session_state["precos"],
     )
 
@@ -76,16 +90,22 @@ if st.button(
     st.session_state["nome_projeto"] = nome_projeto
 
 
+# ============================================================
+# RESULTADO
+# ============================================================
+
 if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
-
     st.subheader("📊 Resultado")
-
 
     col1, col2, col3, col4 = st.columns(4)
 
+
+    # ========================================================
+    # ÁREA
+    # ========================================================
 
     with col1:
         st.metric(
@@ -93,6 +113,10 @@ if "projeto" in st.session_state:
             f'{projeto["area"]:.2f} m²',
         )
 
+
+    # ========================================================
+    # MATERIAIS
+    # ========================================================
 
     with col2:
         st.metric(
@@ -104,6 +128,10 @@ if "projeto" in st.session_state:
         )
 
 
+    # ========================================================
+    # MÃO DE OBRA
+    # ========================================================
+
     with col3:
         st.metric(
             "Mão de obra",
@@ -113,6 +141,10 @@ if "projeto" in st.session_state:
             .replace("X", "."),
         )
 
+
+    # ========================================================
+    # CUSTO GERAL
+    # ========================================================
 
     with col4:
         st.metric(
@@ -126,6 +158,10 @@ if "projeto" in st.session_state:
 
     st.divider()
 
+
+    # ========================================================
+    # QUANTITATIVO DE MATERIAIS
+    # ========================================================
 
     st.subheader("📋 Quantitativo de materiais")
 
@@ -168,8 +204,11 @@ if "projeto" in st.session_state:
     st.divider()
 
 
-    st.subheader("🧱 Massas e Telas")
+    # ========================================================
+    # MASSAS E TELAS
+    # ========================================================
 
+    st.subheader("🧱 Massas e Telas")
 
     st.write(
         f'R$ {projeto["massas_telas"]:,.2f}'
@@ -182,8 +221,11 @@ if "projeto" in st.session_state:
     st.divider()
 
 
-    st.subheader("👷 Mão de obra")
+    # ========================================================
+    # MÃO DE OBRA
+    # ========================================================
 
+    st.subheader("👷 Mão de obra")
 
     mao_de_obra = projeto["mao_de_obra"]
 
@@ -220,6 +262,10 @@ if "projeto" in st.session_state:
 
     st.divider()
 
+
+    # ========================================================
+    # CUSTO GERAL
+    # ========================================================
 
     st.success(
         f'💰 CUSTO GERAL: '
