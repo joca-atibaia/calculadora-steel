@@ -94,13 +94,13 @@ st.markdown(
 
 
     /* ========================================================
-       TÍTULO DO CABEÇALHO
+       TÍTULO
        ======================================================== */
 
     .sf-title {
         color: #6fa8c9 !important;
 
-        font-size: 3.4rem !important;
+        font-size: 3.0rem !important;
 
         line-height: 1.2;
 
@@ -113,7 +113,7 @@ st.markdown(
 
 
     /* ========================================================
-       DESCRIÇÃO DO CABEÇALHO
+       DESCRIÇÃO
        ======================================================== */
 
     .sf-description {
@@ -254,7 +254,7 @@ st.markdown(
         }
 
         .sf-title {
-            font-size: 2.6rem !important;
+            font-size: 2.2rem !important;
         }
 
         .sf-description {
@@ -264,7 +264,6 @@ st.markdown(
         .section-title {
             font-size: 1.15rem;
         }
-
     }
 
     </style>
