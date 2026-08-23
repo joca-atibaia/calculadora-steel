@@ -31,38 +31,26 @@ def formatar_moeda(valor):
 
 
 def titulo_secao(titulo, subtitulo=None):
+    # Renderiza o título principal de forma limpa
     st.markdown(
         f"""
         <div style="
             margin-top: 28px;
-            margin-bottom: 16px;
+            margin-bottom: 4px;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #17202a;
+            line-height: 1.3;
         ">
-            <div style="
-                font-size: 1.35rem;
-                font-weight: 800;
-                color: #17202a;
-                line-height: 1.3;
-                margin-bottom: 4px;
-            ">
-                {titulo}
-            </div>
-            {
-                f'''
-                <div style="
-                    color: #6b7280;
-                    font-size: 0.9rem;
-                    line-height: 1.5;
-                ">
-                    {subtitulo}
-                </div>
-                '''
-                if subtitulo
-                else ""
-            }
+            {titulo}
         </div>
         """,
         unsafe_allow_html=True,
     )
+    
+    # Renderiza o subtítulo de forma nativa e sem bugs usando st.caption
+    if subtitulo:
+        st.caption(subtitulo)
 
 
 # ============================================================
@@ -74,7 +62,7 @@ st.markdown(
     <style>
 
     @import url(
-        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
+        'https://googleapis.com'
     );
 
     html,
@@ -378,346 +366,5 @@ for nome, preco_padrao in st.session_state["precos"].items():
 
     precos_atualizados[nome] = preco_atual
 
-
+# Salva as alterações feitas pelo usuário de volta no estado da sessão
 st.session_state["precos"] = precos_atualizados
-
-
-st.divider()
-
-
-# ============================================================
-# PRÉ-CÁLCULO
-# ============================================================
-
-previa = calcular_projeto(
-    comprimento=comprimento,
-    altura=altura,
-    precos=st.session_state["precos"],
-)
-
-
-# ============================================================
-# QUANTIDADES DOS MATERIAIS
-# ============================================================
-
-titulo_secao(
-    "📦 Quantidades dos materiais",
-    "As quantidades são calculadas automaticamente. "
-    "Você pode alterar qualquer quantidade conforme a necessidade da obra.",
-)
-
-
-if "quantidades" not in st.session_state:
-
-    st.session_state["quantidades"] = {}
-
-
-quantidades_atualizadas = {}
-
-
-for nome, material in previa["materiais"].items():
-
-    quantidade_automatica = material["quantidade"]
-
-
-    if nome not in st.session_state["quantidades"]:
-
-        st.session_state["quantidades"][nome] = (
-            quantidade_automatica
-        )
-
-
-    quantidade_atual = st.number_input(
-        nome,
-        min_value=0.0,
-        value=float(
-            st.session_state["quantidades"][nome]
-        ),
-        step=1.0,
-        format="%.2f",
-        key=f"quantidade_{nome}",
-    )
-
-
-    quantidades_atualizadas[nome] = quantidade_atual
-
-
-st.session_state["quantidades"] = quantidades_atualizadas
-
-
-st.divider()
-
-
-# ============================================================
-# CALCULAR ORÇAMENTO
-# ============================================================
-
-if st.button(
-    "🧮 CALCULAR ORÇAMENTO",
-    type="primary",
-    use_container_width=True,
-):
-
-    resultado = calcular_projeto(
-        comprimento=comprimento,
-        altura=altura,
-        precos=st.session_state["precos"],
-        quantidades=st.session_state["quantidades"],
-    )
-
-
-    st.session_state["projeto"] = resultado
-
-    st.session_state["nome_projeto"] = nome_projeto
-    st.session_state["cliente"] = cliente
-    st.session_state["local_obra"] = local_obra
-    st.session_state["responsavel"] = responsavel
-    st.session_state["data_orcamento"] = data_orcamento
-    st.session_state["observacoes"] = observacoes
-
-
-# ============================================================
-# RESULTADO
-# ============================================================
-
-if "projeto" in st.session_state:
-
-    projeto = st.session_state["projeto"]
-
-    st.divider()
-
-    st.header("📊 Orçamento")
-
-
-    # ========================================================
-    # IDENTIFICAÇÃO DO ORÇAMENTO
-    # ========================================================
-
-    col1, col2 = st.columns(2)
-
-
-    with col1:
-
-        st.write(
-            f"**Projeto:** "
-            f"{st.session_state.get('nome_projeto', '')}"
-        )
-
-        st.write(
-            f"**Cliente:** "
-            f"{st.session_state.get('cliente', '')}"
-        )
-
-        st.write(
-            f"**Local da obra:** "
-            f"{st.session_state.get('local_obra', '')}"
-        )
-
-
-    with col2:
-
-        st.write(
-            f"**Responsável:** "
-            f"{st.session_state.get('responsavel', '')}"
-        )
-
-
-        data_salva = st.session_state.get(
-            "data_orcamento",
-            data_orcamento,
-        )
-
-
-        st.write(
-            f"**Data:** "
-            f"{data_salva.strftime('%d/%m/%Y')}"
-        )
-
-
-    st.divider()
-
-
-    # ========================================================
-    # RESUMO
-    # ========================================================
-
-    st.subheader("📊 Resumo do orçamento")
-
-
-    col1, col2, col3, col4 = st.columns(4)
-
-
-    with col1:
-
-        st.metric(
-            "Área",
-            f'{projeto["area"]:.2f} m²',
-        )
-
-
-    with col2:
-
-        st.metric(
-            "Materiais",
-            formatar_moeda(
-                projeto["subtotal_materiais"]
-            ),
-        )
-
-
-    with col3:
-
-        st.metric(
-            "Mão de obra",
-            formatar_moeda(
-                projeto["mao_de_obra"]["custo"]
-            ),
-        )
-
-
-    with col4:
-
-        st.metric(
-            "Custo geral",
-            formatar_moeda(
-                projeto["custo_geral"]
-            ),
-        )
-
-
-    st.divider()
-
-
-    # ========================================================
-    # QUANTITATIVO
-    # ========================================================
-
-    st.subheader("📋 Quantitativo de materiais")
-
-
-    tabela_materiais = []
-
-
-    for nome, material in projeto["materiais"].items():
-
-        tabela_materiais.append(
-            {
-                "Material": nome,
-                "Unidade": material["unidade"],
-                "Quantidade": (
-                    f'{material["quantidade"]:.2f}'
-                ),
-                "Preço unitário": formatar_moeda(
-                    material["preco_unitario"]
-                ),
-                "Total": formatar_moeda(
-                    material["custo"]
-                ),
-            }
-        )
-
-
-    df_materiais = pd.DataFrame(
-        tabela_materiais
-    )
-
-
-    st.dataframe(
-        df_materiais,
-        use_container_width=True,
-        hide_index=True,
-    )
-
-
-    st.divider()
-
-
-    # ========================================================
-    # MASSAS E TELAS
-    # ========================================================
-
-    st.subheader("🧱 Massas e Telas")
-
-
-    st.metric(
-        "Custo",
-        formatar_moeda(
-            projeto["massas_telas"]
-        ),
-    )
-
-
-    st.divider()
-
-
-    # ========================================================
-    # MÃO DE OBRA
-    # ========================================================
-
-    st.subheader("👷 Mão de obra")
-
-
-    mao_de_obra = projeto["mao_de_obra"]
-
-
-    col1, col2, col3 = st.columns(3)
-
-
-    with col1:
-
-        st.metric(
-            "Dias estimados",
-            f'{mao_de_obra["dias"]:.1f}',
-        )
-
-
-    with col2:
-
-        st.metric(
-            "Diária",
-            formatar_moeda(
-                mao_de_obra["diaria"]
-            ),
-        )
-
-
-    with col3:
-
-        st.metric(
-            "Custo da mão de obra",
-            formatar_moeda(
-                mao_de_obra["custo"]
-            ),
-        )
-
-
-    st.divider()
-
-
-    # ========================================================
-    # OBSERVAÇÕES
-    # ========================================================
-
-    observacoes_salvas = st.session_state.get(
-        "observacoes",
-        "",
-    )
-
-
-    if observacoes_salvas:
-
-        st.subheader("📝 Observações")
-
-        st.write(observacoes_salvas)
-
-        st.divider()
-
-
-    # ========================================================
-    # TOTAL
-    # ========================================================
-
-    st.success(
-        f'💰 CUSTO GERAL: '
-        f'{formatar_moeda(projeto["custo_geral"])}'
-    )
