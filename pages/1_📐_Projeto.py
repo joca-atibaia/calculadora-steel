@@ -99,10 +99,15 @@ st.markdown(
 
     .sf-header-title {
         font-size: 2.15rem;
+
         line-height: 1.2;
+
         font-weight: 800;
+
         letter-spacing: -0.5px;
+
         color: #ffffff;
+
         margin: 0;
     }
 
@@ -113,9 +118,13 @@ st.markdown(
 
     .sf-subtitle {
         color: #dce3e8;
+
         font-size: 1rem;
+
         line-height: 1.6;
+
         margin-top: 8px;
+
         margin-bottom: 14px;
     }
 
@@ -151,15 +160,19 @@ st.markdown(
 
     .sf-section {
         margin-top: 28px;
+
         margin-bottom: 16px;
     }
 
     .sf-section h2 {
         margin: 0 0 4px 0;
+
         padding: 0;
 
         font-size: 1.35rem;
+
         line-height: 1.3;
+
         font-weight: 800;
 
         color: #17202a;
@@ -169,6 +182,7 @@ st.markdown(
         margin: 0;
 
         font-size: 0.9rem;
+
         line-height: 1.5;
 
         color: #6b7280;
@@ -185,7 +199,9 @@ st.markdown(
     .stTextArea label,
     .stSelectbox label {
         font-size: 0.88rem !important;
+
         font-weight: 600 !important;
+
         color: #374151 !important;
     }
 
@@ -242,6 +258,7 @@ st.markdown(
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
+
         overflow: hidden;
     }
 
@@ -254,6 +271,7 @@ st.markdown(
 
         .block-container {
             padding-left: 1rem;
+
             padding-right: 1rem;
         }
 
@@ -282,6 +300,10 @@ st.markdown(
 
 # ============================================================
 # CABEÇALHO PRINCIPAL
+#
+# IMPORTANTE:
+# O cabeçalho inteiro fica dentro de um único st.markdown().
+# Isso garante que o HTML seja renderizado corretamente.
 # ============================================================
 
 st.markdown(
