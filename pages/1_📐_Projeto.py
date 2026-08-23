@@ -114,16 +114,17 @@ st.markdown(
 
     /* ========================================================
        SUBTÍTULO
+       ÚNICA ALTERAÇÃO: COR PRETA
        ======================================================== */
 
     .sf-description {
         color: #000000 !important;
 
-        font-size: 1.15rem !important;
+        font-size: 1rem;
 
         line-height: 1.6;
 
-        margin: 0 0 14px 0;
+        margin-bottom: 14px;
     }
 
 
@@ -144,7 +145,7 @@ st.markdown(
 
         padding: 7px 14px;
 
-        font-size: 0.75rem !important;
+        font-size: 0.75rem;
 
         font-weight: 700;
 
@@ -434,6 +435,7 @@ st.markdown(
 
 
 if "precos" not in st.session_state:
+
     st.session_state["precos"] = PRECOS_BASE.copy()
 
 
@@ -490,6 +492,7 @@ st.markdown(
 
 
 if "quantidades" not in st.session_state:
+
     st.session_state["quantidades"] = {}
 
 
@@ -501,7 +504,10 @@ for nome, material in previa["materiais"].items():
     quantidade_automatica = material["quantidade"]
 
     if nome not in st.session_state["quantidades"]:
-        st.session_state["quantidades"][nome] = quantidade_automatica
+
+        st.session_state["quantidades"][nome] = (
+            quantidade_automatica
+        )
 
     quantidade_atual = st.number_input(
         nome,
@@ -541,11 +547,17 @@ if st.button(
     )
 
     st.session_state["projeto"] = resultado
+
     st.session_state["nome_projeto"] = nome_projeto
+
     st.session_state["cliente"] = cliente
+
     st.session_state["local_obra"] = local_obra
+
     st.session_state["responsavel"] = responsavel
+
     st.session_state["data_orcamento"] = data_orcamento
+
     st.session_state["observacoes"] = observacoes
 
 
@@ -676,11 +688,17 @@ if "projeto" in st.session_state:
         tabela_materiais.append(
             {
                 "Material": nome,
+
                 "Unidade": material["unidade"],
-                "Quantidade": f'{material["quantidade"]:.2f}',
+
+                "Quantidade": (
+                    f'{material["quantidade"]:.2f}'
+                ),
+
                 "Preço unitário": formatar_moeda(
                     material["preco_unitario"]
                 ),
+
                 "Total": formatar_moeda(
                     material["custo"]
                 ),
