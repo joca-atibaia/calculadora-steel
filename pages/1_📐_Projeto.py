@@ -114,17 +114,16 @@ st.markdown(
 
     /* ========================================================
        SUBTÍTULO
-       ÚNICA ALTERAÇÃO: COR PRETA
        ======================================================== */
 
     .sf-description {
         color: #000000 !important;
 
-        font-size: 1rem;
+        font-size: 1.15rem !important;
 
         line-height: 1.6;
 
-        margin-bottom: 14px;
+        margin: 0 0 14px 0;
     }
 
 
@@ -145,7 +144,7 @@ st.markdown(
 
         padding: 7px 14px;
 
-        font-size: 0.75rem;
+        font-size: 0.75rem !important;
 
         font-weight: 700;
 
