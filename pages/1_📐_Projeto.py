@@ -39,13 +39,13 @@ st.markdown(
     """
     <style>
 
-    @import url(
-        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
-    );
-
     /* ======================================================
        BASE
        ====================================================== */
+
+    @import url(
+        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
+    );
 
     html,
     body,
@@ -136,7 +136,7 @@ st.markdown(
 
 
     /* ======================================================
-       SEÇÕES
+       TÍTULOS DAS SEÇÕES
        ====================================================== */
 
     .section-header {
@@ -166,7 +166,10 @@ st.markdown(
 
     .info-card {
         background: #ffffff;
-        border: 1px solid #e1e6eb;
+
+        border:
+            1px solid #e1e6eb;
+
         border-radius: 14px;
         padding: 18px 20px;
         margin-bottom: 14px;
@@ -182,7 +185,10 @@ st.markdown(
 
     div[data-testid="stMetric"] {
         background: #ffffff;
-        border: 1px solid #e1e6eb;
+
+        border:
+            1px solid #e1e6eb;
+
         border-radius: 14px;
         padding: 15px;
 
@@ -402,6 +408,7 @@ with col1:
         min_value=0.01,
         value=30.00,
         step=0.10,
+        format="%.2f",
     )
 
 
@@ -412,6 +419,7 @@ with col2:
         min_value=0.01,
         value=3.00,
         step=0.10,
+        format="%.2f",
     )
 
 
@@ -526,11 +534,13 @@ for nome, material in previa["materiais"].items():
 
     quantidade_automatica = material["quantidade"]
 
+
     if nome not in st.session_state["quantidades"]:
 
         st.session_state["quantidades"][nome] = (
             quantidade_automatica
         )
+
 
     quantidade_atual = st.number_input(
         nome,
@@ -543,6 +553,7 @@ for nome, material in previa["materiais"].items():
         key=f"quantidade_{nome}",
     )
 
+
     quantidades_atualizadas[nome] = quantidade_atual
 
 
@@ -553,7 +564,7 @@ st.divider()
 
 
 # ============================================================
-# CALCULAR ORÇAMENTO
+# BOTÃO CALCULAR
 # ============================================================
 
 if st.button(
@@ -568,6 +579,7 @@ if st.button(
         precos=st.session_state["precos"],
         quantidades=st.session_state["quantidades"],
     )
+
 
     st.session_state["projeto"] = resultado
 
@@ -587,13 +599,15 @@ if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
+
     st.divider()
+
 
     st.header("📊 Orçamento")
 
 
     # ========================================================
-    # IDENTIFICAÇÃO
+    # IDENTIFICAÇÃO DO ORÇAMENTO
     # ========================================================
 
     col1, col2 = st.columns(2)
@@ -624,10 +638,12 @@ if "projeto" in st.session_state:
             f"{st.session_state.get('responsavel', '')}"
         )
 
+
         data_salva = st.session_state.get(
             "data_orcamento",
             data_orcamento,
         )
+
 
         st.write(
             f"**Data:** "
@@ -819,9 +835,11 @@ if "projeto" in st.session_state:
             "📝 Observações"
         )
 
+
         st.write(
             observacoes_salvas
         )
+
 
         st.divider()
 
