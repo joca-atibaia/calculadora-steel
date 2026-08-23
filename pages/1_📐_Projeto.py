@@ -21,30 +21,30 @@ st.set_page_config(
 
 
 # ============================================================
-# CSS — 6C / 6D
+# CSS — TIPOGRAFIA PROFISSIONAL
 # ============================================================
 
 st.markdown(
     """
     <style>
 
-    /* ========================================================
+    /* ======================================================
        FONTES
-       ======================================================== */
+       ====================================================== */
 
     @import url(
-        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&display=swap'
+        'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap'
     );
 
 
-    /* ========================================================
-       TIPOGRAFIA GERAL
-       ======================================================== */
+    /* ======================================================
+       CONFIGURAÇÃO GERAL
+       ====================================================== */
 
     html,
     body,
-    [data-testid="stAppViewContainer"],
-    .stApp {
+    .stApp,
+    [data-testid="stAppViewContainer"] {
         font-family:
             "Inter",
             "Segoe UI",
@@ -53,21 +53,6 @@ st.markdown(
             Arial,
             sans-serif !important;
     }
-
-    .stApp * {
-        font-family:
-            "Inter",
-            "Segoe UI",
-            Roboto,
-            Helvetica,
-            Arial,
-            sans-serif;
-    }
-
-
-    /* ========================================================
-       FUNDO
-       ======================================================== */
 
     .stApp {
         background: #f5f7fa;
@@ -80,9 +65,9 @@ st.markdown(
     }
 
 
-    /* ========================================================
+    /* ======================================================
        HERO
-       ======================================================== */
+       ====================================================== */
 
     .hero {
         background:
@@ -94,7 +79,7 @@ st.markdown(
             );
 
         border-radius: 18px;
-        padding: 34px 38px;
+        padding: 38px 42px;
         margin-bottom: 30px;
 
         box-shadow:
@@ -104,81 +89,80 @@ st.markdown(
     }
 
 
-    /* TÍTULO PRINCIPAL */
+    /* NOVA FONTE DO TÍTULO */
 
     .hero-title {
         font-family:
             "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        font-size: 2.25rem;
-        font-weight: 800;
+        font-size: 2.35rem !important;
+        font-weight: 900 !important;
 
         letter-spacing: -0.8px;
-
         line-height: 1.15;
 
-        color: #ffffff;
+        color: #ffffff !important;
 
-        margin-bottom: 10px;
+        margin: 0 0 12px 0;
     }
 
 
-    /* SUBTÍTULO */
+    /* NOVA FONTE DO SUBTÍTULO */
 
     .hero-subtitle {
         font-family:
-            "Inter",
+            "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        font-size: 1.05rem;
-        font-weight: 400;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
 
-        color: #dce3e8;
+        color: #dce3e8 !important;
 
         line-height: 1.6;
-
-        margin-bottom: 18px;
+        margin-bottom: 20px;
     }
 
 
-    /* SELO */
+    /* NOVA FONTE DO BADGE */
 
     .hero-badge {
         display: inline-block;
 
         font-family:
-            "Inter",
+            "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        background:
-            rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.12);
 
-        border:
-            1px solid rgba(255,255,255,0.22);
+        border: 1px solid rgba(255,255,255,0.22);
 
         border-radius: 999px;
 
-        padding: 7px 14px;
+        padding: 8px 16px;
 
-        font-size: 0.72rem;
-        font-weight: 700;
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
 
-        letter-spacing: 1px;
+        letter-spacing: 0.9px;
 
-        color: #ffffff;
+        color: #ffffff !important;
     }
 
 
-    /* ========================================================
-       TÍTULOS DE SEÇÃO
-       ======================================================== */
+    /* ======================================================
+       TÍTULOS DAS SEÇÕES
+       ====================================================== */
 
     .section-header {
-        margin-top: 28px;
+        margin-top: 30px;
         margin-bottom: 16px;
     }
 
@@ -186,28 +170,34 @@ st.markdown(
         font-family:
             "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        font-size: 1.35rem;
-        font-weight: 700;
+        font-size: 1.30rem !important;
 
-        color: #17202a;
+        font-weight: 800 !important;
 
-        margin-bottom: 3px;
+        color: #17202a !important;
+
+        margin-bottom: 4px;
 
         line-height: 1.3;
+
+        letter-spacing: -0.2px;
     }
 
     .section-subtitle {
         font-family:
             "Inter",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        color: #6b7280;
+        color: #6b7280 !important;
 
-        font-size: 0.9rem;
-        font-weight: 400;
+        font-size: 0.88rem !important;
+
+        font-weight: 400 !important;
 
         margin-bottom: 18px;
 
@@ -215,15 +205,14 @@ st.markdown(
     }
 
 
-    /* ========================================================
+    /* ======================================================
        CARDS
-       ======================================================== */
+       ====================================================== */
 
     .info-card {
         background: #ffffff;
 
-        border:
-            1px solid #e1e6eb;
+        border: 1px solid #e1e6eb;
 
         border-radius: 14px;
 
@@ -237,46 +226,49 @@ st.markdown(
 
     .card-label {
         font-family:
-            "Inter",
+            "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        color: #7b8794;
+        color: #7b8794 !important;
 
-        font-size: 0.72rem;
-        font-weight: 700;
+        font-size: 0.68rem !important;
+
+        font-weight: 800 !important;
 
         text-transform: uppercase;
 
-        letter-spacing: 0.7px;
+        letter-spacing: 0.8px;
 
         margin-bottom: 5px;
     }
 
     .card-value {
         font-family:
-            "Montserrat",
+            "Inter",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        color: #17202a;
+        color: #17202a !important;
 
-        font-size: 1rem;
-        font-weight: 600;
+        font-size: 1rem !important;
+
+        font-weight: 600 !important;
 
         line-height: 1.45;
     }
 
 
-    /* ========================================================
+    /* ======================================================
        MÉTRICAS
-       ======================================================== */
+       ====================================================== */
 
     .metric-card {
         background: #ffffff;
 
-        border:
-            1px solid #e1e6eb;
+        border: 1px solid #e1e6eb;
 
         border-radius: 14px;
 
@@ -290,16 +282,18 @@ st.markdown(
 
     .metric-label {
         font-family:
-            "Inter",
+            "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        color: #7b8794;
+        color: #7b8794 !important;
 
-        font-size: 0.72rem;
-        font-weight: 800;
+        font-size: 0.68rem !important;
 
-        letter-spacing: 0.8px;
+        font-weight: 800 !important;
+
+        letter-spacing: 0.9px;
 
         margin-bottom: 7px;
     }
@@ -308,20 +302,22 @@ st.markdown(
         font-family:
             "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        color: #17202a;
+        color: #17202a !important;
 
-        font-size: 1.65rem;
-        font-weight: 800;
+        font-size: 1.65rem !important;
+
+        font-weight: 800 !important;
 
         line-height: 1.2;
     }
 
 
-    /* ========================================================
+    /* ======================================================
        TOTAL
-       ======================================================== */
+       ====================================================== */
 
     .total-card {
         background:
@@ -331,8 +327,7 @@ st.markdown(
                 #f6fff9
             );
 
-        border:
-            2px solid #28a745;
+        border: 2px solid #28a745;
 
         border-radius: 16px;
 
@@ -348,14 +343,16 @@ st.markdown(
 
     .total-label {
         font-family:
-            "Inter",
+            "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        color: #36734a;
+        color: #36734a !important;
 
-        font-size: 0.78rem;
-        font-weight: 800;
+        font-size: 0.72rem !important;
+
+        font-weight: 800 !important;
 
         letter-spacing: 1px;
     }
@@ -364,20 +361,22 @@ st.markdown(
         font-family:
             "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        color: #176b35;
+        color: #176b35 !important;
 
-        font-size: 2.2rem;
-        font-weight: 900;
+        font-size: 2.25rem !important;
+
+        font-weight: 900 !important;
 
         margin-top: 5px;
     }
 
 
-    /* ========================================================
+    /* ======================================================
        ASSINATURA
-       ======================================================== */
+       ====================================================== */
 
     .assinatura {
         margin: 55px auto 25px auto;
@@ -388,51 +387,50 @@ st.markdown(
     }
 
     .linha-assinatura {
-        border-top:
-            1px solid #333;
+        border-top: 1px solid #333;
 
         width: 85%;
 
-        margin:
-            0 auto 10px auto;
+        margin: 0 auto 10px auto;
     }
 
     .assinatura-nome {
         font-family:
             "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        font-weight: 700;
+        font-weight: 700 !important;
 
-        color: #17202a;
+        color: #17202a !important;
 
-        font-size: 0.95rem;
+        font-size: 0.95rem !important;
     }
 
     .assinatura-cargo {
         font-family:
             "Inter",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        color: #777;
+        color: #777 !important;
 
-        font-size: 0.8rem;
+        font-size: 0.8rem !important;
 
         margin-top: 5px;
     }
 
 
-    /* ========================================================
+    /* ======================================================
        AVISOS
-       ======================================================== */
+       ====================================================== */
 
     .notice-card {
         background: #ffffff;
 
-        border-left:
-            4px solid #34495e;
+        border-left: 4px solid #34495e;
 
         border-radius: 10px;
 
@@ -446,35 +444,39 @@ st.markdown(
     }
 
 
-    /* ========================================================
+    /* ======================================================
        CAMPOS STREAMLIT
-       ======================================================== */
+       ====================================================== */
 
     .stTextInput label,
     .stNumberInput label,
     .stDateInput label,
     .stTextArea label,
     .stSelectbox label {
+
         font-family:
-            "Inter",
+            "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
-        font-size: 0.88rem !important;
+        font-size: 0.78rem !important;
 
-        font-weight: 600 !important;
+        font-weight: 700 !important;
 
         color: #374151 !important;
     }
 
     div[data-baseweb="input"] > div,
     div[data-baseweb="textarea"] > div {
+
         border-radius: 9px;
     }
 
     input,
     textarea,
     [data-baseweb="select"] {
+
         font-family:
             "Inter",
             "Segoe UI",
@@ -482,57 +484,87 @@ st.markdown(
     }
 
 
-    /* ========================================================
+    /* ======================================================
        BOTÕES
-       ======================================================== */
+       ====================================================== */
 
     .stButton > button {
+
         font-family:
-            "Inter",
+            "Montserrat",
             "Segoe UI",
+            Arial,
             sans-serif !important;
 
         border-radius: 9px;
 
-        font-weight: 700;
+        font-weight: 800 !important;
 
         min-height: 42px;
     }
 
 
-    /* ========================================================
+    /* ======================================================
        MÉTRICAS NATIVAS STREAMLIT
-       ======================================================== */
+       ====================================================== */
 
     div[data-testid="stMetric"] {
+
         background: #ffffff;
 
-        border:
-            1px solid #e1e6eb;
+        border: 1px solid #e1e6eb;
 
         border-radius: 12px;
 
         padding: 12px;
     }
 
-    div[data-testid="stMetricValue"] {
+    div[data-testid="stMetricLabel"] {
+
         font-family:
             "Montserrat",
             "Segoe UI",
+            Arial,
+            sans-serif !important;
+
+        font-weight: 700 !important;
+    }
+
+    div[data-testid="stMetricValue"] {
+
+        font-family:
+            "Montserrat",
+            "Segoe UI",
+            Arial,
             sans-serif !important;
 
         font-weight: 800 !important;
     }
 
 
-    /* ========================================================
-       TABELA
-       ======================================================== */
+    /* ======================================================
+       DATAFRAME
+       ====================================================== */
 
     div[data-testid="stDataFrame"] {
+
         border-radius: 12px;
 
         overflow: hidden;
+    }
+
+
+    /* ======================================================
+       CAPTION
+       ====================================================== */
+
+    .stCaption {
+
+        font-family:
+            "Inter",
+            "Segoe UI",
+            Arial,
+            sans-serif !important;
     }
 
 
@@ -547,9 +579,12 @@ st.markdown(
 # ============================================================
 
 def formatar_moeda(valor):
+
     try:
         valor = float(valor or 0)
+
     except (TypeError, ValueError):
+
         valor = 0.0
 
     return (
@@ -561,17 +596,21 @@ def formatar_moeda(valor):
 
 
 def numero(valor, padrao=0.0):
+
     try:
+
         if valor is None:
             return float(padrao)
 
         return float(valor)
 
     except (TypeError, ValueError):
+
         return float(padrao)
 
 
 def obter_valor(dicionario, chave, padrao=0):
+
     if not isinstance(dicionario, dict):
         return padrao
 
@@ -601,7 +640,10 @@ def nome_arquivo_orcamento():
         .replace("\\", "_")
     )
 
-    return nome or "Orcamento_Steel_Framing"
+    return (
+        nome
+        or "Orcamento_Steel_Framing"
+    )
 
 
 # ============================================================
@@ -737,12 +779,14 @@ def gerar_pdf(projeto):
         )
     )
 
+
     massas_telas = numero(
         projeto.get(
             "massas_telas",
             0,
         )
     )
+
 
     custo_geral = numero(
         projeto.get(
@@ -810,7 +854,8 @@ def gerar_pdf(projeto):
         title="Orçamento Steel Framing",
         author=(
             responsavel
-            or "Calculadora Steel Framing"
+            or
+            "Calculadora Steel Framing"
         ),
     )
 
@@ -897,7 +942,7 @@ def gerar_pdf(projeto):
 
 
     # ========================================================
-    # IDENTIFICAÇÃO
+    # 1 — IDENTIFICAÇÃO
     # ========================================================
 
     elementos.append(
@@ -909,7 +954,9 @@ def gerar_pdf(projeto):
 
 
     dados = [
+
         [
+
             Paragraph(
                 f"<b>Projeto:</b><br/>"
                 f"{escape(nome_projeto or 'Não informado')}",
@@ -921,9 +968,11 @@ def gerar_pdf(projeto):
                 f"{escape(cliente or 'Não informado')}",
                 normal,
             ),
+
         ],
 
         [
+
             Paragraph(
                 f"<b>Local da obra:</b><br/>"
                 f"{escape(local_obra or 'Não informado')}",
@@ -935,9 +984,11 @@ def gerar_pdf(projeto):
                 f"{escape(responsavel or 'Não informado')}",
                 normal,
             ),
+
         ],
 
         [
+
             Paragraph(
                 f"<b>Data:</b><br/>"
                 f"{data_orcamento.strftime('%d/%m/%Y')}",
@@ -949,7 +1000,9 @@ def gerar_pdf(projeto):
                 f"{validade} dias",
                 normal,
             ),
+
         ],
+
     ]
 
 
@@ -965,6 +1018,7 @@ def gerar_pdf(projeto):
     tabela.setStyle(
         TableStyle(
             [
+
                 (
                     "BOX",
                     (0, 0),
@@ -1015,6 +1069,7 @@ def gerar_pdf(projeto):
                     (-1, -1),
                     7,
                 ),
+
             ]
         )
     )
@@ -1024,7 +1079,7 @@ def gerar_pdf(projeto):
 
 
     # ========================================================
-    # DIMENSÕES
+    # 2 — RESUMO
     # ========================================================
 
     elementos.append(
@@ -1036,6 +1091,7 @@ def gerar_pdf(projeto):
 
 
     resumo = [
+
         [
             Paragraph(
                 "Área",
@@ -1071,6 +1127,7 @@ def gerar_pdf(projeto):
                 direita,
             ),
         ],
+
     ]
 
 
@@ -1086,6 +1143,7 @@ def gerar_pdf(projeto):
     tabela.setStyle(
         TableStyle(
             [
+
                 (
                     "BOX",
                     (0, 0),
@@ -1115,6 +1173,7 @@ def gerar_pdf(projeto):
                     (-1, -1),
                     "MIDDLE",
                 ),
+
             ]
         )
     )
@@ -1124,7 +1183,7 @@ def gerar_pdf(projeto):
 
 
     # ========================================================
-    # MATERIAIS
+    # 3 — MATERIAIS
     # ========================================================
 
     elementos.append(
@@ -1136,6 +1195,7 @@ def gerar_pdf(projeto):
 
 
     dados_mat = [
+
         [
             "Material",
             "Un.",
@@ -1143,6 +1203,7 @@ def gerar_pdf(projeto):
             "Preço unitário",
             "Total",
         ]
+
     ]
 
 
@@ -1171,7 +1232,9 @@ def gerar_pdf(projeto):
 
 
         dados_mat.append(
+
             [
+
                 Paragraph(
                     escape(
                         str(nome)
@@ -1195,7 +1258,9 @@ def gerar_pdf(projeto):
                 formatar_moeda(
                     custo
                 ),
+
             ]
+
         )
 
 
@@ -1215,6 +1280,7 @@ def gerar_pdf(projeto):
     tabela.setStyle(
         TableStyle(
             [
+
                 (
                     "BACKGROUND",
                     (0, 0),
@@ -1300,6 +1366,7 @@ def gerar_pdf(projeto):
                     (-1, -1),
                     5,
                 ),
+
             ]
         )
     )
@@ -1309,7 +1376,7 @@ def gerar_pdf(projeto):
 
 
     # ========================================================
-    # FINANCEIRO
+    # 4 — FINANCEIRO
     # ========================================================
 
     elementos.append(
@@ -1321,6 +1388,7 @@ def gerar_pdf(projeto):
 
 
     financeiro = [
+
         [
             "Materiais",
             formatar_moeda(
@@ -1341,6 +1409,7 @@ def gerar_pdf(projeto):
                 custo_mao_obra
             ),
         ],
+
     ]
 
 
@@ -1356,6 +1425,7 @@ def gerar_pdf(projeto):
     tabela.setStyle(
         TableStyle(
             [
+
                 (
                     "BOX",
                     (0, 0),
@@ -1378,6 +1448,7 @@ def gerar_pdf(projeto):
                     (1, -1),
                     "RIGHT",
                 ),
+
             ]
         )
     )
@@ -1399,14 +1470,18 @@ def gerar_pdf(projeto):
     # ========================================================
 
     total = Table(
+
         [
+
             [
+
                 Paragraph(
                     "<b>VALOR TOTAL DO ORÇAMENTO</b>",
                     normal,
                 ),
 
                 Paragraph(
+
                     f"<b>{formatar_moeda(custo_geral)}</b>",
 
                     ParagraphStyle(
@@ -1419,20 +1494,25 @@ def gerar_pdf(projeto):
                             "#176b35"
                         ),
                     ),
+
                 ),
+
             ]
+
         ],
 
         colWidths=[
             90 * mm,
             86 * mm,
         ],
+
     )
 
 
     total.setStyle(
         TableStyle(
             [
+
                 (
                     "BOX",
                     (0, 0),
@@ -1468,6 +1548,7 @@ def gerar_pdf(projeto):
                     (-1, -1),
                     12,
                 ),
+
             ]
         )
     )
@@ -1477,7 +1558,7 @@ def gerar_pdf(projeto):
 
 
     # ========================================================
-    # MÃO DE OBRA
+    # 5 — MÃO DE OBRA
     # ========================================================
 
     elementos.append(
@@ -1489,7 +1570,9 @@ def gerar_pdf(projeto):
 
 
     tabela = Table(
+
         [
+
             [
                 "Dias estimados",
                 f"{dias:.1f}",
@@ -1508,18 +1591,21 @@ def gerar_pdf(projeto):
                     custo_mao_obra
                 ),
             ],
+
         ],
 
         colWidths=[
             110 * mm,
             66 * mm,
         ],
+
     )
 
 
     tabela.setStyle(
         TableStyle(
             [
+
                 (
                     "BOX",
                     (0, 0),
@@ -1542,6 +1628,7 @@ def gerar_pdf(projeto):
                     (1, -1),
                     "RIGHT",
                 ),
+
             ]
         )
     )
@@ -1551,7 +1638,7 @@ def gerar_pdf(projeto):
 
 
     # ========================================================
-    # CONDIÇÕES
+    # 6 — CONDIÇÕES
     # ========================================================
 
     elementos.append(
@@ -1563,7 +1650,9 @@ def gerar_pdf(projeto):
 
 
     tabela = Table(
+
         [
+
             [
                 "Validade",
                 f"{validade} dias",
@@ -1583,18 +1672,21 @@ def gerar_pdf(projeto):
                 "Forma de pagamento",
                 forma or "Não informado",
             ],
+
         ],
 
         colWidths=[
             55 * mm,
             121 * mm,
         ],
+
     )
 
 
     tabela.setStyle(
         TableStyle(
             [
+
                 (
                     "BOX",
                     (0, 0),
@@ -1624,6 +1716,7 @@ def gerar_pdf(projeto):
                     (-1, -1),
                     "TOP",
                 ),
+
             ]
         )
     )
@@ -1653,7 +1746,6 @@ def gerar_pdf(projeto):
                     "\n",
                     "<br/>",
                 ),
-
                 normal,
             )
         )
@@ -1676,7 +1768,6 @@ def gerar_pdf(projeto):
                     "\n",
                     "<br/>",
                 ),
-
                 normal,
             )
         )
@@ -1696,11 +1787,9 @@ def gerar_pdf(projeto):
 
     assinatura = Table(
         [[" "]],
-
         colWidths=[
             100 * mm
         ],
-
         rowHeights=[
             12 * mm
         ],
@@ -1710,6 +1799,7 @@ def gerar_pdf(projeto):
     assinatura.setStyle(
         TableStyle(
             [
+
                 (
                     "LINEBELOW",
                     (0, 0),
@@ -1717,6 +1807,7 @@ def gerar_pdf(projeto):
                     0.8,
                     colors.HexColor("#333333"),
                 ),
+
             ]
         )
     )
@@ -1731,7 +1822,8 @@ def gerar_pdf(projeto):
                 responsavel.strip()
                 if responsavel
                 and responsavel.strip()
-                else "Responsável pelo orçamento"
+                else
+                "Responsável pelo orçamento"
             ),
 
             ParagraphStyle(
@@ -1785,7 +1877,6 @@ def gerar_pdf(projeto):
         canvas.drawCentredString(
             largura / 2,
             8 * mm,
-
             (
                 "Calculadora Steel Framing • "
                 f"Página {documento.page}"
@@ -1955,6 +2046,7 @@ def gerar_excel(projeto):
         )
     )
 
+
     subtotal = numero(
         projeto.get(
             "subtotal_materiais",
@@ -2026,9 +2118,7 @@ def gerar_excel(projeto):
     # ORÇAMENTO
     # ========================================================
 
-    ws.merge_cells(
-        "A1:E1"
-    )
+    ws.merge_cells("A1:E1")
 
     ws["A1"] = (
         "ORÇAMENTO — STEEL FRAMING"
@@ -2050,9 +2140,7 @@ def gerar_excel(projeto):
     )
 
 
-    ws.merge_cells(
-        "A2:E2"
-    )
+    ws.merge_cells("A2:E2")
 
     ws["A2"] = (
         "Quantitativo de materiais e mão de obra"
@@ -2099,6 +2187,7 @@ def gerar_excel(projeto):
 
 
     for rotulo, valor in [
+
         (
             "Projeto",
             nome_projeto or "Não informado",
@@ -2125,6 +2214,7 @@ def gerar_excel(projeto):
                 "%d/%m/%Y"
             ),
         ),
+
     ]:
 
         ws.cell(
@@ -2189,6 +2279,7 @@ def gerar_excel(projeto):
 
 
     for rotulo, valor in [
+
         (
             "Comprimento (m)",
             comprimento,
@@ -2203,6 +2294,7 @@ def gerar_excel(projeto):
             "Área (m²)",
             area,
         ),
+
     ]:
 
         ws.cell(
@@ -2578,6 +2670,7 @@ def gerar_excel(projeto):
 
 
     dados = [
+
         (
             "Projeto",
             nome_projeto,
@@ -2634,6 +2727,7 @@ def gerar_excel(projeto):
             "Observações técnicas",
             obs_tecnicas or "Não informado",
         ),
+
     ]
 
 
@@ -2733,6 +2827,7 @@ def gerar_excel(projeto):
             "A": 30,
             "B": 70,
         },
+
     }
 
 
@@ -2746,7 +2841,9 @@ def gerar_excel(projeto):
 
 
     ws_mat.freeze_panes = "A2"
+
     ws_mo.freeze_panes = "A2"
+
     ws_dados.freeze_panes = "A2"
 
 
@@ -2758,7 +2855,7 @@ def gerar_excel(projeto):
 
 
 # ============================================================
-# HERO
+# HERO PRINCIPAL
 # ============================================================
 
 st.markdown(
@@ -2813,9 +2910,7 @@ with col1:
 
     nome_projeto = st.text_input(
         "Nome do projeto",
-
         placeholder="Ex.: Residência Atibaia",
-
         value=st.session_state.get(
             "nome_projeto",
             "",
@@ -2825,9 +2920,7 @@ with col1:
 
     cliente = st.text_input(
         "Cliente",
-
         placeholder="Nome do cliente",
-
         value=st.session_state.get(
             "cliente",
             "",
@@ -2839,9 +2932,7 @@ with col2:
 
     local_obra = st.text_input(
         "Local da obra",
-
         placeholder="Ex.: Atibaia - SP",
-
         value=st.session_state.get(
             "local_obra",
             "",
@@ -2851,9 +2942,7 @@ with col2:
 
     responsavel = st.text_input(
         "Responsável pelo orçamento",
-
         placeholder="Nome do profissional",
-
         value=st.session_state.get(
             "responsavel",
             "",
@@ -2863,7 +2952,6 @@ with col2:
 
 data_orcamento = st.date_input(
     "Data do orçamento",
-
     value=st.session_state.get(
         "data_orcamento",
         date.today(),
@@ -2900,25 +2988,20 @@ with col1:
 
     validade_orcamento = st.number_input(
         "Validade do orçamento (dias)",
-
         min_value=1,
-
         value=int(
             st.session_state.get(
                 "validade_orcamento",
                 10,
             )
         ),
-
         step=1,
     )
 
 
     prazo_execucao = st.text_input(
         "Prazo estimado de execução",
-
         placeholder="Ex.: 30 dias úteis",
-
         value=st.session_state.get(
             "prazo_execucao",
             "",
@@ -2930,9 +3013,7 @@ with col2:
 
     condicao_pagamento = st.text_input(
         "Condição de pagamento",
-
         placeholder="Ex.: 50% entrada + 50% entrega",
-
         value=st.session_state.get(
             "condicao_pagamento",
             "",
@@ -2942,9 +3023,7 @@ with col2:
 
     forma_pagamento = st.text_input(
         "Forma de pagamento",
-
         placeholder="Ex.: Pix, transferência ou boleto",
-
         value=st.session_state.get(
             "forma_pagamento",
             "",
@@ -2954,12 +3033,10 @@ with col2:
 
 observacoes_comerciais = st.text_area(
     "Inclusões / observações comerciais",
-
     placeholder=(
         "Descreva inclusões, exclusões, transporte, "
         "prazo e condições de fornecimento."
     ),
-
     value=st.session_state.get(
         "observacoes_comerciais",
         "",
@@ -2996,16 +3073,13 @@ with col1:
 
     comprimento = st.number_input(
         "Comprimento (m)",
-
         min_value=0.01,
-
         value=float(
             st.session_state.get(
                 "comprimento",
                 30.00,
             )
         ),
-
         step=0.10,
     )
 
@@ -3014,16 +3088,13 @@ with col2:
 
     altura = st.number_input(
         "Altura (m)",
-
         min_value=0.01,
-
         value=float(
             st.session_state.get(
                 "altura",
                 3.00,
             )
         ),
-
         step=0.10,
     )
 
@@ -3049,7 +3120,6 @@ with col3:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -3086,7 +3156,6 @@ if "precos" not in st.session_state:
 
 precos_atualizados = {}
 
-
 colunas_precos = st.columns(3)
 
 
@@ -3103,20 +3172,12 @@ for indice, (
 
         preco_atual = st.number_input(
             nome,
-
             min_value=0.00,
-
-            value=float(
-                preco_padrao
-            ),
-
+            value=float(preco_padrao),
             step=0.01,
-
             format="%.2f",
-
             key=f"preco_{nome}",
         )
-
 
         precos_atualizados[
             nome
@@ -3181,7 +3242,6 @@ if "quantidades" not in st.session_state:
 
 quantidades_atualizadas = {}
 
-
 colunas_quantidades = st.columns(3)
 
 
@@ -3218,19 +3278,14 @@ for indice, (
 
         quantidade_atual = st.number_input(
             nome,
-
             min_value=0.0,
-
             value=float(
                 st.session_state[
                     "quantidades"
                 ][nome]
             ),
-
             step=1.0,
-
             format="%.2f",
-
             key=f"quantidade_{nome}",
         )
 
@@ -3251,12 +3306,10 @@ st.session_state["quantidades"] = (
 
 observacoes_tecnicas = st.text_area(
     "📝 Observações técnicas",
-
     placeholder=(
         "Ex.: medidas finais deverão ser conferidas "
         "antes da fabricação."
     ),
-
     value=st.session_state.get(
         "observacoes_tecnicas",
         "",
@@ -3270,9 +3323,7 @@ observacoes_tecnicas = st.text_area(
 
 if st.button(
     "🧮 CALCULAR / ATUALIZAR ORÇAMENTO",
-
     type="primary",
-
     width="stretch",
 ):
 
@@ -3292,7 +3343,8 @@ if st.button(
     except Exception as erro:
 
         st.error(
-            f"Não foi possível calcular o orçamento: {erro}"
+            "Não foi possível calcular o orçamento: "
+            f"{erro}"
         )
 
         st.stop()
@@ -3303,29 +3355,29 @@ if st.button(
     )
 
 
-    st.session_state["nome_projeto"] = (
-        nome_projeto
-    )
+    st.session_state[
+        "nome_projeto"
+    ] = nome_projeto
 
 
-    st.session_state["cliente"] = (
-        cliente
-    )
+    st.session_state[
+        "cliente"
+    ] = cliente
 
 
-    st.session_state["local_obra"] = (
-        local_obra
-    )
+    st.session_state[
+        "local_obra"
+    ] = local_obra
 
 
-    st.session_state["responsavel"] = (
-        responsavel
-    )
+    st.session_state[
+        "responsavel"
+    ] = responsavel
 
 
-    st.session_state["data_orcamento"] = (
-        data_orcamento
-    )
+    st.session_state[
+        "data_orcamento"
+    ] = data_orcamento
 
 
     st.session_state[
@@ -3384,13 +3436,16 @@ if "projeto" not in st.session_state:
         "🧮 CALCULAR / ATUALIZAR ORÇAMENTO."
     )
 
-
 else:
 
     projeto = st.session_state[
         "projeto"
     ]
 
+
+    # ========================================================
+    # HERO DO RESULTADO
+    # ========================================================
 
     st.markdown(
         """
@@ -3406,7 +3461,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -3425,7 +3479,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -3517,7 +3570,6 @@ else:
 
             </div>
             """,
-
             unsafe_allow_html=True,
         )
 
@@ -3558,7 +3610,6 @@ else:
 
             </div>
             """,
-
             unsafe_allow_html=True,
         )
 
@@ -3577,7 +3628,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -3625,7 +3675,6 @@ else:
 
             </div>
             """,
-
             unsafe_allow_html=True,
         )
 
@@ -3646,7 +3695,6 @@ else:
 
             </div>
             """,
-
             unsafe_allow_html=True,
         )
 
@@ -3667,7 +3715,6 @@ else:
 
             </div>
             """,
-
             unsafe_allow_html=True,
         )
 
@@ -3686,7 +3733,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -3700,35 +3746,44 @@ else:
     ).items():
 
         tabela_materiais.append(
+
             {
-                "Material": nome,
 
-                "Unidade": material.get(
-                    "unidade",
-                    "",
-                ),
+                "Material":
+                    nome,
 
-                "Quantidade": numero(
+                "Unidade":
                     material.get(
-                        "quantidade",
-                        0,
-                    )
-                ),
+                        "unidade",
+                        "",
+                    ),
 
-                "Preço unitário": formatar_moeda(
-                    material.get(
-                        "preco_unitario",
-                        0,
-                    )
-                ),
+                "Quantidade":
+                    numero(
+                        material.get(
+                            "quantidade",
+                            0,
+                        )
+                    ),
 
-                "Total": formatar_moeda(
-                    material.get(
-                        "custo",
-                        0,
-                    )
-                ),
+                "Preço unitário":
+                    formatar_moeda(
+                        material.get(
+                            "preco_unitario",
+                            0,
+                        )
+                    ),
+
+                "Total":
+                    formatar_moeda(
+                        material.get(
+                            "custo",
+                            0,
+                        )
+                    ),
+
             }
+
         )
 
 
@@ -3739,11 +3794,8 @@ else:
 
     st.dataframe(
         df_materiais,
-
         width="stretch",
-
         hide_index=True,
-
         column_config={
 
             "Quantidade":
@@ -3770,7 +3822,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -3802,12 +3853,10 @@ else:
             "custo",
             0,
         )
-
         if isinstance(
             mao_obra,
             dict,
         )
-
         else 0
     )
 
@@ -3827,7 +3876,6 @@ else:
 
         st.metric(
             "Materiais",
-
             formatar_moeda(
                 subtotal_materiais
             ),
@@ -3838,7 +3886,6 @@ else:
 
         st.metric(
             "Massas e telas",
-
             formatar_moeda(
                 massas_telas
             ),
@@ -3849,7 +3896,6 @@ else:
 
         st.metric(
             "Mão de obra",
-
             formatar_moeda(
                 custo_mao_obra
             ),
@@ -3870,7 +3916,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -3889,7 +3934,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -3899,12 +3943,10 @@ else:
             "dias",
             0,
         )
-
         if isinstance(
             mao_obra,
             dict,
         )
-
         else 0
     )
 
@@ -3914,12 +3956,10 @@ else:
             "diaria",
             0,
         )
-
         if isinstance(
             mao_obra,
             dict,
         )
-
         else 0
     )
 
@@ -3931,7 +3971,6 @@ else:
 
         st.metric(
             "Dias estimados",
-
             f"{dias:.1f}",
         )
 
@@ -3940,7 +3979,6 @@ else:
 
         st.metric(
             "Valor da diária",
-
             formatar_moeda(
                 diaria
             ),
@@ -3951,7 +3989,6 @@ else:
 
         st.metric(
             "Custo da mão de obra",
-
             formatar_moeda(
                 custo_mao_obra
             ),
@@ -3972,7 +4009,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -4048,7 +4084,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -4085,7 +4120,6 @@ else:
 
             </div>
             """,
-
             unsafe_allow_html=True,
         )
 
@@ -4114,7 +4148,6 @@ else:
 
             </div>
             """,
-
             unsafe_allow_html=True,
         )
 
@@ -4133,7 +4166,8 @@ else:
             "responsavel",
             "",
         )
-        or "Responsável pelo orçamento"
+        or
+        "Responsável pelo orçamento"
     )
 
 
@@ -4153,7 +4187,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -4172,7 +4205,6 @@ else:
 
         </div>
         """,
-
         unsafe_allow_html=True,
     )
 
@@ -4184,9 +4216,7 @@ else:
 
         if st.button(
             "📄 GERAR PDF",
-
             type="primary",
-
             width="stretch",
         ):
 
@@ -4203,15 +4233,11 @@ else:
 
                 st.download_button(
                     label="⬇️ BAIXAR PDF",
-
                     data=pdf_bytes,
-
                     file_name=(
                         f"{nome_arquivo_orcamento()}.pdf"
                     ),
-
                     mime="application/pdf",
-
                     width="stretch",
                 )
 
@@ -4225,9 +4251,7 @@ else:
 
         if st.button(
             "📊 EXPORTAR EXCEL",
-
             type="primary",
-
             width="stretch",
         ):
 
@@ -4244,18 +4268,14 @@ else:
 
                 st.download_button(
                     label="⬇️ BAIXAR EXCEL",
-
                     data=excel_bytes,
-
                     file_name=(
                         f"{nome_arquivo_orcamento()}.xlsx"
                     ),
-
                     mime=(
                         "application/vnd.openxmlformats-officedocument."
                         "spreadsheetml.sheet"
                     ),
-
                     width="stretch",
                 )
 
