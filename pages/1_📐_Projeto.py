@@ -39,7 +39,7 @@ st.markdown(
     <style>
 
     /* ========================================================
-       FONTE
+       FONTE GERAL
        ======================================================== */
 
     @import url(
@@ -112,12 +112,13 @@ st.markdown(
 
 
     /* ========================================================
-       TÍTULO
+       TÍTULO DO CABEÇALHO
+       AZUL-AÇO
        ======================================================== */
 
     .sf-title {
 
-        color: #ffffff !important;
+        color: #7dd3fc !important;
 
         font-family:
             "Inter",
@@ -140,11 +141,12 @@ st.markdown(
 
     /* ========================================================
        SUBTÍTULO
+       CINZA CLARO
        ======================================================== */
 
     .sf-description {
 
-        color: #dce3e8 !important;
+        color: #e2e8f0 !important;
 
         font-family:
             "Inter",
@@ -273,7 +275,9 @@ st.markdown(
     }
 
 
-    /* Placeholder */
+    /* ========================================================
+       PLACEHOLDER
+       ======================================================== */
 
     .stTextInput input::placeholder,
     .stNumberInput input::placeholder,
@@ -346,8 +350,6 @@ st.markdown(
     }
 
 
-    /* Botão primário */
-
     .stButton > button[kind="primary"] {
 
         color: #ffffff !important;
@@ -367,7 +369,7 @@ st.markdown(
 
 
     /* ========================================================
-       CABEÇALHOS NATIVOS DO RESULTADO
+       TÍTULOS NATIVOS DO RESULTADO
        ======================================================== */
 
     h1,
