@@ -39,13 +39,13 @@ st.markdown(
     """
     <style>
 
-    /* ======================================================
-       BASE
-       ====================================================== */
-
     @import url(
         'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
     );
+
+    /* ======================================================
+       BASE
+       ====================================================== */
 
     html,
     body,
@@ -136,7 +136,7 @@ st.markdown(
 
 
     /* ======================================================
-       TÍTULOS DAS SEÇÕES
+       SEÇÕES
        ====================================================== */
 
     .section-header {
@@ -166,10 +166,7 @@ st.markdown(
 
     .info-card {
         background: #ffffff;
-
-        border:
-            1px solid #e1e6eb;
-
+        border: 1px solid #e1e6eb;
         border-radius: 14px;
         padding: 18px 20px;
         margin-bottom: 14px;
@@ -185,10 +182,7 @@ st.markdown(
 
     div[data-testid="stMetric"] {
         background: #ffffff;
-
-        border:
-            1px solid #e1e6eb;
-
+        border: 1px solid #e1e6eb;
         border-radius: 14px;
         padding: 15px;
 
@@ -198,7 +192,7 @@ st.markdown(
 
 
     /* ======================================================
-       INPUTS
+       CAMPOS
        ====================================================== */
 
     .stTextInput label,
@@ -284,7 +278,7 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO
+# CABEÇALHO PRINCIPAL
 # ============================================================
 
 st.markdown(
@@ -459,17 +453,13 @@ st.markdown(
 
 if "precos" not in st.session_state:
 
-    st.session_state["precos"] = (
-        PRECOS_BASE.copy()
-    )
+    st.session_state["precos"] = PRECOS_BASE.copy()
 
 
 precos_atualizados = {}
 
 
-for nome, preco_padrao in (
-    st.session_state["precos"].items()
-):
+for nome, preco_padrao in st.session_state["precos"].items():
 
     preco_atual = st.number_input(
         nome,
@@ -483,9 +473,7 @@ for nome, preco_padrao in (
     precos_atualizados[nome] = preco_atual
 
 
-st.session_state["precos"] = (
-    precos_atualizados
-)
+st.session_state["precos"] = precos_atualizados
 
 
 st.divider()
@@ -555,21 +543,17 @@ for nome, material in previa["materiais"].items():
         key=f"quantidade_{nome}",
     )
 
-    quantidades_atualizadas[nome] = (
-        quantidade_atual
-    )
+    quantidades_atualizadas[nome] = quantidade_atual
 
 
-st.session_state["quantidades"] = (
-    quantidades_atualizadas
-)
+st.session_state["quantidades"] = quantidades_atualizadas
 
 
 st.divider()
 
 
 # ============================================================
-# BOTÃO CALCULAR
+# CALCULAR ORÇAMENTO
 # ============================================================
 
 if st.button(
@@ -596,7 +580,7 @@ if st.button(
 
 
 # ============================================================
-# RESULTADO DO ORÇAMENTO
+# RESULTADO
 # ============================================================
 
 if "projeto" in st.session_state:
@@ -719,9 +703,7 @@ if "projeto" in st.session_state:
     tabela_materiais = []
 
 
-    for nome, material in (
-        projeto["materiais"].items()
-    ):
+    for nome, material in projeto["materiais"].items():
 
         tabela_materiais.append(
             {
