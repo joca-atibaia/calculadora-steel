@@ -37,7 +37,18 @@ def formatar_moeda(valor):
 
 st.markdown(
     """
-    <style>
+    <div class="section-header">
+        <div class="section-title">
+            📐 Dimensões do projeto
+        </div>
+
+        <div class="section-subtitle">
+            Informe as dimensões utilizadas no cálculo.
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
     /* ======================================================
        BASE
