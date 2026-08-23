@@ -15,6 +15,13 @@ st.set_page_config(
     page_icon="📐",
     layout="wide",
 )
+# Linkar o manifesto para transformação em App
+st.markdown(
+    """
+    <link rel="manifest" href="https://githubusercontent.com">
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ============================================================
