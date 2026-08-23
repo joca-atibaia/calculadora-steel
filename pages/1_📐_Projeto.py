@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-
 from datetime import date
 from io import BytesIO
 from html import escape
@@ -10,13 +9,14 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
-    page_title="Orçamento | Calculadora Steel",
+    page_title="Calculadora Steel Framing",
     page_icon="📐",
     layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -35,74 +35,79 @@ st.markdown(
     .block-container {
         max-width: 1400px;
         padding-top: 2rem;
-        padding-bottom: 3rem;
+        padding-bottom: 4rem;
     }
-
 
     /* ======================================================
        HERO
        ====================================================== */
 
     .hero {
-        padding: 32px 36px;
+        padding: 34px 38px;
         border-radius: 18px;
         border: 1px solid #dfe3e8;
         background:
             linear-gradient(
                 135deg,
-                #f7f9fc 0%,
+                #f8fafc 0%,
                 #ffffff 55%,
-                #eef5ff 100%
+                #f1f5f9 100%
             );
-        margin-bottom: 30px;
-        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.05);
+        box-shadow:
+            0 8px 25px rgba(15, 23, 42, 0.06);
+        margin-bottom: 28px;
     }
 
     .hero-title {
-        font-size: 32px;
+        font-size: 34px;
         font-weight: 800;
-        letter-spacing: -0.5px;
-        color: #182230;
+        letter-spacing: -0.8px;
+        color: #172033;
         margin-bottom: 8px;
     }
 
     .hero-subtitle {
         font-size: 16px;
-        color: #667085;
+        color: #64748b;
         line-height: 1.5;
+        margin-bottom: 18px;
     }
 
     .hero-badge {
         display: inline-block;
-        margin-top: 16px;
-        padding: 7px 14px;
+        padding: 7px 13px;
         border-radius: 999px;
-        background: #e8f1ff;
-        color: #175cd3;
+        background: #eef2ff;
+        border: 1px solid #c7d2fe;
+        color: #3730a3;
         font-size: 12px;
         font-weight: 700;
         letter-spacing: 0.4px;
     }
-
 
     /* ======================================================
        SEÇÕES
        ====================================================== */
 
     .section-title {
-        font-size: 22px;
+        font-size: 21px;
         font-weight: 800;
-        color: #182230;
-        margin-top: 10px;
+        color: #172033;
+        margin-top: 12px;
         margin-bottom: 3px;
     }
 
     .section-subtitle {
         font-size: 14px;
-        color: #667085;
-        margin-bottom: 18px;
+        color: #64748b;
+        margin-bottom: 17px;
     }
 
+    .section-divider {
+        height: 1px;
+        background: #e5e7eb;
+        margin: 28px 0;
+    }
 
     /* ======================================================
        CARDS
@@ -111,153 +116,205 @@ st.markdown(
     .info-card {
         padding: 20px 22px;
         border-radius: 14px;
-        border: 1px solid #e4e7ec;
+        border: 1px solid #e2e8f0;
         background: #ffffff;
-        margin-bottom: 15px;
-        box-shadow: 0 3px 12px rgba(16, 24, 40, 0.04);
+        box-shadow:
+            0 4px 14px rgba(15, 23, 42, 0.04);
+        min-height: 150px;
+        margin-bottom: 10px;
     }
 
     .card-label {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 700;
-        color: #667085;
         text-transform: uppercase;
-        letter-spacing: 0.4px;
+        letter-spacing: 0.7px;
+        color: #64748b;
         margin-bottom: 4px;
     }
 
     .card-value {
         font-size: 16px;
-        font-weight: 600;
-        color: #182230;
+        font-weight: 650;
+        color: #172033;
     }
 
+    .card-spacing {
+        margin-bottom: 16px;
+    }
 
     /* ======================================================
        MÉTRICAS
        ====================================================== */
 
     .metric-card {
-        padding: 20px;
+        padding: 22px;
         border-radius: 14px;
-        border: 1px solid #e4e7ec;
+        border: 1px solid #e2e8f0;
         background: #ffffff;
+        box-shadow:
+            0 4px 14px rgba(15, 23, 42, 0.04);
         text-align: center;
-        box-shadow: 0 3px 12px rgba(16, 24, 40, 0.04);
-        min-height: 110px;
+        margin-bottom: 10px;
     }
 
     .metric-label {
-        font-size: 12px;
-        font-weight: 700;
-        color: #667085;
-        letter-spacing: 0.5px;
+        font-size: 11px;
+        font-weight: 800;
+        color: #64748b;
+        letter-spacing: 0.8px;
+        margin-bottom: 7px;
     }
 
     .metric-value {
-        font-size: 26px;
+        font-size: 27px;
         font-weight: 800;
-        color: #182230;
-        margin-top: 8px;
+        color: #172033;
     }
 
-
     /* ======================================================
-       TOTAL
+       FINANCEIRO
        ====================================================== */
 
+    .finance-card {
+        padding: 20px 22px;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        background: #ffffff;
+        box-shadow:
+            0 4px 14px rgba(15, 23, 42, 0.04);
+        margin-bottom: 12px;
+    }
+
+    .finance-label {
+        font-size: 13px;
+        font-weight: 650;
+        color: #475569;
+    }
+
+    .finance-value {
+        font-size: 21px;
+        font-weight: 800;
+        color: #172033;
+        margin-top: 4px;
+    }
+
     .total-box {
-        padding: 28px;
+        padding: 28px 30px;
         border-radius: 16px;
-        border: 2px solid #12b76a;
-        background: linear-gradient(
-            135deg,
-            #ecfdf3,
-            #f7fff9
-        );
+        border: 2px solid #16a34a;
+        background:
+            linear-gradient(
+                135deg,
+                #f0fdf4,
+                #ffffff
+            );
         text-align: center;
-        margin: 22px 0;
-        box-shadow: 0 6px 18px rgba(18, 183, 106, 0.10);
+        margin: 18px 0 25px 0;
+        box-shadow:
+            0 7px 20px rgba(22, 163, 74, 0.08);
     }
 
     .total-label {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 800;
-        color: #027a48;
-        letter-spacing: 0.8px;
+        letter-spacing: 1px;
+        color: #166534;
+        margin-bottom: 6px;
     }
 
     .total-value {
-        font-size: 36px;
+        font-size: 38px;
         font-weight: 900;
-        color: #05603a;
-        margin-top: 7px;
+        color: #14532d;
     }
 
+    /* ======================================================
+       OBSERVAÇÕES
+       ====================================================== */
+
+    .observation-card {
+        padding: 18px 20px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        color: #334155;
+        line-height: 1.6;
+        margin-bottom: 12px;
+    }
 
     /* ======================================================
        ASSINATURA
        ====================================================== */
 
     .assinatura {
-        margin-top: 60px;
-        padding-top: 15px;
+        margin-top: 50px;
+        padding: 25px 20px 10px 20px;
         text-align: center;
-        color: #344054;
     }
 
     .linha-assinatura {
-        border-top: 1px solid #344054;
+        border-top: 1px solid #334155;
         width: 55%;
+        max-width: 430px;
+        min-width: 250px;
         margin: 0 auto 10px auto;
     }
 
     .assinatura-nome {
-        font-size: 15px;
-        font-weight: 700;
+        font-size: 14px;
+        font-weight: 800;
+        color: #172033;
     }
 
     .assinatura-cargo {
-        margin-top: 5px;
         font-size: 12px;
-        color: #667085;
+        color: #64748b;
+        margin-top: 4px;
     }
 
-
     /* ======================================================
-       OBSERVAÇÕES
-       ====================================================== */
-
-    .observacao-card {
-        padding: 18px 20px;
-        border-radius: 12px;
-        border: 1px solid #e4e7ec;
-        background: #f9fafb;
-        color: #344054;
-        line-height: 1.6;
-        margin-top: 10px;
-        margin-bottom: 15px;
-    }
-
-
-    /* ======================================================
-       TABELA
+       TABELAS
        ====================================================== */
 
     .table-title {
-        font-size: 16px;
-        font-weight: 800;
-        color: #182230;
+        font-size: 15px;
+        font-weight: 750;
+        color: #334155;
         margin-bottom: 10px;
     }
 
-
     /* ======================================================
-       DIVISOR
+       RESPONSIVIDADE
        ====================================================== */
 
-    .section-divider {
-        margin: 30px 0;
+    @media (max-width: 768px) {
+
+        .block-container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .hero {
+            padding: 25px 22px;
+        }
+
+        .hero-title {
+            font-size: 27px;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+        }
+
+        .metric-value {
+            font-size: 23px;
+        }
+
+        .total-value {
+            font-size: 30px;
+        }
+
     }
 
     </style>
@@ -294,14 +351,18 @@ def nome_arquivo_orcamento():
         "",
     )
 
-    nome = (
-        str(nome)
-        .strip()
-        .replace(" ", "_")
-    )
+    nome = str(nome).strip()
 
     if not nome:
-        nome = "Orcamento_Steel_Framing"
+        return "Orcamento_Steel_Framing"
+
+    nome = (
+        nome
+        .replace(" ", "_")
+        .replace("/", "_")
+        .replace("\\", "_")
+        .replace(":", "_")
+    )
 
     return nome
 
@@ -334,10 +395,9 @@ def gerar_excel(projeto):
 
         return None
 
-
-    # ========================================================
+    # --------------------------------------------------------
     # DADOS
-    # ========================================================
+    # --------------------------------------------------------
 
     nome_projeto = st.session_state.get(
         "nome_projeto",
@@ -449,15 +509,14 @@ def gerar_excel(projeto):
         "custo_geral",
     )
 
-
-    # ========================================================
+    # --------------------------------------------------------
     # WORKBOOK
-    # ========================================================
+    # --------------------------------------------------------
 
     wb = Workbook()
 
-    ws = wb.active
-    ws.title = "ORÇAMENTO"
+    ws_orcamento = wb.active
+    ws_orcamento.title = "ORÇAMENTO"
 
     ws_materiais = wb.create_sheet(
         "MATERIAIS"
@@ -471,22 +530,21 @@ def gerar_excel(projeto):
         "DADOS"
     )
 
-
-    # ========================================================
+    # --------------------------------------------------------
     # ESTILOS
-    # ========================================================
+    # --------------------------------------------------------
 
-    azul = "1F4E78"
-    azul_claro = "D9EAF7"
-    verde = "E2F0D9"
-    verde_forte = "548235"
-    cinza = "F2F2F2"
+    azul = "172033"
+    cinza = "64748B"
+    cinza_claro = "F1F5F9"
+    verde = "16A34A"
+    verde_claro = "F0FDF4"
     branco = "FFFFFF"
-    preto = "000000"
+    borda_cor = "CBD5E1"
 
     thin = Side(
         style="thin",
-        color="D9D9D9",
+        color=borda_cor,
     )
 
     border = Border(
@@ -496,73 +554,156 @@ def gerar_excel(projeto):
         bottom=thin,
     )
 
-
-    moeda_format = (
-        'R$ #,##0.00'
-    )
-
-
-    # ========================================================
-    # ABA ORÇAMENTO
-    # ========================================================
-
-    ws.merge_cells(
-        "A1:E1"
-    )
-
-    ws["A1"] = (
-        "ORÇAMENTO — STEEL FRAMING"
-    )
-
-    ws["A1"].font = Font(
-        bold=True,
-        size=18,
-        color=branco,
-    )
-
-    ws["A1"].fill = PatternFill(
+    titulo_fill = PatternFill(
         "solid",
         fgColor=azul,
     )
 
-    ws["A1"].alignment = Alignment(
-        horizontal="center",
-        vertical="center",
+    secao_fill = PatternFill(
+        "solid",
+        fgColor=cinza_claro,
     )
 
-    ws.row_dimensions[1].height = 30
+    total_fill = PatternFill(
+        "solid",
+        fgColor=verde_claro,
+    )
 
+    moeda_format = (
+        '"R$" #,##0.00'
+    )
 
-    ws.merge_cells(
+    # --------------------------------------------------------
+    # FUNÇÕES INTERNAS DO EXCEL
+    # --------------------------------------------------------
+
+    def configurar_larguras(ws):
+
+        larguras = {
+            "A": 30,
+            "B": 24,
+            "C": 22,
+            "D": 22,
+            "E": 22,
+        }
+
+        for coluna, largura in larguras.items():
+
+            ws.column_dimensions[
+                coluna
+            ].width = largura
+
+    def estilizar_titulo(
+        ws,
+        celula,
+        texto,
+    ):
+
+        ws[celula] = texto
+        ws[celula].font = Font(
+            bold=True,
+            size=18,
+            color=branco,
+        )
+        ws[celula].fill = titulo_fill
+        ws[celula].alignment = Alignment(
+            horizontal="left",
+            vertical="center",
+        )
+
+    def estilizar_secao(
+        ws,
+        linha,
+        texto,
+    ):
+
+        ws.merge_cells(
+            start_row=linha,
+            start_column=1,
+            end_row=linha,
+            end_column=5,
+        )
+
+        cell = ws.cell(
+            linha,
+            1,
+        )
+
+        cell.value = texto
+        cell.font = Font(
+            bold=True,
+            size=12,
+            color=azul,
+        )
+        cell.fill = secao_fill
+        cell.alignment = Alignment(
+            horizontal="left"
+        )
+
+    def aplicar_bordas(
+        ws,
+        min_row,
+        max_row,
+        min_col=1,
+        max_col=5,
+    ):
+
+        for row in ws.iter_rows(
+            min_row=min_row,
+            max_row=max_row,
+            min_col=min_col,
+            max_col=max_col,
+        ):
+
+            for cell in row:
+
+                cell.border = border
+                cell.alignment = Alignment(
+                    vertical="center"
+                )
+
+    # --------------------------------------------------------
+    # ABA ORÇAMENTO
+    # --------------------------------------------------------
+
+    configurar_larguras(
+        ws_orcamento
+    )
+
+    ws_orcamento.merge_cells(
+        "A1:E1"
+    )
+
+    estilizar_titulo(
+        ws_orcamento,
+        "A1",
+        "ORÇAMENTO — STEEL FRAMING",
+    )
+
+    ws_orcamento.merge_cells(
         "A2:E2"
     )
 
-    ws["A2"] = (
+    ws_orcamento["A2"] = (
         "Quantitativo de materiais e mão de obra"
     )
 
-    ws["A2"].font = Font(
+    ws_orcamento["A2"].font = Font(
         italic=True,
-        color="666666",
+        color=cinza,
     )
-
-    ws["A2"].alignment = Alignment(
-        horizontal="center",
-    )
-
 
     # --------------------------------------------------------
     # IDENTIFICAÇÃO
     # --------------------------------------------------------
 
-    ws["A4"] = "IDENTIFICAÇÃO DO PROJETO"
-
-    ws["A4"].font = Font(
-        bold=True,
-        size=13,
+    estilizar_secao(
+        ws_orcamento,
+        4,
+        "IDENTIFICAÇÃO DO PROJETO",
     )
 
-    dados = [
+    dados_identificacao = [
         ("Projeto", nome_projeto or "Não informado"),
         ("Cliente", cliente or "Não informado"),
         ("Local da obra", local_obra or "Não informado"),
@@ -575,42 +716,37 @@ def gerar_excel(projeto):
 
     linha = 5
 
-    for rotulo, valor in dados:
+    for rotulo, valor in dados_identificacao:
 
-        ws[f"A{linha}"] = rotulo
-        ws[f"B{linha}"] = valor
+        ws_orcamento.cell(
+            linha,
+            1,
+        ).value = rotulo
 
-        ws[f"A{linha}"].font = Font(
-            bold=True,
-        )
-
-        ws[f"A{linha}"].fill = PatternFill(
-            "solid",
-            fgColor=cinza,
-        )
-
-        ws[f"A{linha}"].border = border
-        ws[f"B{linha}"].border = border
+        ws_orcamento.cell(
+            linha,
+            2,
+        ).value = valor
 
         linha += 1
 
+    aplicar_bordas(
+        ws_orcamento,
+        5,
+        9,
+        1,
+        2,
+    )
 
     # --------------------------------------------------------
     # DIMENSÕES
     # --------------------------------------------------------
 
-    linha += 1
-
-    ws[f"A{linha}"] = (
-        "DIMENSÕES DO PROJETO"
+    estilizar_secao(
+        ws_orcamento,
+        11,
+        "DIMENSÕES DO PROJETO",
     )
-
-    ws[f"A{linha}"].font = Font(
-        bold=True,
-        size=13,
-    )
-
-    linha += 1
 
     dimensoes = [
         ("Comprimento (m)", comprimento),
@@ -618,421 +754,125 @@ def gerar_excel(projeto):
         ("Área (m²)", area),
     ]
 
+    linha = 12
+
     for rotulo, valor in dimensoes:
 
-        ws[f"A{linha}"] = rotulo
-        ws[f"B{linha}"] = float(valor)
+        ws_orcamento.cell(
+            linha,
+            1,
+        ).value = rotulo
 
-        ws[f"A{linha}"].border = border
-        ws[f"B{linha}"].border = border
+        ws_orcamento.cell(
+            linha,
+            2,
+        ).value = float(valor)
 
         linha += 1
 
+    aplicar_bordas(
+        ws_orcamento,
+        12,
+        14,
+        1,
+        2,
+    )
 
     # --------------------------------------------------------
     # RESUMO FINANCEIRO
     # --------------------------------------------------------
 
-    linha += 1
-
-    ws[f"A{linha}"] = (
-        "RESUMO FINANCEIRO"
+    estilizar_secao(
+        ws_orcamento,
+        16,
+        "RESUMO FINANCEIRO",
     )
 
-    ws[f"A{linha}"].font = Font(
-        bold=True,
-        size=13,
+    ws_orcamento["A17"] = "Materiais"
+    ws_orcamento["B17"] = float(
+        subtotal_materiais
     )
 
-    linha += 1
+    ws_orcamento["A18"] = "Massas e telas"
+    ws_orcamento["B18"] = float(
+        massas_telas
+    )
 
-    resumo_inicio = linha
+    ws_orcamento["A19"] = "Mão de obra"
+    ws_orcamento["B19"] = float(
+        custo_mao_de_obra
+    )
 
-    resumo = [
-        (
-            "Materiais",
-            subtotal_materiais,
-        ),
-        (
-            "Massas e telas",
-            massas_telas,
-        ),
-        (
-            "Mão de obra",
-            custo_mao_de_obra,
-        ),
-    ]
+    for row in range(17, 20):
 
-    for rotulo, valor in resumo:
+        ws_orcamento.cell(
+            row,
+            2,
+        ).number_format = moeda_format
 
-        ws[f"A{linha}"] = rotulo
-        ws[f"B{linha}"] = float(valor)
+    aplicar_bordas(
+        ws_orcamento,
+        17,
+        19,
+        1,
+        2,
+    )
 
-        ws[f"A{linha}"].border = border
-        ws[f"B{linha}"].border = border
+    # --------------------------------------------------------
+    # TOTAL
+    # --------------------------------------------------------
 
-        ws[f"B{linha}"].number_format = moeda_format
+    ws_orcamento.merge_cells(
+        "A21:D21"
+    )
 
-        linha += 1
-
-
-    total_linha = linha + 1
-
-    ws[f"A{total_linha}"] = (
+    ws_orcamento["A21"] = (
         "VALOR TOTAL DO ORÇAMENTO"
     )
 
-    ws[f"B{total_linha}"] = (
-        f"=B{resumo_inicio}"
-        f"+B{resumo_inicio + 1}"
-        f"+B{resumo_inicio + 2}"
-    )
-
-    ws[f"A{total_linha}"].font = Font(
-        bold=True,
-        size=13,
-        color=branco,
-    )
-
-    ws[f"B{total_linha}"].font = Font(
+    ws_orcamento["A21"].font = Font(
         bold=True,
         size=14,
-        color=branco,
+        color="14532D",
     )
 
-    ws[f"A{total_linha}"].fill = PatternFill(
-        "solid",
-        fgColor=verde_forte,
+    ws_orcamento["A21"].fill = total_fill
+
+    ws_orcamento["E21"] = (
+        "=B17+B18+B19"
     )
 
-    ws[f"B{total_linha}"].fill = PatternFill(
-        "solid",
-        fgColor=verde_forte,
+    ws_orcamento["E21"].number_format = (
+        moeda_format
     )
 
-    ws[f"A{total_linha}"].border = border
-    ws[f"B{total_linha}"].border = border
+    ws_orcamento["E21"].font = Font(
+        bold=True,
+        size=16,
+        color="14532D",
+    )
 
-    ws[f"B{total_linha}"].number_format = moeda_format
+    ws_orcamento["E21"].fill = total_fill
 
+    aplicar_bordas(
+        ws_orcamento,
+        21,
+        21,
+        1,
+        5,
+    )
 
     # --------------------------------------------------------
     # CONDIÇÕES COMERCIAIS
     # --------------------------------------------------------
 
-    linha = total_linha + 3
-
-    ws[f"A{linha}"] = (
-        "CONDIÇÕES COMERCIAIS"
+    estilizar_secao(
+        ws_orcamento,
+        23,
+        "CONDIÇÕES COMERCIAIS",
     )
-
-    ws[f"A{linha}"].font = Font(
-        bold=True,
-        size=13,
-    )
-
-    linha += 1
 
     condicoes = [
-        ("Validade", f"{validade} dias"),
-        (
-            "Prazo de execução",
-            prazo_execucao or "Não informado",
-        ),
-        (
-            "Condição de pagamento",
-            condicao_pagamento or "Não informado",
-        ),
-        (
-            "Forma de pagamento",
-            forma_pagamento or "Não informado",
-        ),
-    ]
-
-    for rotulo, valor in condicoes:
-
-        ws[f"A{linha}"] = rotulo
-        ws[f"B{linha}"] = valor
-
-        ws[f"A{linha}"].font = Font(
-            bold=True,
-        )
-
-        ws[f"A{linha}"].fill = PatternFill(
-            "solid",
-            fgColor=cinza,
-        )
-
-        ws[f"A{linha}"].border = border
-        ws[f"B{linha}"].border = border
-
-        linha += 1
-
-
-    # --------------------------------------------------------
-    # OBSERVAÇÕES
-    # --------------------------------------------------------
-
-    linha += 1
-
-    ws[f"A{linha}"] = (
-        "OBSERVAÇÕES COMERCIAIS"
-    )
-
-    ws[f"A{linha}"].font = Font(
-        bold=True,
-        size=13,
-    )
-
-    linha += 1
-
-    ws.merge_cells(
-        start_row=linha,
-        start_column=1,
-        end_row=linha,
-        end_column=5,
-    )
-
-    ws.cell(
-        linha,
-        1,
-    ).value = (
-        observacoes_comerciais
-        or "Não informado"
-    )
-
-    ws.cell(
-        linha,
-        1,
-    ).alignment = Alignment(
-        wrap_text=True,
-        vertical="top",
-    )
-
-
-    linha += 2
-
-    ws[f"A{linha}"] = (
-        "OBSERVAÇÕES TÉCNICAS"
-    )
-
-    ws[f"A{linha}"].font = Font(
-        bold=True,
-        size=13,
-    )
-
-    linha += 1
-
-    ws.merge_cells(
-        start_row=linha,
-        start_column=1,
-        end_row=linha,
-        end_column=5,
-    )
-
-    ws.cell(
-        linha,
-        1,
-    ).value = (
-        observacoes_tecnicas
-        or "Não informado"
-    )
-
-    ws.cell(
-        linha,
-        1,
-    ).alignment = Alignment(
-        wrap_text=True,
-        vertical="top",
-    )
-
-
-    # ========================================================
-    # ABA MATERIAIS
-    # ========================================================
-
-    ws_materiais.append(
-        [
-            "Material",
-            "Unidade",
-            "Quantidade",
-            "Preço unitário",
-            "Total",
-        ]
-    )
-
-    for cell in ws_materiais[1]:
-
-        cell.font = Font(
-            bold=True,
-            color=branco,
-        )
-
-        cell.fill = PatternFill(
-            "solid",
-            fgColor=azul,
-        )
-
-        cell.border = border
-
-        cell.alignment = Alignment(
-            horizontal="center",
-        )
-
-
-    primeira_linha_material = 2
-
-    for nome, material in materiais.items():
-
-        linha_material = (
-            ws_materiais.max_row + 1
-        )
-
-        ws_materiais.append(
-            [
-                nome,
-                material.get(
-                    "unidade",
-                    "",
-                ),
-                float(
-                    material.get(
-                        "quantidade",
-                        0,
-                    )
-                ),
-                float(
-                    material.get(
-                        "preco_unitario",
-                        0,
-                    )
-                ),
-                (
-                    f"=C{linha_material}"
-                    f"*D{linha_material}"
-                ),
-            ]
-        )
-
-
-    ultima_linha_material = (
-        ws_materiais.max_row
-    )
-
-    linha_total_material = (
-        ultima_linha_material + 1
-    )
-
-    ws_materiais[
-        f"A{linha_total_material}"
-    ] = "TOTAL MATERIAIS"
-
-    ws_materiais[
-        f"E{linha_total_material}"
-    ] = (
-        f"=SUM(E{primeira_linha_material}:"
-        f"E{ultima_linha_material})"
-    )
-
-    ws_materiais[
-        f"A{linha_total_material}"
-    ].font = Font(
-        bold=True,
-    )
-
-    ws_materiais[
-        f"E{linha_total_material}"
-    ].font = Font(
-        bold=True,
-    )
-
-
-    # ========================================================
-    # ABA MÃO DE OBRA
-    # ========================================================
-
-    ws_mao.append(
-        [
-            "Descrição",
-            "Quantidade",
-            "Valor unitário",
-            "Total",
-        ]
-    )
-
-    for cell in ws_mao[1]:
-
-        cell.font = Font(
-            bold=True,
-            color=branco,
-        )
-
-        cell.fill = PatternFill(
-            "solid",
-            fgColor=azul,
-        )
-
-        cell.border = border
-
-
-    ws_mao.append(
-        [
-            "Mão de obra",
-            float(dias),
-            float(diaria),
-            "=B2*C2",
-        ]
-    )
-
-
-    ws_mao["A4"] = (
-        "Custo total da mão de obra"
-    )
-
-    ws_mao["D4"] = (
-        "=D2"
-    )
-
-    ws_mao["A4"].font = Font(
-        bold=True,
-    )
-
-    ws_mao["D4"].font = Font(
-        bold=True,
-    )
-
-
-    # ========================================================
-    # ABA DADOS
-    # ========================================================
-
-    ws_dados.append(
-        ["CAMPO", "VALOR"]
-    )
-
-    for cell in ws_dados[1]:
-
-        cell.font = Font(
-            bold=True,
-            color=branco,
-        )
-
-        cell.fill = PatternFill(
-            "solid",
-            fgColor=azul,
-        )
-
-    dados_completos = [
-        ("Projeto", nome_projeto),
-        ("Cliente", cliente),
-        ("Local da obra", local_obra),
-        ("Responsável", responsavel),
-        (
-            "Data do orçamento",
-            data_orcamento.strftime(
-                "%d/%m/%Y"
-            ),
-        ),
         (
             "Validade",
             f"{validade} dias",
@@ -1049,99 +889,438 @@ def gerar_excel(projeto):
             "Forma de pagamento",
             forma_pagamento or "Não informado",
         ),
+    ]
+
+    linha = 24
+
+    for rotulo, valor in condicoes:
+
+        ws_orcamento.cell(
+            linha,
+            1,
+        ).value = rotulo
+
+        ws_orcamento.cell(
+            linha,
+            2,
+        ).value = valor
+
+        linha += 1
+
+    aplicar_bordas(
+        ws_orcamento,
+        24,
+        27,
+        1,
+        2,
+    )
+
+    # --------------------------------------------------------
+    # OBSERVAÇÕES
+    # --------------------------------------------------------
+
+    estilizar_secao(
+        ws_orcamento,
+        29,
+        "OBSERVAÇÕES COMERCIAIS",
+    )
+
+    ws_orcamento.merge_cells(
+        "A30:E31"
+    )
+
+    ws_orcamento["A30"] = (
+        observacoes_comerciais
+        or "Não informado"
+    )
+
+    ws_orcamento["A30"].alignment = Alignment(
+        wrap_text=True,
+        vertical="top",
+    )
+
+    aplicar_bordas(
+        ws_orcamento,
+        30,
+        31,
+        1,
+        5,
+    )
+
+    estilizar_secao(
+        ws_orcamento,
+        33,
+        "OBSERVAÇÕES TÉCNICAS",
+    )
+
+    ws_orcamento.merge_cells(
+        "A34:E35"
+    )
+
+    ws_orcamento["A34"] = (
+        observacoes_tecnicas
+        or "Não informado"
+    )
+
+    ws_orcamento["A34"].alignment = Alignment(
+        wrap_text=True,
+        vertical="top",
+    )
+
+    aplicar_bordas(
+        ws_orcamento,
+        34,
+        35,
+        1,
+        5,
+    )
+
+    # --------------------------------------------------------
+    # ABA MATERIAIS
+    # --------------------------------------------------------
+
+    configurar_larguras(
+        ws_materiais
+    )
+
+    ws_materiais.merge_cells(
+        "A1:E1"
+    )
+
+    estilizar_titulo(
+        ws_materiais,
+        "A1",
+        "QUANTITATIVO DE MATERIAIS",
+    )
+
+    cabecalho = [
+        "Material",
+        "Unidade",
+        "Quantidade",
+        "Preço unitário",
+        "Total",
+    ]
+
+    for coluna, valor in enumerate(
+        cabecalho,
+        start=1,
+    ):
+
+        cell = ws_materiais.cell(
+            3,
+            coluna,
+        )
+
+        cell.value = valor
+        cell.font = Font(
+            bold=True,
+            color=branco,
+        )
+        cell.fill = titulo_fill
+        cell.alignment = Alignment(
+            horizontal="center"
+        )
+
+    linha = 4
+
+    for nome, material in materiais.items():
+
+        ws_materiais.cell(
+            linha,
+            1,
+        ).value = str(nome)
+
+        ws_materiais.cell(
+            linha,
+            2,
+        ).value = material.get(
+            "unidade",
+            "",
+        )
+
+        ws_materiais.cell(
+            linha,
+            3,
+        ).value = float(
+            material.get(
+                "quantidade",
+                0,
+            )
+        )
+
+        ws_materiais.cell(
+            linha,
+            4,
+        ).value = float(
+            material.get(
+                "preco_unitario",
+                0,
+            )
+        )
+
+        # Fórmula simples e compatível
+        ws_materiais.cell(
+            linha,
+            5,
+        ).value = (
+            f"=C{linha}*D{linha}"
+        )
+
+        ws_materiais.cell(
+            linha,
+            4,
+        ).number_format = moeda_format
+
+        ws_materiais.cell(
+            linha,
+            5,
+        ).number_format = moeda_format
+
+        linha += 1
+
+    ultima_linha_materiais = (
+        linha - 1
+    )
+
+    aplicar_bordas(
+        ws_materiais,
+        3,
+        ultima_linha_materiais,
+        1,
+        5,
+    )
+
+    # Total de materiais
+    ws_materiais.cell(
+        linha + 1,
+        4,
+    ).value = "TOTAL"
+
+    ws_materiais.cell(
+        linha + 1,
+        4,
+    ).font = Font(
+        bold=True
+    )
+
+    ws_materiais.cell(
+        linha + 1,
+        5,
+    ).value = (
+        f"=SUM(E4:E{ultima_linha_materiais})"
+    )
+
+    ws_materiais.cell(
+        linha + 1,
+        5,
+    ).number_format = moeda_format
+
+    ws_materiais.cell(
+        linha + 1,
+        5,
+    ).font = Font(
+        bold=True
+    )
+
+    aplicar_bordas(
+        ws_materiais,
+        linha + 1,
+        linha + 1,
+        4,
+        5,
+    )
+
+    ws_materiais.freeze_panes = "A4"
+
+    # --------------------------------------------------------
+    # ABA MÃO DE OBRA
+    # --------------------------------------------------------
+
+    configurar_larguras(
+        ws_mao
+    )
+
+    ws_mao.merge_cells(
+        "A1:C1"
+    )
+
+    estilizar_titulo(
+        ws_mao,
+        "A1",
+        "MÃO DE OBRA",
+    )
+
+    ws_mao["A3"] = "Descrição"
+    ws_mao["B3"] = "Valor"
+    ws_mao["C3"] = "Resultado"
+
+    for cell in ws_mao[3]:
+
+        cell.font = Font(
+            bold=True,
+            color=branco,
+        )
+
+        cell.fill = titulo_fill
+        cell.alignment = Alignment(
+            horizontal="center"
+        )
+
+    ws_mao["A4"] = "Dias estimados"
+    ws_mao["B4"] = float(dias)
+    ws_mao["C4"] = float(dias)
+
+    ws_mao["A5"] = "Valor da diária"
+    ws_mao["B5"] = float(diaria)
+    ws_mao["C5"] = float(diaria)
+
+    ws_mao["A6"] = "Custo da mão de obra"
+
+    # Fórmula básica: dias x diária
+    ws_mao["C6"] = "=C4*C5"
+
+    ws_mao["B5"].number_format = moeda_format
+    ws_mao["C5"].number_format = moeda_format
+    ws_mao["C6"].number_format = moeda_format
+
+    aplicar_bordas(
+        ws_mao,
+        3,
+        6,
+        1,
+        3,
+    )
+
+    ws_mao["A6"].font = Font(
+        bold=True
+    )
+
+    ws_mao["C6"].font = Font(
+        bold=True
+    )
+
+    # --------------------------------------------------------
+    # ABA DADOS
+    # --------------------------------------------------------
+
+    configurar_larguras(
+        ws_dados
+    )
+
+    ws_dados.merge_cells(
+        "A1:B1"
+    )
+
+    estilizar_titulo(
+        ws_dados,
+        "A1",
+        "DADOS DO ORÇAMENTO",
+    )
+
+    dados = [
+        ("Projeto", nome_projeto),
+        ("Cliente", cliente),
+        ("Local da obra", local_obra),
+        ("Responsável", responsavel),
+        (
+            "Data",
+            data_orcamento.strftime(
+                "%d/%m/%Y"
+            ),
+        ),
+        ("Validade", f"{validade} dias"),
+        (
+            "Prazo de execução",
+            prazo_execucao or "Não informado",
+        ),
+        (
+            "Condição de pagamento",
+            condicao_pagamento or "Não informado",
+        ),
+        (
+            "Forma de pagamento",
+            forma_pagamento or "Não informado",
+        ),
+        (
+            "Comprimento (m)",
+            float(comprimento),
+        ),
+        (
+            "Altura (m)",
+            float(altura),
+        ),
+        (
+            "Área (m²)",
+            float(area),
+        ),
         (
             "Observações comerciais",
-            observacoes_comerciais or "Não informado",
+            observacoes_comerciais
+            or "Não informado",
         ),
         (
             "Observações técnicas",
-            observacoes_tecnicas or "Não informado",
+            observacoes_tecnicas
+            or "Não informado",
         ),
     ]
 
-    for item in dados_completos:
+    linha = 3
 
-        ws_dados.append(
-            list(item)
+    for rotulo, valor in dados:
+
+        ws_dados.cell(
+            linha,
+            1,
+        ).value = rotulo
+
+        ws_dados.cell(
+            linha,
+            2,
+        ).value = valor
+
+        linha += 1
+
+    aplicar_bordas(
+        ws_dados,
+        3,
+        linha - 1,
+        1,
+        2,
+    )
+
+    # --------------------------------------------------------
+    # FORMATAÇÃO GERAL
+    # --------------------------------------------------------
+
+    for ws in wb.worksheets:
+
+        ws.sheet_view.showGridLines = False
+
+        ws.freeze_panes = (
+            "A3"
+            if ws.title != "ORÇAMENTO"
+            else None
         )
 
-
-    # ========================================================
-    # FORMATAÇÃO GERAL DAS ABAS
-    # ========================================================
-
-    for planilha in wb.worksheets:
-
-        planilha.freeze_panes = "A2"
-
-        for row in planilha.iter_rows():
+        for row in ws.iter_rows():
 
             for cell in row:
-
-                cell.border = border
 
                 cell.alignment = Alignment(
                     vertical="center",
                     wrap_text=True,
                 )
 
-
-        for column_cells in planilha.columns:
-
-            tamanho = 0
-
-            for cell in column_cells:
-
-                if cell.value is not None:
-
-                    tamanho = max(
-                        tamanho,
-                        len(str(cell.value)),
-                    )
-
-            tamanho = min(
-                max(tamanho + 2, 12),
-                45,
-            )
-
-            letra = get_column_letter(
-                column_cells[0].column
-            )
-
-            planilha.column_dimensions[
-                letra
-            ].width = tamanho
-
-
-    # ========================================================
-    # FORMATAÇÃO MONETÁRIA
-    # ========================================================
-
-    for row in ws_materiais.iter_rows(
-        min_row=2,
-        max_row=ws_materiais.max_row,
-    ):
-
-        row[3].number_format = moeda_format
-        row[4].number_format = moeda_format
-
-
-    for row in ws_mao.iter_rows(
-        min_row=2,
-        max_row=ws_mao.max_row,
-    ):
-
-        row[2].number_format = moeda_format
-        row[3].number_format = moeda_format
-
-
-    # ========================================================
-    # EXPORTAÇÃO
-    # ========================================================
+    # --------------------------------------------------------
+    # SALVAR NA MEMÓRIA
+    # --------------------------------------------------------
 
     buffer = BytesIO()
 
-    wb.save(buffer)
+    wb.save(
+        buffer
+    )
 
     buffer.seek(0)
 
@@ -1157,7 +1336,10 @@ def gerar_pdf(projeto):
     try:
 
         from reportlab.lib import colors
-        from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+        from reportlab.lib.enums import (
+            TA_CENTER,
+            TA_RIGHT,
+        )
         from reportlab.lib.pagesizes import A4
         from reportlab.lib.styles import (
             getSampleStyleSheet,
@@ -1182,6 +1364,9 @@ def gerar_pdf(projeto):
 
         return None
 
+    # ========================================================
+    # DADOS
+    # ========================================================
 
     nome_projeto = st.session_state.get(
         "nome_projeto",
@@ -1243,16 +1428,6 @@ def gerar_pdf(projeto):
         "area",
     )
 
-    comprimento = st.session_state.get(
-        "comprimento",
-        area,
-    )
-
-    altura = st.session_state.get(
-        "altura",
-        "",
-    )
-
     subtotal_materiais = obter_valor(
         projeto,
         "subtotal_materiais",
@@ -1293,6 +1468,19 @@ def gerar_pdf(projeto):
         "custo",
     )
 
+    comprimento = st.session_state.get(
+        "comprimento",
+        area,
+    )
+
+    altura = st.session_state.get(
+        "altura",
+        "",
+    )
+
+    # ========================================================
+    # DOCUMENTO
+    # ========================================================
 
     buffer = BytesIO()
 
@@ -1304,13 +1492,14 @@ def gerar_pdf(projeto):
         topMargin=15 * mm,
         bottomMargin=18 * mm,
         title="Orçamento Steel Framing",
-        author=responsavel or "Calculadora Steel Framing",
+        author=responsavel
+        or "Calculadora Steel Framing",
     )
 
     styles = getSampleStyleSheet()
 
     estilo_titulo = ParagraphStyle(
-        "Titulo",
+        "TituloOrcamento",
         parent=styles["Title"],
         fontName="Helvetica-Bold",
         fontSize=19,
@@ -1322,6 +1511,7 @@ def gerar_pdf(projeto):
     estilo_subtitulo = ParagraphStyle(
         "Subtitulo",
         parent=styles["Normal"],
+        fontName="Helvetica",
         fontSize=9,
         leading=12,
         alignment=TA_CENTER,
@@ -1342,6 +1532,7 @@ def gerar_pdf(projeto):
     estilo_normal = ParagraphStyle(
         "NormalOrcamento",
         parent=styles["Normal"],
+        fontName="Helvetica",
         fontSize=9,
         leading=12,
     )
@@ -1349,6 +1540,7 @@ def gerar_pdf(projeto):
     estilo_pequeno = ParagraphStyle(
         "Pequeno",
         parent=styles["Normal"],
+        fontName="Helvetica",
         fontSize=8,
         leading=10,
     )
@@ -1396,7 +1588,6 @@ def gerar_pdf(projeto):
 
     elementos = []
 
-
     # ========================================================
     # CABEÇALHO
     # ========================================================
@@ -1415,9 +1606,8 @@ def gerar_pdf(projeto):
         )
     )
 
-
     # ========================================================
-    # DADOS
+    # 1. DADOS
     # ========================================================
 
     elementos.append(
@@ -1427,35 +1617,34 @@ def gerar_pdf(projeto):
         )
     )
 
+    data_formatada = data_orcamento.strftime(
+        "%d/%m/%Y"
+    )
+
     dados_orcamento = [
         [
             Paragraph(
-                f"<b>Projeto:</b><br/>"
-                f"{escape(nome_projeto) if nome_projeto else 'Não informado'}",
+                f"<b>Projeto:</b><br/>{escape(nome_projeto) or 'Não informado'}",
                 estilo_normal,
             ),
             Paragraph(
-                f"<b>Cliente:</b><br/>"
-                f"{escape(cliente) if cliente else 'Não informado'}",
-                estilo_normal,
-            ),
-        ],
-        [
-            Paragraph(
-                f"<b>Local da obra:</b><br/>"
-                f"{escape(local_obra) if local_obra else 'Não informado'}",
-                estilo_normal,
-            ),
-            Paragraph(
-                f"<b>Responsável:</b><br/>"
-                f"{escape(responsavel) if responsavel else 'Não informado'}",
+                f"<b>Cliente:</b><br/>{escape(cliente) or 'Não informado'}",
                 estilo_normal,
             ),
         ],
         [
             Paragraph(
-                f"<b>Data:</b><br/>"
-                f"{data_orcamento.strftime('%d/%m/%Y')}",
+                f"<b>Local da obra:</b><br/>{escape(local_obra) or 'Não informado'}",
+                estilo_normal,
+            ),
+            Paragraph(
+                f"<b>Responsável:</b><br/>{escape(responsavel) or 'Não informado'}",
+                estilo_normal,
+            ),
+        ],
+        [
+            Paragraph(
+                f"<b>Data:</b><br/>{data_formatada}",
                 estilo_normal,
             ),
             Paragraph(
@@ -1476,23 +1665,64 @@ def gerar_pdf(projeto):
     tabela_dados.setStyle(
         TableStyle(
             [
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#cccccc")),
-                ("INNERGRID", (0, 0), (-1, -1), 0.3, colors.HexColor("#dddddd")),
-                ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 7),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-                ("TOPPADDING", (0, 0), (-1, -1), 7),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.5,
+                    colors.HexColor("#cccccc"),
+                ),
+                (
+                    "INNERGRID",
+                    (0, 0),
+                    (-1, -1),
+                    0.3,
+                    colors.HexColor("#dddddd"),
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "TOP",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "TOPPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "BOTTOMPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
             ]
         )
     )
 
-    elementos.append(tabela_dados)
-    elementos.append(Spacer(1, 8))
+    elementos.append(
+        tabela_dados
+    )
 
+    elementos.append(
+        Spacer(1, 8)
+    )
 
     # ========================================================
-    # RESUMO
+    # 2. RESUMO DO PROJETO
     # ========================================================
 
     elementos.append(
@@ -1504,19 +1734,32 @@ def gerar_pdf(projeto):
 
     resumo = [
         [
-            Paragraph("<b>Área</b>", estilo_normal),
-            Paragraph(f"{float(area):.2f} m²", estilo_direita),
-        ],
-        [
-            Paragraph("<b>Comprimento</b>", estilo_normal),
-            Paragraph(f"{float(comprimento):.2f} m", estilo_direita),
-        ],
-        [
-            Paragraph("<b>Altura</b>", estilo_normal),
             Paragraph(
-                f"{float(altura):.2f} m"
-                if altura != ""
-                else "Não informado",
+                "<b>Área</b>",
+                estilo_normal,
+            ),
+            Paragraph(
+                f"{float(area):.2f} m²",
+                estilo_direita,
+            ),
+        ],
+        [
+            Paragraph(
+                "<b>Comprimento</b>",
+                estilo_normal,
+            ),
+            Paragraph(
+                f"{float(comprimento):.2f} m",
+                estilo_direita,
+            ),
+        ],
+        [
+            Paragraph(
+                "<b>Altura</b>",
+                estilo_normal,
+            ),
+            Paragraph(
+                f"{float(altura):.2f} m",
                 estilo_direita,
             ),
         ],
@@ -1533,24 +1776,70 @@ def gerar_pdf(projeto):
     tabela_resumo.setStyle(
         TableStyle(
             [
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#cccccc")),
-                ("INNERGRID", (0, 0), (-1, -1), 0.3, colors.HexColor("#dddddd")),
-                ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#f5f5f5")),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 7),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-                ("TOPPADDING", (0, 0), (-1, -1), 6),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.5,
+                    colors.HexColor("#cccccc"),
+                ),
+                (
+                    "INNERGRID",
+                    (0, 0),
+                    (-1, -1),
+                    0.3,
+                    colors.HexColor("#dddddd"),
+                ),
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (0, -1),
+                    colors.HexColor("#f5f5f5"),
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "TOPPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
+                (
+                    "BOTTOMPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
             ]
         )
     )
 
-    elementos.append(tabela_resumo)
-    elementos.append(Spacer(1, 10))
+    elementos.append(
+        tabela_resumo
+    )
 
+    elementos.append(
+        Spacer(1, 10)
+    )
 
     # ========================================================
-    # MATERIAIS
+    # 3. MATERIAIS
     # ========================================================
 
     elementos.append(
@@ -1562,11 +1851,26 @@ def gerar_pdf(projeto):
 
     tabela_materiais = [
         [
-            Paragraph("<b>Material</b>", estilo_pequeno),
-            Paragraph("<b>Un.</b>", estilo_pequeno),
-            Paragraph("<b>Quantidade</b>", estilo_pequeno),
-            Paragraph("<b>Preço unitário</b>", estilo_pequeno),
-            Paragraph("<b>Total</b>", estilo_pequeno),
+            Paragraph(
+                "<b>Material</b>",
+                estilo_pequeno,
+            ),
+            Paragraph(
+                "<b>Un.</b>",
+                estilo_pequeno,
+            ),
+            Paragraph(
+                "<b>Quantidade</b>",
+                estilo_pequeno,
+            ),
+            Paragraph(
+                "<b>Preço unitário</b>",
+                estilo_pequeno,
+            ),
+            Paragraph(
+                "<b>Total</b>",
+                estilo_pequeno,
+            ),
         ]
     ]
 
@@ -1574,9 +1878,17 @@ def gerar_pdf(projeto):
 
         tabela_materiais.append(
             [
-                Paragraph(str(nome), estilo_pequeno),
                 Paragraph(
-                    str(material.get("unidade", "")),
+                    escape(str(nome)),
+                    estilo_pequeno,
+                ),
+                Paragraph(
+                    str(
+                        material.get(
+                            "unidade",
+                            "",
+                        )
+                    ),
                     estilo_centralizado,
                 ),
                 Paragraph(
@@ -1585,13 +1897,19 @@ def gerar_pdf(projeto):
                 ),
                 Paragraph(
                     formatar_moeda(
-                        material.get("preco_unitario", 0)
+                        material.get(
+                            "preco_unitario",
+                            0,
+                        )
                     ),
                     estilo_direita,
                 ),
                 Paragraph(
                     formatar_moeda(
-                        material.get("custo", 0)
+                        material.get(
+                            "custo",
+                            0,
+                        )
                     ),
                     estilo_direita,
                 ),
@@ -1615,26 +1933,82 @@ def gerar_pdf(projeto):
     tabela_material_pdf.setStyle(
         TableStyle(
             [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#eeeeee")),
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#bbbbbb")),
-                ("INNERGRID", (0, 0), (-1, -1), 0.3, colors.HexColor("#dddddd")),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("ALIGN", (1, 1), (1, -1), "CENTER"),
-                ("ALIGN", (2, 1), (-1, -1), "RIGHT"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 5),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 5),
-                ("TOPPADDING", (0, 0), (-1, -1), 6),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (-1, 0),
+                    colors.HexColor("#eeeeee"),
+                ),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.5,
+                    colors.HexColor("#bbbbbb"),
+                ),
+                (
+                    "INNERGRID",
+                    (0, 0),
+                    (-1, -1),
+                    0.3,
+                    colors.HexColor("#dddddd"),
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE",
+                ),
+                (
+                    "ALIGN",
+                    (1, 1),
+                    (1, -1),
+                    "CENTER",
+                ),
+                (
+                    "ALIGN",
+                    (2, 1),
+                    (-1, -1),
+                    "RIGHT",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    5,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    5,
+                ),
+                (
+                    "TOPPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
+                (
+                    "BOTTOMPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
             ]
         )
     )
 
-    elementos.append(tabela_material_pdf)
-    elementos.append(Spacer(1, 10))
+    elementos.append(
+        tabela_material_pdf
+    )
 
+    elementos.append(
+        Spacer(1, 10)
+    )
 
     # ========================================================
-    # FINANCEIRO
+    # 4. RESUMO FINANCEIRO
     # ========================================================
 
     elementos.append(
@@ -1646,23 +2020,38 @@ def gerar_pdf(projeto):
 
     financeiro = [
         [
-            Paragraph("Materiais", estilo_normal),
             Paragraph(
-                formatar_moeda(subtotal_materiais),
+                "Materiais",
+                estilo_normal,
+            ),
+            Paragraph(
+                formatar_moeda(
+                    subtotal_materiais
+                ),
                 estilo_direita,
             ),
         ],
         [
-            Paragraph("Massas e telas", estilo_normal),
             Paragraph(
-                formatar_moeda(massas_telas),
+                "Massas e telas",
+                estilo_normal,
+            ),
+            Paragraph(
+                formatar_moeda(
+                    massas_telas
+                ),
                 estilo_direita,
             ),
         ],
         [
-            Paragraph("Mão de obra", estilo_normal),
             Paragraph(
-                formatar_moeda(custo_mao_de_obra),
+                "Mão de obra",
+                estilo_normal,
+            ),
+            Paragraph(
+                formatar_moeda(
+                    custo_mao_de_obra
+                ),
                 estilo_direita,
             ),
         ],
@@ -1679,24 +2068,61 @@ def gerar_pdf(projeto):
     tabela_financeiro.setStyle(
         TableStyle(
             [
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#cccccc")),
-                ("INNERGRID", (0, 0), (-1, -1), 0.3, colors.HexColor("#dddddd")),
-                ("ALIGN", (1, 0), (1, -1), "RIGHT"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 7),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-                ("TOPPADDING", (0, 0), (-1, -1), 7),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.5,
+                    colors.HexColor("#cccccc"),
+                ),
+                (
+                    "INNERGRID",
+                    (0, 0),
+                    (-1, -1),
+                    0.3,
+                    colors.HexColor("#dddddd"),
+                ),
+                (
+                    "ALIGN",
+                    (1, 0),
+                    (1, -1),
+                    "RIGHT",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "TOPPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "BOTTOMPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
             ]
         )
     )
 
-    elementos.append(tabela_financeiro)
-    elementos.append(Spacer(1, 10))
+    elementos.append(
+        tabela_financeiro
+    )
 
-
-    # ========================================================
-    # TOTAL
-    # ========================================================
+    elementos.append(
+        Spacer(1, 10)
+    )
 
     total_tabela = Table(
         [
@@ -1720,25 +2146,64 @@ def gerar_pdf(projeto):
     total_tabela.setStyle(
         TableStyle(
             [
-                ("BOX", (0, 0), (-1, -1), 1.2, colors.HexColor("#1f7a1f")),
-                ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f3fff3")),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 9),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 9),
-                ("TOPPADDING", (0, 0), (-1, -1), 12),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    1.2,
+                    colors.HexColor("#1f7a1f"),
+                ),
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (-1, -1),
+                    colors.HexColor("#f3fff3"),
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    9,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    9,
+                ),
+                (
+                    "TOPPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    12,
+                ),
+                (
+                    "BOTTOMPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    12,
+                ),
             ]
         )
     )
 
-    elementos.append(total_tabela)
-
+    elementos.append(
+        total_tabela
+    )
 
     # ========================================================
-    # MÃO DE OBRA
+    # 5. MÃO DE OBRA
     # ========================================================
 
-    elementos.append(Spacer(1, 10))
+    elementos.append(
+        Spacer(1, 10)
+    )
 
     elementos.append(
         Paragraph(
@@ -1750,17 +2215,34 @@ def gerar_pdf(projeto):
     mao_obra_tabela = Table(
         [
             [
-                Paragraph("<b>Dias estimados</b>", estilo_normal),
-                Paragraph(f"{float(dias):.1f}", estilo_direita),
-            ],
-            [
-                Paragraph("<b>Valor da diária</b>", estilo_normal),
-                Paragraph(formatar_moeda(diaria), estilo_direita),
-            ],
-            [
-                Paragraph("<b>Custo da mão de obra</b>", estilo_normal),
                 Paragraph(
-                    formatar_moeda(custo_mao_de_obra),
+                    "<b>Dias estimados</b>",
+                    estilo_normal,
+                ),
+                Paragraph(
+                    f"{float(dias):.1f}",
+                    estilo_direita,
+                ),
+            ],
+            [
+                Paragraph(
+                    "<b>Valor da diária</b>",
+                    estilo_normal,
+                ),
+                Paragraph(
+                    formatar_moeda(diaria),
+                    estilo_direita,
+                ),
+            ],
+            [
+                Paragraph(
+                    "<b>Custo da mão de obra</b>",
+                    estilo_normal,
+                ),
+                Paragraph(
+                    formatar_moeda(
+                        custo_mao_de_obra
+                    ),
                     estilo_direita,
                 ),
             ],
@@ -1774,25 +2256,65 @@ def gerar_pdf(projeto):
     mao_obra_tabela.setStyle(
         TableStyle(
             [
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#cccccc")),
-                ("INNERGRID", (0, 0), (-1, -1), 0.3, colors.HexColor("#dddddd")),
-                ("ALIGN", (1, 0), (1, -1), "RIGHT"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 7),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-                ("TOPPADDING", (0, 0), (-1, -1), 6),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.5,
+                    colors.HexColor("#cccccc"),
+                ),
+                (
+                    "INNERGRID",
+                    (0, 0),
+                    (-1, -1),
+                    0.3,
+                    colors.HexColor("#dddddd"),
+                ),
+                (
+                    "ALIGN",
+                    (1, 0),
+                    (1, -1),
+                    "RIGHT",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "TOPPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
+                (
+                    "BOTTOMPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
             ]
         )
     )
 
-    elementos.append(mao_obra_tabela)
-
+    elementos.append(
+        mao_obra_tabela
+    )
 
     # ========================================================
-    # CONDIÇÕES
+    # 6. CONDIÇÕES COMERCIAIS
     # ========================================================
 
-    elementos.append(Spacer(1, 10))
+    elementos.append(
+        Spacer(1, 10)
+    )
 
     elementos.append(
         Paragraph(
@@ -1803,33 +2325,51 @@ def gerar_pdf(projeto):
 
     condicoes = [
         [
-            Paragraph("<b>Validade</b>", estilo_normal),
-            Paragraph(f"{validade} dias", estilo_normal),
-        ],
-        [
-            Paragraph("<b>Prazo de execução</b>", estilo_normal),
             Paragraph(
-                escape(prazo_execucao)
-                if prazo_execucao
-                else "Não informado",
+                "<b>Validade</b>",
+                estilo_normal,
+            ),
+            Paragraph(
+                f"{validade} dias",
                 estilo_normal,
             ),
         ],
         [
-            Paragraph("<b>Condição de pagamento</b>", estilo_normal),
             Paragraph(
-                escape(condicao_pagamento)
-                if condicao_pagamento
-                else "Não informado",
+                "<b>Prazo de execução</b>",
+                estilo_normal,
+            ),
+            Paragraph(
+                escape(
+                    prazo_execucao
+                    or "Não informado"
+                ),
                 estilo_normal,
             ),
         ],
         [
-            Paragraph("<b>Forma de pagamento</b>", estilo_normal),
             Paragraph(
-                escape(forma_pagamento)
-                if forma_pagamento
-                else "Não informado",
+                "<b>Condição de pagamento</b>",
+                estilo_normal,
+            ),
+            Paragraph(
+                escape(
+                    condicao_pagamento
+                    or "Não informado"
+                ),
+                estilo_normal,
+            ),
+        ],
+        [
+            Paragraph(
+                "<b>Forma de pagamento</b>",
+                estilo_normal,
+            ),
+            Paragraph(
+                escape(
+                    forma_pagamento
+                    or "Não informado"
+                ),
                 estilo_normal,
             ),
         ],
@@ -1846,23 +2386,66 @@ def gerar_pdf(projeto):
     tabela_condicoes.setStyle(
         TableStyle(
             [
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#cccccc")),
-                ("INNERGRID", (0, 0), (-1, -1), 0.3, colors.HexColor("#dddddd")),
-                ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#f5f5f5")),
-                ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 7),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-                ("TOPPADDING", (0, 0), (-1, -1), 6),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.5,
+                    colors.HexColor("#cccccc"),
+                ),
+                (
+                    "INNERGRID",
+                    (0, 0),
+                    (-1, -1),
+                    0.3,
+                    colors.HexColor("#dddddd"),
+                ),
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (0, -1),
+                    colors.HexColor("#f5f5f5"),
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "TOP",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "TOPPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
+                (
+                    "BOTTOMPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
             ]
         )
     )
 
-    elementos.append(tabela_condicoes)
-
+    elementos.append(
+        tabela_condicoes
+    )
 
     # ========================================================
-    # OBSERVAÇÕES
+    # 7. OBSERVAÇÕES
     # ========================================================
 
     if observacoes_comerciais:
@@ -1878,11 +2461,13 @@ def gerar_pdf(projeto):
             Paragraph(
                 escape(
                     observacoes_comerciais
-                ).replace("\n", "<br/>"),
+                ).replace(
+                    "\n",
+                    "<br/>",
+                ),
                 estilo_normal,
             )
         )
-
 
     if observacoes_tecnicas:
 
@@ -1897,11 +2482,13 @@ def gerar_pdf(projeto):
             Paragraph(
                 escape(
                     observacoes_tecnicas
-                ).replace("\n", "<br/>"),
+                ).replace(
+                    "\n",
+                    "<br/>",
+                ),
                 estilo_normal,
             )
         )
-
 
     # ========================================================
     # ASSINATURA — CORRIGIDA
@@ -1954,13 +2541,16 @@ def gerar_pdf(projeto):
         )
     )
 
-    elementos.append(assinatura)
+    elementos.append(
+        assinatura
+    )
 
+    # --------------------------------------------------------
+    # RESPONSÁVEL — UMA ÚNICA VEZ
+    # --------------------------------------------------------
 
-    nome_assinatura = (
-        escape(
-            responsavel.strip()
-        )
+    responsavel_pdf = (
+        responsavel.strip()
         if responsavel
         and responsavel.strip()
         else "Responsável pelo orçamento"
@@ -1968,7 +2558,7 @@ def gerar_pdf(projeto):
 
     elementos.append(
         Paragraph(
-            f"<b>{nome_assinatura}</b>",
+            f"<b>{escape(responsavel_pdf)}</b>",
             estilo_assinatura_nome,
         )
     )
@@ -1979,7 +2569,6 @@ def gerar_pdf(projeto):
             estilo_assinatura_cargo,
         )
     )
-
 
     # ========================================================
     # RODAPÉ
@@ -2014,6 +2603,9 @@ def gerar_pdf(projeto):
 
         canvas.restoreState()
 
+    # ========================================================
+    # GERAR
+    # ========================================================
 
     doc.build(
         elementos,
@@ -2027,7 +2619,7 @@ def gerar_pdf(projeto):
 
 
 # ============================================================
-# HERO PRINCIPAL
+# HERO PRINCIPAL — FASE 6C
 # ============================================================
 
 st.markdown(
@@ -2054,7 +2646,7 @@ st.markdown(
 
 
 # ============================================================
-# IDENTIFICAÇÃO DO PROJETO
+# IDENTIFICAÇÃO
 # ============================================================
 
 st.markdown(
@@ -2070,9 +2662,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
 col1, col2 = st.columns(2)
-
 
 with col1:
 
@@ -2094,7 +2684,6 @@ with col1:
         ),
     )
 
-
 with col2:
 
     local_obra = st.text_input(
@@ -2115,7 +2704,6 @@ with col2:
         ),
     )
 
-
 data_orcamento = st.date_input(
     "Data do orçamento",
     value=st.session_state.get(
@@ -2123,9 +2711,6 @@ data_orcamento = st.date_input(
         date.today(),
     ),
 )
-
-
-st.divider()
 
 
 # ============================================================
@@ -2139,15 +2724,13 @@ st.markdown(
     </div>
 
     <div class="section-subtitle">
-        Defina as condições comerciais do orçamento.
+        Defina validade, prazo e condições de pagamento.
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-
 col1, col2 = st.columns(2)
-
 
 with col1:
 
@@ -2170,7 +2753,6 @@ with col1:
         ),
     )
 
-
 with col2:
 
     condicao_pagamento = st.text_input(
@@ -2191,7 +2773,6 @@ with col2:
         ),
     )
 
-
 observacoes_comerciais = st.text_area(
     "Inclusões / observações comerciais",
     placeholder=(
@@ -2203,9 +2784,6 @@ observacoes_comerciais = st.text_area(
         "",
     ),
 )
-
-
-st.divider()
 
 
 # ============================================================
@@ -2225,9 +2803,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
 col1, col2, col3 = st.columns(3)
-
 
 with col1:
 
@@ -2238,7 +2814,6 @@ with col1:
         step=0.10,
     )
 
-
 with col2:
 
     altura = st.number_input(
@@ -2247,7 +2822,6 @@ with col2:
         value=3.00,
         step=0.10,
     )
-
 
 with col3:
 
@@ -2272,12 +2846,13 @@ with col3:
         unsafe_allow_html=True,
     )
 
+st.session_state["comprimento"] = (
+    comprimento
+)
 
-st.session_state["comprimento"] = comprimento
-st.session_state["altura"] = altura
-
-
-st.divider()
+st.session_state["altura"] = (
+    altura
+)
 
 
 # ============================================================
@@ -2291,12 +2866,12 @@ st.markdown(
     </div>
 
     <div class="section-subtitle">
-        Altere os preços conforme fornecedor, região ou condição de compra.
+        Altere os preços conforme fornecedor,
+        região ou condição de compra.
     </div>
     """,
     unsafe_allow_html=True,
 )
-
 
 if "precos" not in st.session_state:
 
@@ -2304,42 +2879,28 @@ if "precos" not in st.session_state:
         PRECOS_BASE.copy()
     )
 
-
 precos_atualizados = {}
 
-
-colunas_precos = st.columns(3)
-
-
-for indice, (
-    nome,
-    preco_padrao,
-) in enumerate(
+for nome, preco_padrao in (
     st.session_state["precos"].items()
 ):
 
-    with colunas_precos[indice % 3]:
+    preco_atual = st.number_input(
+        nome,
+        min_value=0.00,
+        value=float(preco_padrao),
+        step=0.01,
+        format="%.2f",
+        key=f"preco_{nome}",
+    )
 
-        preco_atual = st.number_input(
-            nome,
-            min_value=0.00,
-            value=float(preco_padrao),
-            step=0.01,
-            format="%.2f",
-            key=f"preco_{nome}",
-        )
-
-        precos_atualizados[nome] = (
-            preco_atual
-        )
-
+    precos_atualizados[nome] = (
+        preco_atual
+    )
 
 st.session_state["precos"] = (
     precos_atualizados
 )
-
-
-st.divider()
 
 
 # ============================================================
@@ -2371,60 +2932,46 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
 if "quantidades" not in st.session_state:
 
     st.session_state["quantidades"] = {}
 
-
 quantidades_atualizadas = {}
 
-colunas_quantidades = st.columns(3)
-
-
-for indice, (
-    nome,
-    material,
-) in enumerate(
-    previa["materiais"].items()
-):
+for nome, material in previa["materiais"].items():
 
     quantidade_automatica = material[
         "quantidade"
     ]
 
-    if nome not in st.session_state["quantidades"]:
-
-        st.session_state["quantidades"][nome] = (
-            quantidade_automatica
-        )
-
-    with colunas_quantidades[
-        indice % 3
+    if nome not in st.session_state[
+        "quantidades"
     ]:
 
-        quantidade_atual = st.number_input(
-            nome,
-            min_value=0.0,
-            value=float(
-                st.session_state["quantidades"][nome]
-            ),
-            step=1.0,
-            format="%.2f",
-            key=f"quantidade_{nome}",
-        )
+        st.session_state[
+            "quantidades"
+        ][nome] = quantidade_automatica
 
-        quantidades_atualizadas[nome] = (
-            quantidade_atual
-        )
+    quantidade_atual = st.number_input(
+        nome,
+        min_value=0.0,
+        value=float(
+            st.session_state[
+                "quantidades"
+            ][nome]
+        ),
+        step=1.0,
+        format="%.2f",
+        key=f"quantidade_{nome}",
+    )
 
+    quantidades_atualizadas[nome] = (
+        quantidade_atual
+    )
 
 st.session_state["quantidades"] = (
     quantidades_atualizadas
 )
-
-
-st.divider()
 
 
 # ============================================================
@@ -2440,7 +2987,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
 observacoes_tecnicas = st.text_area(
     "Observações técnicas",
     placeholder=(
@@ -2454,11 +3000,8 @@ observacoes_tecnicas = st.text_area(
 )
 
 
-st.divider()
-
-
 # ============================================================
-# CALCULAR
+# BOTÃO CALCULAR
 # ============================================================
 
 if st.button(
@@ -2471,7 +3014,9 @@ if st.button(
         comprimento=comprimento,
         altura=altura,
         precos=st.session_state["precos"],
-        quantidades=st.session_state["quantidades"],
+        quantidades=st.session_state[
+            "quantidades"
+        ],
     )
 
     st.session_state["projeto"] = (
@@ -2498,29 +3043,29 @@ if st.button(
         data_orcamento
     )
 
-    st.session_state["validade_orcamento"] = (
-        validade_orcamento
-    )
+    st.session_state[
+        "validade_orcamento"
+    ] = validade_orcamento
 
-    st.session_state["prazo_execucao"] = (
-        prazo_execucao
-    )
+    st.session_state[
+        "prazo_execucao"
+    ] = prazo_execucao
 
-    st.session_state["condicao_pagamento"] = (
-        condicao_pagamento
-    )
+    st.session_state[
+        "condicao_pagamento"
+    ] = condicao_pagamento
 
-    st.session_state["forma_pagamento"] = (
-        forma_pagamento
-    )
+    st.session_state[
+        "forma_pagamento"
+    ] = forma_pagamento
 
-    st.session_state["observacoes_comerciais"] = (
-        observacoes_comerciais
-    )
+    st.session_state[
+        "observacoes_comerciais"
+    ] = observacoes_comerciais
 
-    st.session_state["observacoes_tecnicas"] = (
-        observacoes_tecnicas
-    )
+    st.session_state[
+        "observacoes_tecnicas"
+    ] = observacoes_tecnicas
 
     st.success(
         "Orçamento atualizado com sucesso."
@@ -2533,10 +3078,14 @@ if st.button(
 
 if "projeto" in st.session_state:
 
-    projeto = st.session_state["projeto"]
+    projeto = st.session_state[
+        "projeto"
+    ]
 
-    st.divider()
-
+    st.markdown(
+        '<div class="section-divider"></div>',
+        unsafe_allow_html=True,
+    )
 
     # ========================================================
     # HERO DO ORÇAMENTO
@@ -2559,9 +3108,8 @@ if "projeto" in st.session_state:
         unsafe_allow_html=True,
     )
 
-
     # ========================================================
-    # DADOS
+    # DADOS DO ORÇAMENTO
     # ========================================================
 
     st.markdown(
@@ -2573,8 +3121,12 @@ if "projeto" in st.session_state:
         unsafe_allow_html=True,
     )
 
+    data_salva = st.session_state.get(
+        "data_orcamento",
+        date.today(),
+    )
 
-    projeto_nome = escape(
+    projeto_nome = (
         st.session_state.get(
             "nome_projeto",
             "",
@@ -2582,7 +3134,7 @@ if "projeto" in st.session_state:
         or "Não informado"
     )
 
-    cliente_nome = escape(
+    cliente_nome = (
         st.session_state.get(
             "cliente",
             "",
@@ -2590,7 +3142,7 @@ if "projeto" in st.session_state:
         or "Não informado"
     )
 
-    local_nome = escape(
+    local_nome = (
         st.session_state.get(
             "local_obra",
             "",
@@ -2598,7 +3150,7 @@ if "projeto" in st.session_state:
         or "Não informado"
     )
 
-    responsavel_nome = escape(
+    responsavel_nome = (
         st.session_state.get(
             "responsavel",
             "",
@@ -2606,9 +3158,12 @@ if "projeto" in st.session_state:
         or "Não informado"
     )
 
+    validade_salva = st.session_state.get(
+        "validade_orcamento",
+        10,
+    )
 
     col1, col2 = st.columns(2)
-
 
     with col1:
 
@@ -2621,27 +3176,27 @@ if "projeto" in st.session_state:
                 </div>
 
                 <div class="card-value">
-                    {projeto_nome}
+                    {escape(projeto_nome)}
                 </div>
 
-                <br>
+                <div class="card-spacing"></div>
 
                 <div class="card-label">
                     Cliente
                 </div>
 
                 <div class="card-value">
-                    {cliente_nome}
+                    {escape(cliente_nome)}
                 </div>
 
-                <br>
+                <div class="card-spacing"></div>
 
                 <div class="card-label">
                     Local da obra
                 </div>
 
                 <div class="card-value">
-                    {local_nome}
+                    {escape(local_nome)}
                 </div>
 
             </div>
@@ -2649,13 +3204,7 @@ if "projeto" in st.session_state:
             unsafe_allow_html=True,
         )
 
-
     with col2:
-
-        data_salva = st.session_state.get(
-            "data_orcamento",
-            date.today(),
-        )
 
         st.markdown(
             f"""
@@ -2666,10 +3215,10 @@ if "projeto" in st.session_state:
                 </div>
 
                 <div class="card-value">
-                    {responsavel_nome}
+                    {escape(responsavel_nome)}
                 </div>
 
-                <br>
+                <div class="card-spacing"></div>
 
                 <div class="card-label">
                     Data
@@ -2679,27 +3228,20 @@ if "projeto" in st.session_state:
                     {data_salva.strftime("%d/%m/%Y")}
                 </div>
 
-                <br>
+                <div class="card-spacing"></div>
 
                 <div class="card-label">
                     Validade
                 </div>
 
                 <div class="card-value">
-                    {st.session_state.get(
-                        "validade_orcamento",
-                        10,
-                    )} dias
+                    {validade_salva} dias
                 </div>
 
             </div>
             """,
             unsafe_allow_html=True,
         )
-
-
-    st.divider()
-
 
     # ========================================================
     # RESUMO DO PROJETO
@@ -2714,9 +3256,7 @@ if "projeto" in st.session_state:
         unsafe_allow_html=True,
     )
 
-
     col1, col2, col3 = st.columns(3)
-
 
     with col1:
 
@@ -2737,7 +3277,6 @@ if "projeto" in st.session_state:
             unsafe_allow_html=True,
         )
 
-
     with col2:
 
         st.markdown(
@@ -2756,7 +3295,6 @@ if "projeto" in st.session_state:
             """,
             unsafe_allow_html=True,
         )
-
 
     with col3:
 
@@ -2777,10 +3315,6 @@ if "projeto" in st.session_state:
             unsafe_allow_html=True,
         )
 
-
-    st.divider()
-
-
     # ========================================================
     # MATERIAIS
     # ========================================================
@@ -2794,51 +3328,53 @@ if "projeto" in st.session_state:
         unsafe_allow_html=True,
     )
 
-
     tabela_materiais = []
 
-    for nome, material in projeto[
-        "materiais"
-    ].items():
+    for nome, material in (
+        projeto["materiais"].items()
+    ):
 
         tabela_materiais.append(
             {
                 "Material": nome,
-                "Unidade": material["unidade"],
-                "Quantidade": material["quantidade"],
+                "Unidade": material[
+                    "unidade"
+                ],
+                "Quantidade": material[
+                    "quantidade"
+                ],
                 "Preço unitário": formatar_moeda(
-                    material["preco_unitario"]
+                    material[
+                        "preco_unitario"
+                    ]
                 ),
                 "Total": formatar_moeda(
-                    material["custo"]
+                    material[
+                        "custo"
+                    ]
                 ),
             }
         )
 
-
     df_materiais = pd.DataFrame(
         tabela_materiais
     )
-
 
     st.dataframe(
         df_materiais,
         use_container_width=True,
         hide_index=True,
         column_config={
-            "Quantidade": st.column_config.NumberColumn(
-                "Quantidade",
-                format="%.2f",
-            ),
+            "Quantidade":
+                st.column_config.NumberColumn(
+                    "Quantidade",
+                    format="%.2f",
+                ),
         },
     )
 
-
-    st.divider()
-
-
     # ========================================================
-    # RESUMO FINANCEIRO
+    # FINANCEIRO
     # ========================================================
 
     st.markdown(
@@ -2849,7 +3385,6 @@ if "projeto" in st.session_state:
         """,
         unsafe_allow_html=True,
     )
-
 
     subtotal_materiais = obter_valor(
         projeto,
@@ -2876,39 +3411,64 @@ if "projeto" in st.session_state:
         "custo_geral",
     )
 
-
     col1, col2, col3 = st.columns(3)
-
 
     with col1:
 
-        st.metric(
-            "Materiais",
-            formatar_moeda(
-                subtotal_materiais
-            ),
-        )
+        st.markdown(
+            f"""
+            <div class="finance-card">
 
+                <div class="finance-label">
+                    Materiais
+                </div>
+
+                <div class="finance-value">
+                    {formatar_moeda(subtotal_materiais)}
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     with col2:
 
-        st.metric(
-            "Massas e telas",
-            formatar_moeda(
-                massas_telas
-            ),
-        )
+        st.markdown(
+            f"""
+            <div class="finance-card">
 
+                <div class="finance-label">
+                    Massas e telas
+                </div>
+
+                <div class="finance-value">
+                    {formatar_moeda(massas_telas)}
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     with col3:
 
-        st.metric(
-            "Mão de obra",
-            formatar_moeda(
-                custo_mao_de_obra
-            ),
-        )
+        st.markdown(
+            f"""
+            <div class="finance-card">
 
+                <div class="finance-label">
+                    Mão de obra
+                </div>
+
+                <div class="finance-value">
+                    {formatar_moeda(custo_mao_de_obra)}
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     st.markdown(
         f"""
@@ -2927,10 +3487,6 @@ if "projeto" in st.session_state:
         unsafe_allow_html=True,
     )
 
-
-    st.divider()
-
-
     # ========================================================
     # MÃO DE OBRA
     # ========================================================
@@ -2944,7 +3500,6 @@ if "projeto" in st.session_state:
         unsafe_allow_html=True,
     )
 
-
     dias = obter_valor(
         mao_de_obra,
         "dias",
@@ -2955,40 +3510,64 @@ if "projeto" in st.session_state:
         "diaria",
     )
 
-
     col1, col2, col3 = st.columns(3)
-
 
     with col1:
 
-        st.metric(
-            "Dias estimados",
-            f"{dias:.1f}",
-        )
+        st.markdown(
+            f"""
+            <div class="metric-card">
 
+                <div class="metric-label">
+                    DIAS ESTIMADOS
+                </div>
+
+                <div class="metric-value">
+                    {dias:.1f}
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     with col2:
 
-        st.metric(
-            "Valor da diária",
-            formatar_moeda(
-                diaria
-            ),
-        )
+        st.markdown(
+            f"""
+            <div class="metric-card">
 
+                <div class="metric-label">
+                    VALOR DA DIÁRIA
+                </div>
+
+                <div class="metric-value">
+                    {formatar_moeda(diaria)}
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     with col3:
 
-        st.metric(
-            "Custo da mão de obra",
-            formatar_moeda(
-                custo_mao_de_obra
-            ),
+        st.markdown(
+            f"""
+            <div class="metric-card">
+
+                <div class="metric-label">
+                    CUSTO DA MÃO DE OBRA
+                </div>
+
+                <div class="metric-value">
+                    {formatar_moeda(custo_mao_de_obra)}
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-
-
-    st.divider()
-
 
     # ========================================================
     # CONDIÇÕES COMERCIAIS
@@ -3003,36 +3582,22 @@ if "projeto" in st.session_state:
         unsafe_allow_html=True,
     )
 
-
-    prazo_salvo = escape(
-        st.session_state.get(
-            "prazo_execucao",
-            "",
-        )
-        or "Não informado"
+    prazo_salvo = st.session_state.get(
+        "prazo_execucao",
+        "",
     )
 
-    pagamento_salvo = escape(
-        st.session_state.get(
-            "condicao_pagamento",
-            "",
-        )
-        or "Não informado"
+    pagamento_salvo = st.session_state.get(
+        "condicao_pagamento",
+        "",
     )
 
-    forma_pagamento_salva = escape(
+    forma_pagamento_salva = (
         st.session_state.get(
             "forma_pagamento",
             "",
         )
-        or "Não informado"
     )
-
-    validade_salva = st.session_state.get(
-        "validade_orcamento",
-        10,
-    )
-
 
     st.markdown(
         f"""
@@ -3052,8 +3617,8 @@ if "projeto" in st.session_state:
                 Prazo estimado de execução
             </div>
 
-            <div>
-                {prazo_salvo}
+            <div class="card-value">
+                {escape(prazo_salvo or "Não informado")}
             </div>
 
             <br>
@@ -3062,8 +3627,8 @@ if "projeto" in st.session_state:
                 Condição de pagamento
             </div>
 
-            <div>
-                {pagamento_salvo}
+            <div class="card-value">
+                {escape(pagamento_salvo or "Não informado")}
             </div>
 
             <br>
@@ -3072,19 +3637,17 @@ if "projeto" in st.session_state:
                 Forma de pagamento
             </div>
 
-            <div>
-                {forma_pagamento_salva}
+            <div class="card-value">
+                {escape(
+                    forma_pagamento_salva
+                    or "Não informado"
+                )}
             </div>
 
         </div>
         """,
         unsafe_allow_html=True,
     )
-
-
-    # ========================================================
-    # OBSERVAÇÕES
-    # ========================================================
 
     observacoes_comerciais_salvas = (
         st.session_state.get(
@@ -3093,29 +3656,28 @@ if "projeto" in st.session_state:
         )
     )
 
-
     if observacoes_comerciais_salvas:
 
         st.markdown(
-            """
-            <div class="section-title">
-                📝 Observações comerciais
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        st.markdown(
             f"""
-            <div class="observacao-card">
+            <div class="observation-card">
+
+                <div class="card-label">
+                    Inclusões / observações comerciais
+                </div>
+
                 {escape(
                     observacoes_comerciais_salvas
                 ).replace(chr(10), "<br>")}
+
             </div>
             """,
             unsafe_allow_html=True,
         )
 
+    # ========================================================
+    # OBSERVAÇÕES TÉCNICAS
+    # ========================================================
 
     observacoes_tecnicas_salvas = (
         st.session_state.get(
@@ -3123,7 +3685,6 @@ if "projeto" in st.session_state:
             "",
         )
     )
-
 
     if observacoes_tecnicas_salvas:
 
@@ -3138,7 +3699,7 @@ if "projeto" in st.session_state:
 
         st.markdown(
             f"""
-            <div class="observacao-card">
+            <div class="observation-card">
                 {escape(
                     observacoes_tecnicas_salvas
                 ).replace(chr(10), "<br>")}
@@ -3147,27 +3708,47 @@ if "projeto" in st.session_state:
             unsafe_allow_html=True,
         )
 
-
-    st.divider()
-
-
     # ========================================================
-    # ASSINATURA — CORRIGIDA
+    # VALOR FINAL
     # ========================================================
 
-    nome_responsavel = escape(
+    st.markdown(
+        """
+        <div class="section-title">
+            💵 Valor final
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        f"""
+        <div class="total-box">
+
+            <div class="total-label">
+                CUSTO GERAL
+            </div>
+
+            <div class="total-value">
+                {formatar_moeda(custo_geral)}
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # ========================================================
+    # ASSINATURA — CORREÇÃO 6C
+    # ========================================================
+
+    responsavel_assinatura = (
         st.session_state.get(
             "responsavel",
             "",
-        ).strip()
-    )
-
-    if not nome_responsavel:
-
-        nome_responsavel = (
-            "Responsável pelo orçamento"
         )
-
+        or "Responsável pelo orçamento"
+    )
 
     st.markdown(
         f"""
@@ -3176,7 +3757,7 @@ if "projeto" in st.session_state:
             <div class="linha-assinatura"></div>
 
             <div class="assinatura-nome">
-                {nome_responsavel}
+                {escape(responsavel_assinatura)}
             </div>
 
             <div class="assinatura-cargo">
@@ -3188,13 +3769,9 @@ if "projeto" in st.session_state:
         unsafe_allow_html=True,
     )
 
-
     # ========================================================
     # EXPORTAÇÃO
     # ========================================================
-
-    st.divider()
-
 
     st.markdown(
         """
@@ -3203,15 +3780,13 @@ if "projeto" in st.session_state:
         </div>
 
         <div class="section-subtitle">
-            Gere o documento final em PDF ou Excel.
+            Gere os documentos profissionais do orçamento.
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-
     col1, col2 = st.columns(2)
-
 
     # ========================================================
     # PDF
@@ -3233,7 +3808,6 @@ if "projeto" in st.session_state:
                     projeto
                 )
 
-
             if pdf_bytes:
 
                 nome_arquivo = (
@@ -3254,7 +3828,6 @@ if "projeto" in st.session_state:
                     "PDF gerado com sucesso."
                 )
 
-
     # ========================================================
     # EXCEL
     # ========================================================
@@ -3274,7 +3847,6 @@ if "projeto" in st.session_state:
                 excel_bytes = gerar_excel(
                     projeto
                 )
-
 
             if excel_bytes:
 
@@ -3299,9 +3871,8 @@ if "projeto" in st.session_state:
                     "Excel gerado com sucesso."
                 )
 
-
     st.caption(
         "PDF e Excel disponíveis para exportação. "
-        "O Excel mantém os valores validados pelo orçamento "
-        "e permite edição dos quantitativos e preços."
+        "O Excel mantém os valores do orçamento e "
+        "permite edição dos quantitativos e preços."
     )
