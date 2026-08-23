@@ -7,7 +7,7 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
@@ -18,7 +18,65 @@ st.set_page_config(
 
 
 # ============================================================
-# FUNÇÕES AUXILIARES
+# ESTILO PROFISSIONAL
+# ============================================================
+
+st.markdown(
+    """
+    <style>
+
+    .main-title {
+        font-size: 2.4rem;
+        font-weight: 800;
+        margin-bottom: 0;
+    }
+
+    .subtitle {
+        color: #666;
+        font-size: 1.05rem;
+        margin-top: 0;
+    }
+
+    .section-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-top: 10px;
+    }
+
+    .total-box {
+        padding: 22px;
+        border-radius: 12px;
+        border: 1px solid #d9d9d9;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .total-label {
+        font-size: 0.95rem;
+        color: #666;
+        margin-bottom: 4px;
+    }
+
+    .total-value {
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    .info-box {
+        padding: 16px;
+        border-radius: 10px;
+        border: 1px solid #e2e2e2;
+        margin-bottom: 10px;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# ============================================================
+# FUNÇÕES
 # ============================================================
 
 def formatar_moeda(valor):
@@ -34,17 +92,29 @@ def formatar_moeda(valor):
 # CABEÇALHO
 # ============================================================
 
-st.title("📐 CALCULADORA STEEL FRAMING")
-st.caption("Orçamento de materiais e mão de obra")
+st.markdown(
+    '<div class="main-title">📐 CALCULADORA STEEL FRAMING</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    '<div class="subtitle">'
+    'Sistema profissional para orçamento de materiais e mão de obra'
+    '</div>',
+    unsafe_allow_html=True,
+)
 
 st.divider()
 
 
 # ============================================================
-# IDENTIFICAÇÃO DO PROJETO
+# IDENTIFICAÇÃO
 # ============================================================
 
-st.subheader("📋 Identificação do projeto")
+st.markdown(
+    '<div class="section-title">📋 Identificação do projeto</div>',
+    unsafe_allow_html=True,
+)
 
 col1, col2 = st.columns(2)
 
@@ -80,9 +150,54 @@ data_orcamento = st.date_input(
 )
 
 
+st.divider()
+
+
+# ============================================================
+# CONDIÇÕES COMERCIAIS
+# ============================================================
+
+st.markdown(
+    '<div class="section-title">💼 Condições comerciais</div>',
+    unsafe_allow_html=True,
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    validade = st.number_input(
+        "Validade do orçamento (dias)",
+        min_value=1,
+        value=10,
+        step=1,
+    )
+
+    prazo_execucao = st.text_input(
+        "Prazo estimado de execução",
+        placeholder="Ex.: 30 dias",
+    )
+
+
+with col2:
+
+    condicao_pagamento = st.text_input(
+        "Condição de pagamento",
+        placeholder="Ex.: 50% entrada + 50% conclusão",
+    )
+
+    inclusao = st.text_input(
+        "Inclusões / observações comerciais",
+        placeholder="Ex.: Materiais e mão de obra",
+    )
+
+
 observacoes = st.text_area(
     "Observações",
-    placeholder="Informações adicionais sobre o orçamento...",
+    placeholder=(
+        "Informações adicionais sobre o orçamento, "
+        "condições da obra, especificações ou ressalvas..."
+    ),
 )
 
 
@@ -90,10 +205,13 @@ st.divider()
 
 
 # ============================================================
-# DADOS DO PROJETO
+# DIMENSÕES
 # ============================================================
 
-st.subheader("📐 Dimensões do projeto")
+st.markdown(
+    '<div class="section-title">📐 Dimensões do projeto</div>',
+    unsafe_allow_html=True,
+)
 
 col1, col2, col3 = st.columns(3)
 
@@ -136,16 +254,17 @@ st.divider()
 
 if "precos" not in st.session_state:
 
-    st.session_state["precos"] = (
-        PRECOS_BASE.copy()
-    )
+    st.session_state["precos"] = PRECOS_BASE.copy()
 
 
-st.subheader("💰 Preços dos materiais")
+st.markdown(
+    '<div class="section-title">💰 Preços dos materiais</div>',
+    unsafe_allow_html=True,
+)
 
 st.caption(
-    "Altere os preços conforme fornecedor, "
-    "região ou condição de compra."
+    "Altere os preços conforme fornecedor, região "
+    "ou condição de compra."
 )
 
 
@@ -189,12 +308,14 @@ previa = calcular_projeto(
 # QUANTIDADES
 # ============================================================
 
-st.subheader("📦 Quantidades dos materiais")
+st.markdown(
+    '<div class="section-title">📦 Quantidades dos materiais</div>',
+    unsafe_allow_html=True,
+)
 
 st.caption(
     "As quantidades são calculadas automaticamente. "
-    "Você pode alterar qualquer quantidade conforme "
-    "a necessidade da obra."
+    "Você pode ajustar conforme a necessidade da obra."
 )
 
 
@@ -208,9 +329,7 @@ quantidades_atualizadas = {}
 
 for nome, material in previa["materiais"].items():
 
-    quantidade_automatica = material[
-        "quantidade"
-    ]
+    quantidade_automatica = material["quantidade"]
 
     if nome not in st.session_state["quantidades"]:
 
@@ -231,9 +350,7 @@ for nome, material in previa["materiais"].items():
     )
 
 
-    quantidades_atualizadas[nome] = (
-        quantidade_atual
-    )
+    quantidades_atualizadas[nome] = quantidade_atual
 
 
 st.session_state["quantidades"] = (
@@ -245,7 +362,7 @@ st.divider()
 
 
 # ============================================================
-# CALCULAR ORÇAMENTO
+# BOTÃO CALCULAR
 # ============================================================
 
 if st.button(
@@ -261,32 +378,19 @@ if st.button(
         quantidades=st.session_state["quantidades"],
     )
 
-
     st.session_state["projeto"] = resultado
 
-    st.session_state["nome_projeto"] = (
-        nome_projeto
-    )
+    st.session_state["nome_projeto"] = nome_projeto
+    st.session_state["cliente"] = cliente
+    st.session_state["local_obra"] = local_obra
+    st.session_state["responsavel"] = responsavel
+    st.session_state["data_orcamento"] = data_orcamento
 
-    st.session_state["cliente"] = (
-        cliente
-    )
-
-    st.session_state["local_obra"] = (
-        local_obra
-    )
-
-    st.session_state["responsavel"] = (
-        responsavel
-    )
-
-    st.session_state["data_orcamento"] = (
-        data_orcamento
-    )
-
-    st.session_state["observacoes"] = (
-        observacoes
-    )
+    st.session_state["validade"] = validade
+    st.session_state["prazo_execucao"] = prazo_execucao
+    st.session_state["condicao_pagamento"] = condicao_pagamento
+    st.session_state["inclusao"] = inclusao
+    st.session_state["observacoes"] = observacoes
 
 
 # ============================================================
@@ -303,11 +407,10 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # IDENTIFICAÇÃO
+    # IDENTIFICAÇÃO DO ORÇAMENTO
     # ========================================================
 
     col1, col2 = st.columns(2)
-
 
     with col1:
 
@@ -344,29 +447,24 @@ if "projeto" in st.session_state:
             f"{data_salva.strftime('%d/%m/%Y')}"
         )
 
+        st.write(
+            f"**Validade:** "
+            f"{st.session_state.get('validade', 10)} dias"
+        )
+
 
     st.divider()
 
 
     # ========================================================
-    # RESUMO
+    # RESUMO FINANCEIRO
     # ========================================================
 
-    st.subheader("📊 Resumo do orçamento")
+    st.subheader("💰 Resumo financeiro")
 
-
-    col1, col2, col3, col4 = st.columns(4)
-
+    col1, col2, col3 = st.columns(3)
 
     with col1:
-
-        st.metric(
-            "Área",
-            f'{projeto["area"]:.2f} m²',
-        )
-
-
-    with col2:
 
         st.metric(
             "Materiais",
@@ -375,8 +473,7 @@ if "projeto" in st.session_state:
             ),
         )
 
-
-    with col3:
+    with col2:
 
         st.metric(
             "Mão de obra",
@@ -385,22 +482,34 @@ if "projeto" in st.session_state:
             ),
         )
 
-
-    with col4:
+    with col3:
 
         st.metric(
-            "Custo geral",
-            formatar_moeda(
-                projeto["custo_geral"]
-            ),
+            "Área",
+            f'{projeto["area"]:.2f} m²',
         )
+
+
+    st.markdown(
+        f"""
+        <div class="total-box">
+            <div class="total-label">
+                CUSTO GERAL DO ORÇAMENTO
+            </div>
+            <div class="total-value">
+                {formatar_moeda(projeto["custo_geral"])}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
     st.divider()
 
 
     # ========================================================
-    # TABELA PROFISSIONAL DE MATERIAIS
+    # MATERIAIS
     # ========================================================
 
     st.subheader(
@@ -453,7 +562,6 @@ if "projeto" in st.session_state:
         "🧱 Massas e Telas"
     )
 
-
     st.metric(
         "Custo",
         formatar_moeda(
@@ -473,14 +581,9 @@ if "projeto" in st.session_state:
         "👷 Mão de obra"
     )
 
-
-    mao_de_obra = projeto[
-        "mao_de_obra"
-    ]
-
+    mao_de_obra = projeto["mao_de_obra"]
 
     col1, col2, col3 = st.columns(3)
-
 
     with col1:
 
@@ -488,7 +591,6 @@ if "projeto" in st.session_state:
             "Dias estimados",
             f'{mao_de_obra["dias"]:.1f}',
         )
-
 
     with col2:
 
@@ -498,7 +600,6 @@ if "projeto" in st.session_state:
                 mao_de_obra["diaria"]
             ),
         )
-
 
     with col3:
 
@@ -514,6 +615,42 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
+    # CONDIÇÕES COMERCIAIS
+    # ========================================================
+
+    st.subheader(
+        "💼 Condições comerciais"
+    )
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        st.write(
+            f"**Prazo estimado:** "
+            f"{st.session_state.get('prazo_execucao', '')}"
+        )
+
+        st.write(
+            f"**Condição de pagamento:** "
+            f"{st.session_state.get('condicao_pagamento', '')}"
+        )
+
+
+    with col2:
+
+        st.write(
+            f"**Validade:** "
+            f"{st.session_state.get('validade', 10)} dias"
+        )
+
+        st.write(
+            f"**Inclusões:** "
+            f"{st.session_state.get('inclusao', '')}"
+        )
+
+
+    # ========================================================
     # OBSERVAÇÕES
     # ========================================================
 
@@ -525,20 +662,39 @@ if "projeto" in st.session_state:
 
     if observacoes_salvas:
 
-        st.subheader("📝 Observações")
+        st.divider()
 
-        st.write(
+        st.subheader(
+            "📝 Observações"
+        )
+
+        st.info(
             observacoes_salvas
         )
 
-        st.divider()
+
+    st.divider()
 
 
     # ========================================================
-    # CUSTO GERAL
+    # TOTAL FINAL
     # ========================================================
 
-    st.success(
-        f'💰 CUSTO GERAL: '
-        f'{formatar_moeda(projeto["custo_geral"])}'
+    st.markdown(
+        f"""
+        <div class="total-box">
+            <div class="total-label">
+                VALOR TOTAL DO ORÇAMENTO
+            </div>
+            <div class="total-value">
+                {formatar_moeda(projeto["custo_geral"])}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+    st.caption(
+        "Orçamento elaborado pela Calculadora Steel Framing."
     )
