@@ -8,7 +8,7 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
@@ -19,7 +19,7 @@ st.set_page_config(
 
 
 # ============================================================
-# CSS — VISUAL PROFISSIONAL
+# CSS
 # ============================================================
 
 st.markdown(
@@ -39,11 +39,11 @@ st.markdown(
     }
 
     .orcamento-header h1 {
-        margin-bottom: 4px;
+        margin: 0 0 5px 0;
     }
 
     .orcamento-header p {
-        margin-top: 0;
+        margin: 0;
         color: #666;
     }
 
@@ -140,6 +140,7 @@ def gerar_pdf(projeto):
             Table,
             TableStyle,
             KeepTogether,
+            PageBreak,
         )
 
     except ImportError:
@@ -154,7 +155,7 @@ def gerar_pdf(projeto):
 
 
     # ========================================================
-    # DADOS DO ORÇAMENTO
+    # DADOS
     # ========================================================
 
     nome_projeto = st.session_state.get(
@@ -214,7 +215,7 @@ def gerar_pdf(projeto):
 
 
     # ========================================================
-    # VALORES DO PROJETO
+    # VALORES — NÃO ALTERAR
     # ========================================================
 
     area = obter_valor(
@@ -269,17 +270,17 @@ def gerar_pdf(projeto):
 
     comprimento = st.session_state.get(
         "comprimento",
-        None,
+        "",
     )
 
     altura = st.session_state.get(
         "altura",
-        None,
+        "",
     )
 
 
     # ========================================================
-    # DOCUMENTO PDF
+    # DOCUMENTO
     # ========================================================
 
     buffer = BytesIO()
@@ -290,19 +291,19 @@ def gerar_pdf(projeto):
         rightMargin=14 * mm,
         leftMargin=14 * mm,
         topMargin=14 * mm,
-        bottomMargin=17 * mm,
+        bottomMargin=18 * mm,
         title="Orçamento Steel Framing",
         author=responsavel or "Calculadora Steel Framing",
         subject="Orçamento de materiais e mão de obra",
     )
 
 
-    styles = getSampleStyleSheet()
-
-
     # ========================================================
     # ESTILOS
     # ========================================================
+
+    styles = getSampleStyleSheet()
+
 
     estilo_titulo = ParagraphStyle(
         "TituloOrcamento",
@@ -316,10 +317,10 @@ def gerar_pdf(projeto):
 
 
     estilo_subtitulo = ParagraphStyle(
-        "Subtitulo",
+        "SubtituloOrcamento",
         parent=styles["Normal"],
         fontName="Helvetica",
-        fontSize=8.5,
+        fontSize=9,
         leading=11,
         alignment=TA_CENTER,
         textColor=colors.grey,
@@ -328,7 +329,7 @@ def gerar_pdf(projeto):
 
 
     estilo_secao = ParagraphStyle(
-        "Secao",
+        "SecaoOrcamento",
         parent=styles["Heading2"],
         fontName="Helvetica-Bold",
         fontSize=11,
@@ -345,55 +346,32 @@ def gerar_pdf(projeto):
         fontName="Helvetica",
         fontSize=8.5,
         leading=11,
-        spaceAfter=0,
     )
 
 
     estilo_pequeno = ParagraphStyle(
-        "Pequeno",
+        "PequenoOrcamento",
         parent=styles["Normal"],
         fontName="Helvetica",
         fontSize=7.5,
         leading=9,
-        spaceAfter=0,
     )
 
 
     estilo_direita = ParagraphStyle(
-        "Direita",
+        "DireitaOrcamento",
         parent=estilo_normal,
         alignment=TA_RIGHT,
     )
 
 
     estilo_total = ParagraphStyle(
-        "Total",
+        "TotalOrcamento",
         parent=styles["Normal"],
         fontName="Helvetica-Bold",
         fontSize=16,
         leading=19,
         alignment=TA_RIGHT,
-    )
-
-
-    estilo_assinatura_nome = ParagraphStyle(
-        "AssinaturaNome",
-        parent=styles["Normal"],
-        fontName="Helvetica-Bold",
-        fontSize=9,
-        leading=11,
-        alignment=TA_CENTER,
-        spaceAfter=2,
-    )
-
-
-    estilo_assinatura_funcao = ParagraphStyle(
-        "AssinaturaFuncao",
-        parent=styles["Normal"],
-        fontName="Helvetica",
-        fontSize=8,
-        leading=10,
-        alignment=TA_CENTER,
     )
 
 
@@ -422,7 +400,6 @@ def gerar_pdf(projeto):
         colWidths=[182 * mm],
     )
 
-
     cabecalho.setStyle(
         TableStyle(
             [
@@ -430,26 +407,26 @@ def gerar_pdf(projeto):
                     "BOX",
                     (0, 0),
                     (-1, -1),
-                    0.6,
+                    0.7,
                     colors.HexColor("#cccccc"),
                 ),
                 (
                     "BACKGROUND",
                     (0, 0),
                     (-1, -1),
-                    colors.HexColor("#f8f9fa"),
+                    colors.HexColor("#fafafa"),
                 ),
                 (
                     "LEFTPADDING",
                     (0, 0),
                     (-1, -1),
-                    10,
+                    8,
                 ),
                 (
                     "RIGHTPADDING",
                     (0, 0),
                     (-1, -1),
-                    10,
+                    8,
                 ),
                 (
                     "TOPPADDING",
@@ -461,19 +438,18 @@ def gerar_pdf(projeto):
                     "BOTTOMPADDING",
                     (0, 0),
                     (-1, -1),
-                    5,
+                    4,
                 ),
             ]
         )
     )
 
-
     elementos.append(cabecalho)
-    elementos.append(Spacer(1, 6))
+    elementos.append(Spacer(1, 7))
 
 
     # ========================================================
-    # 1. DADOS DO ORÇAMENTO
+    # 1 — DADOS DO ORÇAMENTO
     # ========================================================
 
     dados_titulo = Paragraph(
@@ -481,11 +457,9 @@ def gerar_pdf(projeto):
         estilo_secao,
     )
 
-
     data_formatada = data_orcamento.strftime(
         "%d/%m/%Y"
     )
-
 
     dados_orcamento = [
         [
@@ -520,7 +494,6 @@ def gerar_pdf(projeto):
         ],
     ]
 
-
     tabela_dados = Table(
         dados_orcamento,
         colWidths=[
@@ -528,7 +501,6 @@ def gerar_pdf(projeto):
             91 * mm,
         ],
     )
-
 
     tabela_dados.setStyle(
         TableStyle(
@@ -581,7 +553,6 @@ def gerar_pdf(projeto):
         )
     )
 
-
     elementos.append(
         KeepTogether(
             [
@@ -591,11 +562,11 @@ def gerar_pdf(projeto):
         )
     )
 
-    elementos.append(Spacer(1, 6))
+    elementos.append(Spacer(1, 7))
 
 
     # ========================================================
-    # 2. RESUMO DO PROJETO
+    # 2 — RESUMO DO PROJETO
     # ========================================================
 
     resumo_titulo = Paragraph(
@@ -603,26 +574,21 @@ def gerar_pdf(projeto):
         estilo_secao,
     )
 
-
-    comprimento_pdf = (
-        comprimento
-        if comprimento is not None
-        else 0
+    comprimento_texto = (
+        f"{float(comprimento):.2f} m"
+        if comprimento != ""
+        else "Não informado"
     )
 
-    altura_pdf = (
-        altura
-        if altura is not None
-        else 0
+    altura_texto = (
+        f"{float(altura):.2f} m"
+        if altura != ""
+        else "Não informado"
     )
-
 
     resumo = [
         [
-            Paragraph(
-                "<b>Área</b>",
-                estilo_normal,
-            ),
+            Paragraph("<b>Área</b>", estilo_normal),
             Paragraph(
                 f"{float(area):.2f} m²",
                 estilo_direita,
@@ -634,7 +600,7 @@ def gerar_pdf(projeto):
                 estilo_normal,
             ),
             Paragraph(
-                f"{float(comprimento_pdf):.2f} m",
+                comprimento_texto,
                 estilo_direita,
             ),
         ],
@@ -644,12 +610,11 @@ def gerar_pdf(projeto):
                 estilo_normal,
             ),
             Paragraph(
-                f"{float(altura_pdf):.2f} m",
+                altura_texto,
                 estilo_direita,
             ),
         ],
     ]
-
 
     tabela_resumo = Table(
         resumo,
@@ -658,7 +623,6 @@ def gerar_pdf(projeto):
             91 * mm,
         ],
     )
-
 
     tabela_resumo.setStyle(
         TableStyle(
@@ -717,7 +681,6 @@ def gerar_pdf(projeto):
         )
     )
 
-
     elementos.append(
         KeepTogether(
             [
@@ -727,41 +690,28 @@ def gerar_pdf(projeto):
         )
     )
 
-    elementos.append(Spacer(1, 6))
+    elementos.append(Spacer(1, 7))
 
 
     # ========================================================
-    # 3. QUANTITATIVO DE MATERIAIS
+    # 3 — QUANTITATIVO DE MATERIAIS
     # ========================================================
 
-    materiais_titulo = Paragraph(
-        "3. QUANTITATIVO DE MATERIAIS",
-        estilo_secao,
+    elementos.append(
+        Paragraph(
+            "3. QUANTITATIVO DE MATERIAIS",
+            estilo_secao,
+        )
     )
 
 
     tabela_materiais = [
         [
-            Paragraph(
-                "<b>Material</b>",
-                estilo_pequeno,
-            ),
-            Paragraph(
-                "<b>Un.</b>",
-                estilo_pequeno,
-            ),
-            Paragraph(
-                "<b>Quantidade</b>",
-                estilo_pequeno,
-            ),
-            Paragraph(
-                "<b>Preço unitário</b>",
-                estilo_pequeno,
-            ),
-            Paragraph(
-                "<b>Total</b>",
-                estilo_pequeno,
-            ),
+            Paragraph("<b>Material</b>", estilo_pequeno),
+            Paragraph("<b>Un.</b>", estilo_pequeno),
+            Paragraph("<b>Quantidade</b>", estilo_pequeno),
+            Paragraph("<b>Preço unitário</b>", estilo_pequeno),
+            Paragraph("<b>Total</b>", estilo_pequeno),
         ]
     ]
 
@@ -812,14 +762,15 @@ def gerar_pdf(projeto):
     tabela_material_pdf = Table(
         tabela_materiais,
         colWidths=[
-            64 * mm,
+            66 * mm,
             15 * mm,
             27 * mm,
-            38 * mm,
-            38 * mm,
+            37 * mm,
+            37 * mm,
         ],
         repeatRows=1,
         splitByRow=1,
+        hAlign="CENTER",
     )
 
 
@@ -830,21 +781,21 @@ def gerar_pdf(projeto):
                     "BACKGROUND",
                     (0, 0),
                     (-1, 0),
-                    colors.HexColor("#eeeeee"),
+                    colors.HexColor("#e9e9e9"),
                 ),
                 (
                     "BOX",
                     (0, 0),
                     (-1, -1),
-                    0.5,
-                    colors.HexColor("#bbbbbb"),
+                    0.6,
+                    colors.HexColor("#aaaaaa"),
                 ),
                 (
                     "INNERGRID",
                     (0, 0),
                     (-1, -1),
-                    0.3,
-                    colors.HexColor("#dddddd"),
+                    0.25,
+                    colors.HexColor("#d5d5d5"),
                 ),
                 (
                     "VALIGN",
@@ -868,35 +819,23 @@ def gerar_pdf(projeto):
                     "LEFTPADDING",
                     (0, 0),
                     (-1, -1),
-                    5,
+                    4,
                 ),
                 (
                     "RIGHTPADDING",
                     (0, 0),
                     (-1, -1),
-                    5,
+                    4,
                 ),
                 (
                     "TOPPADDING",
                     (0, 0),
-                    (-1, 0),
-                    6,
-                ),
-                (
-                    "BOTTOMPADDING",
-                    (0, 0),
-                    (-1, 0),
-                    6,
-                ),
-                (
-                    "TOPPADDING",
-                    (0, 1),
                     (-1, -1),
                     4,
                 ),
                 (
                     "BOTTOMPADDING",
-                    (0, 1),
+                    (0, 0),
                     (-1, -1),
                     4,
                 ),
@@ -906,32 +845,28 @@ def gerar_pdf(projeto):
 
 
     elementos.append(
-        KeepTogether(
-            [
-                materiais_titulo,
-                tabela_material_pdf,
-            ]
-        )
+        tabela_material_pdf
     )
 
-
-    elementos.append(Spacer(1, 8))
+    elementos.append(Spacer(1, 7))
 
 
     # ========================================================
-    # 4. RESUMO FINANCEIRO
+    # 4 — RESUMO FINANCEIRO
     # ========================================================
 
-    financeiro_titulo = Paragraph(
-        "4. RESUMO FINANCEIRO",
-        estilo_secao,
+    elementos.append(
+        Paragraph(
+            "4. RESUMO FINANCEIRO",
+            estilo_secao,
+        )
     )
 
 
     financeiro = [
         [
             Paragraph(
-                "Materiais",
+                "<b>Materiais</b>",
                 estilo_normal,
             ),
             Paragraph(
@@ -943,7 +878,7 @@ def gerar_pdf(projeto):
         ],
         [
             Paragraph(
-                "Massas e telas",
+                "<b>Massas e telas</b>",
                 estilo_normal,
             ),
             Paragraph(
@@ -955,7 +890,7 @@ def gerar_pdf(projeto):
         ],
         [
             Paragraph(
-                "Mão de obra",
+                "<b>Mão de obra</b>",
                 estilo_normal,
             ),
             Paragraph(
@@ -971,9 +906,9 @@ def gerar_pdf(projeto):
     tabela_financeiro = Table(
         financeiro,
         colWidths=[
-            116 * mm,
-            66 * mm,
-        ],
+            120 * mm,
+            62 * mm,
+    ],
     )
 
 
@@ -1016,13 +951,13 @@ def gerar_pdf(projeto):
                     "TOPPADDING",
                     (0, 0),
                     (-1, -1),
-                    6,
+                    5,
                 ),
                 (
                     "BOTTOMPADDING",
                     (0, 0),
                     (-1, -1),
-                    6,
+                    5,
                 ),
             ]
         )
@@ -1030,14 +965,8 @@ def gerar_pdf(projeto):
 
 
     elementos.append(
-        KeepTogether(
-            [
-                financeiro_titulo,
-                tabela_financeiro,
-            ]
-        )
+        tabela_financeiro
     )
-
 
     elementos.append(Spacer(1, 7))
 
@@ -1060,8 +989,8 @@ def gerar_pdf(projeto):
             ]
         ],
         colWidths=[
-            91 * mm,
-            91 * mm,
+            100 * mm,
+            82 * mm,
         ],
     )
 
@@ -1118,24 +1047,23 @@ def gerar_pdf(projeto):
 
 
     elementos.append(
-        KeepTogether(
-            [
-                total_tabela,
-            ]
-        )
+        total_tabela
     )
 
 
-    elementos.append(Spacer(1, 7))
-
-
     # ========================================================
-    # 5. MÃO DE OBRA
+    # 5 — MÃO DE OBRA
     # ========================================================
 
-    mao_obra_titulo = Paragraph(
-        "5. MÃO DE OBRA",
-        estilo_secao,
+    elementos.append(
+        Spacer(1, 7)
+    )
+
+    elementos.append(
+        Paragraph(
+            "5. MÃO DE OBRA",
+            estilo_secao,
+        )
     )
 
 
@@ -1175,8 +1103,8 @@ def gerar_pdf(projeto):
             ],
         ],
         colWidths=[
-            116 * mm,
-            66 * mm,
+            120 * mm,
+            62 * mm,
         ],
     )
 
@@ -1234,25 +1162,23 @@ def gerar_pdf(projeto):
 
 
     elementos.append(
-        KeepTogether(
-            [
-                mao_obra_titulo,
-                mao_obra_tabela,
-            ]
-        )
+        mao_obra_tabela
     )
 
 
-    elementos.append(Spacer(1, 6))
-
-
     # ========================================================
-    # 6. CONDIÇÕES COMERCIAIS
+    # 6 — CONDIÇÕES COMERCIAIS
     # ========================================================
 
-    condicoes_titulo = Paragraph(
-        "6. CONDIÇÕES COMERCIAIS",
-        estilo_secao,
+    elementos.append(
+        Spacer(1, 7)
+    )
+
+    elementos.append(
+        Paragraph(
+            "6. CONDIÇÕES COMERCIAIS",
+            estilo_secao,
+        )
     )
 
 
@@ -1303,8 +1229,8 @@ def gerar_pdf(projeto):
     tabela_condicoes = Table(
         condicoes,
         colWidths=[
-            55 * mm,
-            127 * mm,
+            58 * mm,
+            124 * mm,
         ],
     )
 
@@ -1368,20 +1294,19 @@ def gerar_pdf(projeto):
 
 
     elementos.append(
-        KeepTogether(
-            [
-                condicoes_titulo,
-                tabela_condicoes,
-            ]
-        )
+        tabela_condicoes
     )
 
 
     # ========================================================
-    # 7. OBSERVAÇÕES COMERCIAIS
+    # OBSERVAÇÕES COMERCIAIS
     # ========================================================
 
     if observacoes_comerciais:
+
+        elementos.append(
+            Spacer(1, 7)
+        )
 
         elementos.append(
             Paragraph(
@@ -1405,16 +1330,16 @@ def gerar_pdf(projeto):
             )
         )
 
-        elementos.append(
-            Spacer(1, 6)
-        )
-
 
     # ========================================================
-    # 8. OBSERVAÇÕES TÉCNICAS
+    # OBSERVAÇÕES TÉCNICAS
     # ========================================================
 
     if observacoes_tecnicas:
+
+        elementos.append(
+            Spacer(1, 7)
+        )
 
         elementos.append(
             Paragraph(
@@ -1438,43 +1363,40 @@ def gerar_pdf(projeto):
             )
         )
 
-        elementos.append(
-            Spacer(1, 8)
-        )
-
 
     # ========================================================
-    # ASSINATURA — ÚNICA
+    # ASSINATURA — UMA ÚNICA VEZ
     # ========================================================
 
-    assinatura = Table(
+    assinatura_conteudo = Table(
         [
             [
                 Paragraph(
                     "________________________________________",
-                    estilo_assinatura_funcao,
+                    estilo_normal,
                 )
             ],
             [
                 Paragraph(
-                    responsavel or "Responsável pelo orçamento",
-                    estilo_assinatura_nome,
+                    f"<b>{responsavel or 'Responsável pelo orçamento'}</b>",
+                    estilo_normal,
                 )
             ],
             [
                 Paragraph(
                     "Responsável pelo orçamento",
-                    estilo_assinatura_funcao,
+                    estilo_pequeno,
                 )
             ],
         ],
         colWidths=[
-            110 * mm,
+            100 * mm,
         ],
+        hAlign="CENTER",
     )
 
 
-    assinatura.setStyle(
+    assinatura_conteudo.setStyle(
         TableStyle(
             [
                 (
@@ -1487,13 +1409,13 @@ def gerar_pdf(projeto):
                     "TOPPADDING",
                     (0, 0),
                     (-1, -1),
-                    1,
+                    2,
                 ),
                 (
                     "BOTTOMPADDING",
                     (0, 0),
                     (-1, -1),
-                    1,
+                    2,
                 ),
             ]
         )
@@ -1501,13 +1423,13 @@ def gerar_pdf(projeto):
 
 
     elementos.append(
-        Spacer(1, 18)
+        Spacer(1, 25)
     )
 
     elementos.append(
         KeepTogether(
             [
-                assinatura,
+                assinatura_conteudo,
             ]
         )
     )
@@ -1531,9 +1453,9 @@ def gerar_pdf(projeto):
 
         canvas.line(
             14 * mm,
-            12 * mm,
+            13 * mm,
             largura - 14 * mm,
-            12 * mm,
+            13 * mm,
         )
 
         canvas.setFont(
@@ -1545,10 +1467,16 @@ def gerar_pdf(projeto):
             colors.grey
         )
 
-        canvas.drawCentredString(
-            largura / 2,
-            7 * mm,
-            f"Orçamento Steel Framing • Página {documento.page}",
+        canvas.drawString(
+            14 * mm,
+            8 * mm,
+            "Orçamento Steel Framing",
+        )
+
+        canvas.drawRightString(
+            largura - 14 * mm,
+            8 * mm,
+            f"Página {documento.page}",
         )
 
         canvas.restoreState()
@@ -1571,7 +1499,7 @@ def gerar_pdf(projeto):
 
 
 # ============================================================
-# CABEÇALHO DO APLICATIVO
+# CABEÇALHO DO APP
 # ============================================================
 
 st.markdown(
@@ -1589,7 +1517,7 @@ st.markdown(
 
 
 # ============================================================
-# IDENTIFICAÇÃO DO PROJETO
+# IDENTIFICAÇÃO
 # ============================================================
 
 st.subheader("📋 Identificação do projeto")
@@ -1755,7 +1683,6 @@ with col3:
     )
 
 
-# Guarda as dimensões para o PDF
 st.session_state["comprimento"] = comprimento
 st.session_state["altura"] = altura
 
@@ -1862,7 +1789,6 @@ for nome, material in previa["materiais"].items():
         key=f"quantidade_{nome}",
     )
 
-
     quantidades_atualizadas[nome] = (
         quantidade_atual
     )
@@ -1897,7 +1823,7 @@ st.divider()
 
 
 # ============================================================
-# CALCULAR / ATUALIZAR ORÇAMENTO
+# CALCULAR
 # ============================================================
 
 if st.button(
@@ -1912,7 +1838,6 @@ if st.button(
         precos=st.session_state["precos"],
         quantidades=st.session_state["quantidades"],
     )
-
 
     st.session_state["projeto"] = resultado
 
@@ -1989,7 +1914,6 @@ if "projeto" in st.session_state:
 
     col1, col2 = st.columns(2)
 
-
     with col1:
 
         st.markdown(
@@ -2004,7 +1928,6 @@ if "projeto" in st.session_state:
             {st.session_state.get("local_obra", "")}
             """
         )
-
 
     with col2:
 
@@ -2038,25 +1961,19 @@ if "projeto" in st.session_state:
 
     col1, col2, col3 = st.columns(3)
 
-
     with col1:
-
         st.metric(
             "Área",
             f'{projeto["area"]:.2f} m²',
         )
 
-
     with col2:
-
         st.metric(
             "Comprimento",
             f"{comprimento:.2f} m",
         )
 
-
     with col3:
-
         st.metric(
             "Altura",
             f"{altura:.2f} m",
@@ -2067,16 +1984,14 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # TABELA DE MATERIAIS
+    # MATERIAIS
     # ========================================================
 
     st.subheader(
         "📦 Quantitativo de materiais"
     )
 
-
     tabela_materiais = []
-
 
     for nome, material in (
         projeto["materiais"].items()
@@ -2096,11 +2011,9 @@ if "projeto" in st.session_state:
             }
         )
 
-
     df_materiais = pd.DataFrame(
         tabela_materiais
     )
-
 
     st.dataframe(
         df_materiais,
@@ -2125,7 +2038,6 @@ if "projeto" in st.session_state:
     st.subheader(
         "💰 Resumo financeiro"
     )
-
 
     subtotal_materiais = obter_valor(
         projeto,
@@ -2152,12 +2064,9 @@ if "projeto" in st.session_state:
         "custo_geral",
     )
 
-
     col1, col2, col3 = st.columns(3)
 
-
     with col1:
-
         st.metric(
             "Materiais",
             formatar_moeda(
@@ -2165,9 +2074,7 @@ if "projeto" in st.session_state:
             ),
         )
 
-
     with col2:
-
         st.metric(
             "Massas e telas",
             formatar_moeda(
@@ -2175,9 +2082,7 @@ if "projeto" in st.session_state:
             ),
         )
 
-
     with col3:
-
         st.metric(
             "Mão de obra",
             formatar_moeda(
@@ -2220,20 +2125,15 @@ if "projeto" in st.session_state:
         "diaria",
     )
 
-
     col1, col2, col3 = st.columns(3)
 
-
     with col1:
-
         st.metric(
             "Dias estimados",
             f"{dias:.1f}",
         )
 
-
     with col2:
-
         st.metric(
             "Valor da diária",
             formatar_moeda(
@@ -2241,9 +2141,7 @@ if "projeto" in st.session_state:
             ),
         )
 
-
     with col3:
-
         st.metric(
             "Custo da mão de obra",
             formatar_moeda(
@@ -2256,13 +2154,12 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # CONDIÇÕES COMERCIAIS
+    # CONDIÇÕES
     # ========================================================
 
     st.subheader(
         "💼 Condições comerciais"
     )
-
 
     prazo_salvo = st.session_state.get(
         "prazo_execucao",
@@ -2284,9 +2181,7 @@ if "projeto" in st.session_state:
         10,
     )
 
-
     col1, col2 = st.columns(2)
-
 
     with col1:
 
@@ -2299,7 +2194,6 @@ if "projeto" in st.session_state:
             {prazo_salvo if prazo_salvo else "Não informado"}
             """
         )
-
 
     with col2:
 
@@ -2320,7 +2214,6 @@ if "projeto" in st.session_state:
             "",
         )
     )
-
 
     if observacoes_comerciais_salvas:
 
@@ -2352,7 +2245,6 @@ if "projeto" in st.session_state:
         )
     )
 
-
     if observacoes_tecnicas_salvas:
 
         st.subheader(
@@ -2373,7 +2265,6 @@ if "projeto" in st.session_state:
     st.subheader(
         "💵 Valor final"
     )
-
 
     st.markdown(
         f"""
@@ -2427,7 +2318,6 @@ if "projeto" in st.session_state:
         "📤 Exportação do orçamento"
     )
 
-
     col1, col2 = st.columns(2)
 
 
@@ -2451,7 +2341,6 @@ if "projeto" in st.session_state:
                     projeto
                 )
 
-
             if pdf_bytes:
 
                 nome_arquivo = (
@@ -2463,13 +2352,11 @@ if "projeto" in st.session_state:
                     .replace(" ", "_")
                 )
 
-
                 if not nome_arquivo:
 
                     nome_arquivo = (
                         "Orcamento_Steel_Framing"
                     )
-
 
                 st.download_button(
                     label="⬇️ BAIXAR PDF",
@@ -2487,7 +2374,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # EXCEL — PRÓXIMA FASE
+    # EXCEL
     # ========================================================
 
     with col2:
@@ -2496,9 +2383,7 @@ if "projeto" in st.session_state:
             "📊 EXPORTAR EXCEL",
             use_container_width=True,
             disabled=True,
-            help=(
-                "Será implementado na Fase 6B."
-            ),
+            help="Será implementado na Fase 6B.",
         )
 
 
