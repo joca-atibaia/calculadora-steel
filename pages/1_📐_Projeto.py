@@ -7,7 +7,7 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
@@ -18,7 +18,7 @@ st.set_page_config(
 
 
 # ============================================================
-# FUNÇÕES AUXILIARES
+# FUNÇÕES
 # ============================================================
 
 def formatar_moeda(valor):
@@ -31,7 +31,7 @@ def formatar_moeda(valor):
 
 
 # ============================================================
-# CSS — VISUAL PROFISSIONAL 6C
+# CSS
 # ============================================================
 
 st.markdown(
@@ -71,10 +71,10 @@ st.markdown(
 
 
     /* ========================================================
-       CABEÇALHO
+       CABEÇALHO NATIVO
        ======================================================== */
 
-    .sf-header {
+    .sf-title-box {
         background: linear-gradient(
             135deg,
             #17202a 0%,
@@ -84,20 +84,17 @@ st.markdown(
 
         border-radius: 18px;
 
-        padding: 30px 38px 24px 38px;
+        padding: 30px 38px 26px 38px;
 
-        margin-bottom: 8px;
+        margin-bottom: 25px;
 
         box-shadow:
             0 10px 30px rgba(0, 0, 0, 0.12);
     }
 
+    .sf-title {
+        color: #ffffff;
 
-    /* ========================================================
-       TÍTULO DO CABEÇALHO
-       ======================================================== */
-
-    .sf-header-title {
         font-size: 2.15rem;
 
         line-height: 1.2;
@@ -106,35 +103,23 @@ st.markdown(
 
         letter-spacing: -0.5px;
 
-        color: #ffffff;
-
-        margin: 0;
+        margin-bottom: 8px;
     }
 
-
-    /* ========================================================
-       SUBTÍTULO
-       ======================================================== */
-
-    .sf-subtitle {
+    .sf-description {
         color: #dce3e8;
 
         font-size: 1rem;
 
         line-height: 1.6;
 
-        margin-top: 8px;
-
         margin-bottom: 14px;
     }
 
-
-    /* ========================================================
-       BADGE
-       ======================================================== */
-
-    .sf-badge {
+    .sf-version {
         display: inline-block;
+
+        color: #ffffff;
 
         background: rgba(255, 255, 255, 0.12);
 
@@ -149,8 +134,6 @@ st.markdown(
         font-weight: 700;
 
         letter-spacing: 0.6px;
-
-        color: #ffffff;
     }
 
 
@@ -158,34 +141,24 @@ st.markdown(
        SEÇÕES
        ======================================================== */
 
-    .sf-section {
-        margin-top: 28px;
-
-        margin-bottom: 16px;
-    }
-
-    .sf-section h2 {
-        margin: 0 0 4px 0;
-
-        padding: 0;
-
+    .section-title {
         font-size: 1.35rem;
-
-        line-height: 1.3;
 
         font-weight: 800;
 
         color: #17202a;
+
+        margin-top: 28px;
+
+        margin-bottom: 4px;
     }
 
-    .sf-section p {
-        margin: 0;
-
+    .section-description {
         font-size: 0.9rem;
 
-        line-height: 1.5;
-
         color: #6b7280;
+
+        margin-bottom: 16px;
     }
 
 
@@ -208,15 +181,6 @@ st.markdown(
     div[data-baseweb="input"] > div,
     div[data-baseweb="textarea"] > div {
         border-radius: 9px;
-    }
-
-    input,
-    textarea,
-    [data-baseweb="select"] {
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
     }
 
 
@@ -271,23 +235,18 @@ st.markdown(
 
         .block-container {
             padding-left: 1rem;
-
             padding-right: 1rem;
         }
 
-        .sf-header {
-            padding: 25px 22px 20px 22px;
-        }
-
-        .sf-header-title {
+        .sf-title {
             font-size: 1.65rem;
         }
 
-        .sf-subtitle {
+        .sf-description {
             font-size: 0.9rem;
         }
 
-        .sf-section h2 {
+        .section-title {
             font-size: 1.15rem;
         }
     }
@@ -299,32 +258,31 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO PRINCIPAL
-#
-# IMPORTANTE:
-# O cabeçalho inteiro fica dentro de um único st.markdown().
-# Isso garante que o HTML seja renderizado corretamente.
+# CABEÇALHO
 # ============================================================
 
 st.markdown(
-    """
-    <div class="sf-header">
+    '<div class="sf-title-box">',
+    unsafe_allow_html=True,
+)
 
-        <div class="sf-header-title">
-            📐 CALCULADORA STEEL FRAMING
-        </div>
+st.markdown(
+    "📐 CALCULADORA STEEL FRAMING",
+    unsafe_allow_html=False,
+)
 
-        <div class="sf-subtitle">
-            Sistema profissional para orçamento de
-            materiais, quantitativos e mão de obra.
-        </div>
+st.markdown(
+    "Sistema profissional para orçamento de materiais, "
+    "quantitativos e mão de obra.",
+    unsafe_allow_html=False,
+)
 
-        <div class="sf-badge">
-            ORÇAMENTO PROFISSIONAL • VERSÃO 6C
-        </div>
+st.caption(
+    "ORÇAMENTO PROFISSIONAL • VERSÃO 6C"
+)
 
-    </div>
-    """,
+st.markdown(
+    "</div>",
     unsafe_allow_html=True,
 )
 
@@ -334,12 +292,14 @@ st.markdown(
 # ============================================================
 
 st.markdown(
-    """
-    <div class="sf-section">
-        <h2>📋 Identificação do projeto</h2>
-        <p>Informe os dados principais do orçamento.</p>
-    </div>
-    """,
+    '<div class="section-title">📋 Identificação do projeto</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    '<div class="section-description">'
+    'Informe os dados principais do orçamento.'
+    '</div>',
     unsafe_allow_html=True,
 )
 
@@ -389,16 +349,18 @@ st.divider()
 
 
 # ============================================================
-# DIMENSÕES DO PROJETO
+# DIMENSÕES
 # ============================================================
 
 st.markdown(
-    """
-    <div class="sf-section">
-        <h2>📐 Dimensões do projeto</h2>
-        <p>Informe as dimensões utilizadas no cálculo.</p>
-    </div>
-    """,
+    '<div class="section-title">📐 Dimensões do projeto</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    '<div class="section-description">'
+    'Informe as dimensões utilizadas no cálculo.'
+    '</div>',
     unsafe_allow_html=True,
 )
 
@@ -442,19 +404,18 @@ st.divider()
 
 
 # ============================================================
-# PREÇOS DOS MATERIAIS
+# PREÇOS
 # ============================================================
 
 st.markdown(
-    """
-    <div class="sf-section">
-        <h2>💰 Preços dos materiais</h2>
-        <p>
-            Altere os preços conforme fornecedor,
-            região ou condição de compra.
-        </p>
-    </div>
-    """,
+    '<div class="section-title">💰 Preços dos materiais</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    '<div class="section-description">'
+    'Altere os preços conforme fornecedor, região ou condição de compra.'
+    '</div>',
     unsafe_allow_html=True,
 )
 
@@ -499,20 +460,19 @@ previa = calcular_projeto(
 
 
 # ============================================================
-# QUANTIDADES DOS MATERIAIS
+# QUANTIDADES
 # ============================================================
 
 st.markdown(
-    """
-    <div class="sf-section">
-        <h2>📦 Quantidades dos materiais</h2>
-        <p>
-            As quantidades são calculadas automaticamente.
-            Você pode alterar qualquer quantidade conforme
-            a necessidade da obra.
-        </p>
-    </div>
-    """,
+    '<div class="section-title">📦 Quantidades dos materiais</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    '<div class="section-description">'
+    'As quantidades são calculadas automaticamente. '
+    'Você pode alterar qualquer quantidade conforme a necessidade da obra.'
+    '</div>',
     unsafe_allow_html=True,
 )
 
@@ -647,7 +607,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # RESUMO DO ORÇAMENTO
+    # RESUMO
     # ========================================================
 
     st.subheader("📊 Resumo do orçamento")
@@ -698,7 +658,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # QUANTITATIVO DE MATERIAIS
+    # QUANTITATIVO
     # ========================================================
 
     st.subheader(
