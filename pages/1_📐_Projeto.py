@@ -155,7 +155,6 @@ st.markdown(
 
     .section-header {
         margin-top: 28px;
-
         margin-bottom: 16px;
     }
 
@@ -223,7 +222,7 @@ st.markdown(
 
 
     /* ======================================================
-       INPUTS
+       CAMPOS
        ====================================================== */
 
     .stTextInput label,
@@ -286,7 +285,6 @@ st.markdown(
 
         .block-container {
             padding-left: 1rem;
-
             padding-right: 1rem;
         }
 
@@ -492,17 +490,13 @@ st.markdown(
 
 if "precos" not in st.session_state:
 
-    st.session_state["precos"] = (
-        PRECOS_BASE.copy()
-    )
+    st.session_state["precos"] = PRECOS_BASE.copy()
 
 
 precos_atualizados = {}
 
 
-for nome, preco_padrao in (
-    st.session_state["precos"].items()
-):
+for nome, preco_padrao in st.session_state["precos"].items():
 
     preco_atual = st.number_input(
         nome,
@@ -513,14 +507,10 @@ for nome, preco_padrao in (
         key=f"preco_{nome}",
     )
 
-    precos_atualizados[nome] = (
-        preco_atual
-    )
+    precos_atualizados[nome] = preco_atual
 
 
-st.session_state["precos"] = (
-    precos_atualizados
-)
+st.session_state["precos"] = precos_atualizados
 
 
 st.divider()
@@ -569,21 +559,15 @@ if "quantidades" not in st.session_state:
 quantidades_atualizadas = {}
 
 
-for nome, material in (
-    previa["materiais"].items()
-):
+for nome, material in previa["materiais"].items():
 
-    quantidade_automatica = material[
-        "quantidade"
-    ]
-
+    quantidade_automatica = material["quantidade"]
 
     if nome not in st.session_state["quantidades"]:
 
         st.session_state["quantidades"][nome] = (
             quantidade_automatica
         )
-
 
     quantidade_atual = st.number_input(
         nome,
@@ -596,15 +580,10 @@ for nome, material in (
         key=f"quantidade_{nome}",
     )
 
-
-    quantidades_atualizadas[nome] = (
-        quantidade_atual
-    )
+    quantidades_atualizadas[nome] = quantidade_atual
 
 
-st.session_state["quantidades"] = (
-    quantidades_atualizadas
-)
+st.session_state["quantidades"] = quantidades_atualizadas
 
 
 st.divider()
@@ -627,32 +606,14 @@ if st.button(
         quantidades=st.session_state["quantidades"],
     )
 
-
     st.session_state["projeto"] = resultado
 
-    st.session_state["nome_projeto"] = (
-        nome_projeto
-    )
-
-    st.session_state["cliente"] = (
-        cliente
-    )
-
-    st.session_state["local_obra"] = (
-        local_obra
-    )
-
-    st.session_state["responsavel"] = (
-        responsavel
-    )
-
-    st.session_state["data_orcamento"] = (
-        data_orcamento
-    )
-
-    st.session_state["observacoes"] = (
-        observacoes
-    )
+    st.session_state["nome_projeto"] = nome_projeto
+    st.session_state["cliente"] = cliente
+    st.session_state["local_obra"] = local_obra
+    st.session_state["responsavel"] = responsavel
+    st.session_state["data_orcamento"] = data_orcamento
+    st.session_state["observacoes"] = observacoes
 
 
 # ============================================================
@@ -715,7 +676,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # RESUMO
+    # RESUMO DO ORÇAMENTO
     # ========================================================
 
     st.subheader(
@@ -779,32 +740,20 @@ if "projeto" in st.session_state:
     tabela_materiais = []
 
 
-    for nome, material in (
-        projeto["materiais"].items()
-    ):
+    for nome, material in projeto["materiais"].items():
 
         tabela_materiais.append(
             {
                 "Material": nome,
-
-                "Unidade": material[
-                    "unidade"
-                ],
-
+                "Unidade": material["unidade"],
                 "Quantidade": (
                     f'{material["quantidade"]:.2f}'
                 ),
-
                 "Preço unitário": formatar_moeda(
-                    material[
-                        "preco_unitario"
-                    ]
+                    material["preco_unitario"]
                 ),
-
                 "Total": formatar_moeda(
-                    material[
-                        "custo"
-                    ]
+                    material["custo"]
                 ),
             }
         )
@@ -854,9 +803,7 @@ if "projeto" in st.session_state:
     )
 
 
-    mao_de_obra = projeto[
-        "mao_de_obra"
-    ]
+    mao_de_obra = projeto["mao_de_obra"]
 
 
     col1, col2, col3 = st.columns(3)
@@ -897,11 +844,9 @@ if "projeto" in st.session_state:
     # OBSERVAÇÕES
     # ========================================================
 
-    observacoes_salvas = (
-        st.session_state.get(
-            "observacoes",
-            "",
-        )
+    observacoes_salvas = st.session_state.get(
+        "observacoes",
+        "",
     )
 
 
