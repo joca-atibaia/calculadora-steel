@@ -300,10 +300,6 @@ st.markdown(
 
 # ============================================================
 # CABEÇALHO PRINCIPAL
-#
-# IMPORTANTE:
-# O cabeçalho inteiro fica dentro de um único st.markdown().
-# Isso garante que o HTML seja renderizado corretamente.
 # ============================================================
 
 st.markdown(
@@ -709,7 +705,7 @@ if "projeto" in st.session_state:
     tabela_materiais = []
 
 
-    for nome, material in projeto["materiais"].items():
+    for nome, material in projeto["materiais"].items":
 
         tabela_materiais.append(
             {
