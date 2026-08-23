@@ -100,7 +100,7 @@ st.markdown(
     .sf-title {
         color: #6fa8c9 !important;
 
-        font-size: 3.0rem !important;
+        font-size: 3.4rem !important;
 
         line-height: 1.2;
 
@@ -254,7 +254,7 @@ st.markdown(
         }
 
         .sf-title {
-            font-size: 2.2rem !important;
+            font-size: 2.6rem !important;
         }
 
         .sf-description {
@@ -264,6 +264,7 @@ st.markdown(
         .section-title {
             font-size: 1.15rem;
         }
+
     }
 
     </style>
