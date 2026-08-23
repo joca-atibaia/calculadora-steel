@@ -32,23 +32,12 @@ def formatar_moeda(valor):
 
 
 # ============================================================
-# CSS — VISUAL PROFISSIONAL
+# CSS — VISUAL PROFISSIONAL 6C
 # ============================================================
 
 st.markdown(
     """
-    <div class="section-header">
-        <div class="section-title">
-            📐 Dimensões do projeto
-        </div>
-
-        <div class="section-subtitle">
-            Informe as dimensões utilizadas no cálculo.
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+    <style>
 
     /* ======================================================
        BASE
@@ -166,6 +155,7 @@ st.markdown(
 
     .section-header {
         margin-top: 28px;
+
         margin-bottom: 16px;
     }
 
@@ -310,6 +300,10 @@ st.markdown(
             font-size: 0.9rem;
         }
 
+        .section-title {
+            font-size: 1.15rem;
+        }
+
     }
 
     </style>
@@ -368,6 +362,7 @@ st.markdown(
 
 
 col1, col2 = st.columns(2)
+
 
 with col1:
 
@@ -434,6 +429,7 @@ st.markdown(
 
 col1, col2, col3 = st.columns(3)
 
+
 with col1:
 
     comprimento = st.number_input(
@@ -492,17 +488,13 @@ st.markdown(
 
 if "precos" not in st.session_state:
 
-    st.session_state["precos"] = (
-        PRECOS_BASE.copy()
-    )
+    st.session_state["precos"] = PRECOS_BASE.copy()
 
 
 precos_atualizados = {}
 
 
-for nome, preco_padrao in (
-    st.session_state["precos"].items()
-):
+for nome, preco_padrao in st.session_state["precos"].items():
 
     preco_atual = st.number_input(
         nome,
@@ -567,9 +559,8 @@ quantidades_atualizadas = {}
 
 for nome, material in previa["materiais"].items():
 
-    quantidade_automatica = material[
-        "quantidade"
-    ]
+    quantidade_automatica = material["quantidade"]
+
 
     if nome not in st.session_state["quantidades"]:
 
@@ -590,14 +581,10 @@ for nome, material in previa["materiais"].items():
     )
 
 
-    quantidades_atualizadas[nome] = (
-        quantidade_atual
-    )
+    quantidades_atualizadas[nome] = quantidade_atual
 
 
-st.session_state["quantidades"] = (
-    quantidades_atualizadas
-)
+st.session_state["quantidades"] = quantidades_atualizadas
 
 
 st.divider()
@@ -623,29 +610,17 @@ if st.button(
 
     st.session_state["projeto"] = resultado
 
-    st.session_state["nome_projeto"] = (
-        nome_projeto
-    )
+    st.session_state["nome_projeto"] = nome_projeto
 
-    st.session_state["cliente"] = (
-        cliente
-    )
+    st.session_state["cliente"] = cliente
 
-    st.session_state["local_obra"] = (
-        local_obra
-    )
+    st.session_state["local_obra"] = local_obra
 
-    st.session_state["responsavel"] = (
-        responsavel
-    )
+    st.session_state["responsavel"] = responsavel
 
-    st.session_state["data_orcamento"] = (
-        data_orcamento
-    )
+    st.session_state["data_orcamento"] = data_orcamento
 
-    st.session_state["observacoes"] = (
-        observacoes
-    )
+    st.session_state["observacoes"] = observacoes
 
 
 # ============================================================
@@ -770,9 +745,7 @@ if "projeto" in st.session_state:
     tabela_materiais = []
 
 
-    for nome, material in (
-        projeto["materiais"].items()
-    ):
+    for nome, material in projeto["materiais"].items():
 
         tabela_materiais.append(
             {
@@ -833,9 +806,7 @@ if "projeto" in st.session_state:
     )
 
 
-    mao_de_obra = projeto[
-        "mao_de_obra"
-    ]
+    mao_de_obra = projeto["mao_de_obra"]
 
 
     col1, col2, col3 = st.columns(3)
