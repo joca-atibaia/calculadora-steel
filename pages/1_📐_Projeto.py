@@ -7,7 +7,7 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
@@ -30,20 +30,8 @@ def formatar_moeda(valor):
     )
 
 
-def cabecalho_secao(titulo, subtitulo=""):
-    st.markdown(
-        f"""
-        <div class="section-header">
-            <div class="section-title">{titulo}</div>
-            <div class="section-subtitle">{subtitulo}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 # ============================================================
-# CSS — VISUAL PROFISSIONAL 6C
+# CSS
 # ============================================================
 
 st.markdown(
@@ -82,7 +70,7 @@ st.markdown(
     }
 
     /* ======================================================
-       HERO
+       CABEÇALHO
        ====================================================== */
 
     .hero {
@@ -123,9 +111,15 @@ st.markdown(
 
     .hero-badge {
         display: inline-block;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.22);
+
+        background:
+            rgba(255, 255, 255, 0.12);
+
+        border:
+            1px solid rgba(255, 255, 255, 0.22);
+
         border-radius: 999px;
+
         padding: 7px 14px;
 
         font-size: 0.75rem;
@@ -136,7 +130,7 @@ st.markdown(
     }
 
     /* ======================================================
-       TÍTULOS DAS SEÇÕES
+       SEÇÕES
        ====================================================== */
 
     .section-header {
@@ -160,28 +154,17 @@ st.markdown(
     }
 
     /* ======================================================
-       CARDS
-       ====================================================== */
-
-    .info-card {
-        background: #ffffff;
-        border: 1px solid #e1e6eb;
-        border-radius: 14px;
-        padding: 18px 20px;
-        margin-bottom: 14px;
-
-        box-shadow:
-            0 3px 12px rgba(0, 0, 0, 0.04);
-    }
-
-    /* ======================================================
        MÉTRICAS
        ====================================================== */
 
     div[data-testid="stMetric"] {
         background: #ffffff;
-        border: 1px solid #e1e6eb;
+
+        border:
+            1px solid #e1e6eb;
+
         border-radius: 14px;
+
         padding: 15px;
 
         box-shadow:
@@ -262,6 +245,7 @@ st.markdown(
         .section-title {
             font-size: 1.15rem;
         }
+
     }
 
     </style>
@@ -272,6 +256,9 @@ st.markdown(
 
 # ============================================================
 # CABEÇALHO PRINCIPAL
+#
+# IMPORTANTE:
+# O HTML está dentro de st.markdown e NÃO é exibido como código.
 # ============================================================
 
 st.markdown(
@@ -301,9 +288,21 @@ st.markdown(
 # IDENTIFICAÇÃO DO PROJETO
 # ============================================================
 
-cabecalho_secao(
-    "📋 Identificação do projeto",
-    "Informe os dados principais do orçamento.",
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📋 Identificação do projeto
+        </div>
+
+        <div class="section-subtitle">
+            Informe os dados principais do orçamento.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -315,13 +314,11 @@ with col1:
     nome_projeto = st.text_input(
         "Nome do projeto",
         placeholder="Ex.: Residência Atibaia",
-        key="nome_projeto_input",
     )
 
     cliente = st.text_input(
         "Cliente",
         placeholder="Nome do cliente",
-        key="cliente_input",
     )
 
 
@@ -330,27 +327,23 @@ with col2:
     local_obra = st.text_input(
         "Local da obra",
         placeholder="Ex.: Atibaia - SP",
-        key="local_obra_input",
     )
 
     responsavel = st.text_input(
         "Responsável pelo orçamento",
         placeholder="Nome do profissional",
-        key="responsavel_input",
     )
 
 
 data_orcamento = st.date_input(
     "Data do orçamento",
     value=date.today(),
-    key="data_orcamento_input",
 )
 
 
 observacoes = st.text_area(
     "Observações",
     placeholder="Informações adicionais sobre o orçamento...",
-    key="observacoes_input",
 )
 
 
@@ -358,12 +351,24 @@ st.divider()
 
 
 # ============================================================
-# DIMENSÕES DO PROJETO
+# DIMENSÕES
 # ============================================================
 
-cabecalho_secao(
-    "📐 Dimensões do projeto",
-    "Informe as dimensões utilizadas no cálculo.",
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📐 Dimensões do projeto
+        </div>
+
+        <div class="section-subtitle">
+            Informe as dimensões utilizadas no cálculo.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -378,7 +383,6 @@ with col1:
         value=30.00,
         step=0.10,
         format="%.2f",
-        key="comprimento",
     )
 
 
@@ -390,7 +394,6 @@ with col2:
         value=3.00,
         step=0.10,
         format="%.2f",
-        key="altura",
     )
 
 
@@ -411,9 +414,22 @@ st.divider()
 # PREÇOS DOS MATERIAIS
 # ============================================================
 
-cabecalho_secao(
-    "💰 Preços dos materiais",
-    "Altere os preços conforme fornecedor, região ou condição de compra.",
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            💰 Preços dos materiais
+        </div>
+
+        <div class="section-subtitle">
+            Altere os preços conforme fornecedor, região
+            ou condição de compra.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -427,15 +443,14 @@ precos_atualizados = {}
 
 for nome, preco_padrao in PRECOS_BASE.items():
 
-    if nome not in st.session_state["precos"]:
-
-        st.session_state["precos"][nome] = preco_padrao
-
     preco_atual = st.number_input(
         nome,
         min_value=0.00,
         value=float(
-            st.session_state["precos"][nome]
+            st.session_state["precos"].get(
+                nome,
+                preco_padrao,
+            )
         ),
         step=0.01,
         format="%.2f",
@@ -463,13 +478,26 @@ previa = calcular_projeto(
 
 
 # ============================================================
-# QUANTIDADES DOS MATERIAIS
+# QUANTIDADES
 # ============================================================
 
-cabecalho_secao(
-    "📦 Quantidades dos materiais",
-    "As quantidades são calculadas automaticamente. "
-    "Você pode alterar qualquer quantidade conforme a necessidade da obra.",
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📦 Quantidades dos materiais
+        </div>
+
+        <div class="section-subtitle">
+            As quantidades são calculadas automaticamente.
+            Você pode alterar qualquer quantidade conforme
+            a necessidade da obra.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -487,11 +515,13 @@ for nome, material in previa["materiais"].items():
         material["quantidade"]
     )
 
+
     if nome not in st.session_state["quantidades"]:
 
         st.session_state["quantidades"][nome] = (
             quantidade_automatica
         )
+
 
     quantidade_atual = st.number_input(
         nome,
@@ -504,10 +534,15 @@ for nome, material in previa["materiais"].items():
         key=f"quantidade_{nome}",
     )
 
-    quantidades_atualizadas[nome] = quantidade_atual
+
+    quantidades_atualizadas[nome] = (
+        quantidade_atual
+    )
 
 
-st.session_state["quantidades"] = quantidades_atualizadas
+st.session_state["quantidades"] = (
+    quantidades_atualizadas
+)
 
 
 st.divider()
@@ -530,14 +565,32 @@ if st.button(
         quantidades=st.session_state["quantidades"],
     )
 
+
     st.session_state["projeto"] = resultado
 
-    st.session_state["nome_projeto"] = nome_projeto
-    st.session_state["cliente"] = cliente
-    st.session_state["local_obra"] = local_obra
-    st.session_state["responsavel"] = responsavel
-    st.session_state["data_orcamento"] = data_orcamento
-    st.session_state["observacoes"] = observacoes
+    st.session_state["nome_projeto"] = (
+        nome_projeto
+    )
+
+    st.session_state["cliente"] = (
+        cliente
+    )
+
+    st.session_state["local_obra"] = (
+        local_obra
+    )
+
+    st.session_state["responsavel"] = (
+        responsavel
+    )
+
+    st.session_state["data_orcamento"] = (
+        data_orcamento
+    )
+
+    st.session_state["observacoes"] = (
+        observacoes
+    )
 
 
 # ============================================================
@@ -550,19 +603,11 @@ if "projeto" in st.session_state:
 
     st.divider()
 
-
-    # ========================================================
-    # CABEÇALHO DO RESULTADO
-    # ========================================================
-
-    cabecalho_secao(
-        "📊 Orçamento",
-        "Resultado calculado para o projeto.",
-    )
+    st.markdown("## 📊 Orçamento")
 
 
     # ========================================================
-    # IDENTIFICAÇÃO DO ORÇAMENTO
+    # IDENTIFICAÇÃO
     # ========================================================
 
     col1, col2 = st.columns(2)
@@ -595,7 +640,7 @@ if "projeto" in st.session_state:
 
         data_salva = st.session_state.get(
             "data_orcamento",
-            date.today(),
+            data_orcamento,
         )
 
         st.write(
@@ -608,7 +653,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # RESUMO DO ORÇAMENTO
+    # RESUMO
     # ========================================================
 
     st.subheader(
@@ -661,7 +706,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # QUANTITATIVO DE MATERIAIS
+    # QUANTITATIVO
     # ========================================================
 
     st.subheader(
@@ -672,7 +717,9 @@ if "projeto" in st.session_state:
     tabela_materiais = []
 
 
-    for nome, material in projeto["materiais"].items():
+    for nome, material in (
+        projeto["materiais"].items()
+    ):
 
         tabela_materiais.append(
             {
