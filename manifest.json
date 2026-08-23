@@ -1,0 +1,17 @@
+{
+  "name": "Calculadora Steel Framing",
+  "short_name": "CalcSteel",
+  "start_url": "https://streamlit.app",
+  "display": "standalone",
+  "background_color": "#17202a",
+  "theme_color": "#17202a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://flaticon.com",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
