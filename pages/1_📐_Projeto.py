@@ -9,6 +9,7 @@ from core.calculos import (
     calcular_projeto,
     calcular_indicadores_projeto,
 )
+
 from core.dados import (
     PRECOS_BASE,
     MATERIAIS,
@@ -17,7 +18,7 @@ from core.dados import (
 
 
 # ============================================================
-# CONFIGURAÇÃO
+# CONFIGURAÇÃO DA PÁGINA
 # ============================================================
 
 st.set_page_config(
@@ -41,9 +42,8 @@ st.markdown(
 
     html,
     body,
-    [data-testid="stAppViewContainer"],
-    [data-testid="stAppViewContainer"] *,
-    .stApp {
+    .stApp,
+    [data-testid="stAppViewContainer"] {
         font-family:
             "Inter",
             "Segoe UI",
@@ -63,9 +63,9 @@ st.markdown(
         padding-bottom: 4rem;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        HERO
-       -------------------------------------------------------- */
+       ======================================================== */
 
     .hero {
         background:
@@ -123,9 +123,9 @@ st.markdown(
         color: #ffffff;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        SEÇÕES
-       -------------------------------------------------------- */
+       ======================================================== */
 
     .section-header {
         margin-top: 28px;
@@ -147,9 +147,9 @@ st.markdown(
         line-height: 1.5;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        CARDS
-       -------------------------------------------------------- */
+       ======================================================== */
 
     .info-card {
         background: #ffffff;
@@ -190,9 +190,9 @@ st.markdown(
         line-height: 1.45;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        MÉTRICAS
-       -------------------------------------------------------- */
+       ======================================================== */
 
     .metric-card {
         background: #ffffff;
@@ -230,9 +230,9 @@ st.markdown(
         line-height: 1.2;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        TOTAL
-       -------------------------------------------------------- */
+       ======================================================== */
 
     .total-card {
         background:
@@ -275,9 +275,9 @@ st.markdown(
         margin-top: 5px;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        AVISO
-       -------------------------------------------------------- */
+       ======================================================== */
 
     .notice-card {
         background: #ffffff;
@@ -298,9 +298,9 @@ st.markdown(
         line-height: 1.6;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        INPUTS
-       -------------------------------------------------------- */
+       ======================================================== */
 
     .stTextInput label,
     .stNumberInput label,
@@ -326,21 +326,19 @@ st.markdown(
             sans-serif !important;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        BOTÕES
-       -------------------------------------------------------- */
+       ======================================================== */
 
     .stButton > button {
         border-radius: 9px;
-
         font-weight: 700;
-
         min-height: 42px;
     }
 
-    /* --------------------------------------------------------
+    /* ========================================================
        DATAFRAME
-       -------------------------------------------------------- */
+       ======================================================== */
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
@@ -358,24 +356,22 @@ st.markdown(
 # ============================================================
 
 def numero(valor, padrao=0.0):
-    """
-    Converte qualquer valor numérico com segurança.
-    """
+    """Converte qualquer valor para float com segurança."""
 
     try:
+
         if valor is None:
             return float(padrao)
 
         return float(valor)
 
     except (TypeError, ValueError):
+
         return float(padrao)
 
 
 def formatar_moeda(valor):
-    """
-    Formata número no padrão brasileiro.
-    """
+    """Formata valor no padrão brasileiro."""
 
     valor = numero(valor)
 
@@ -387,25 +383,24 @@ def formatar_moeda(valor):
     )
 
 
-def obter_valor(dicionario, chave, padrao=0):
-    """
-    Obtém valor de dicionário com segurança.
-    """
+def obter_mao_de_obra(projeto):
+    """Retorna o dicionário de mão de obra com segurança."""
 
-    if not isinstance(dicionario, dict):
-        return padrao
+    mao = projeto.get(
+        "mao_de_obra",
+        {},
+    )
 
-    valor = dicionario.get(chave, padrao)
+    if not isinstance(mao, dict):
+        return {}
 
-    if valor is None:
-        return padrao
-
-    return valor
+    return mao
 
 
 def inicializar_estado():
     """
-    Inicializa os estados da aplicação.
+    Inicializa somente estados permanentes.
+    Os widgets possuem suas próprias keys.
     """
 
     defaults = {
@@ -426,7 +421,7 @@ def inicializar_estado():
 
         "condicao_pagamento": "",
 
-        "forma_pagamento": "",
+        "forma_pagamento": "Pix",
 
         "observacoes_comerciais": "",
 
@@ -442,7 +437,8 @@ def inicializar_estado():
                 755.00,
             ),
 
-        "precos": PRECOS_BASE.copy(),
+        "precos":
+            PRECOS_BASE.copy(),
 
         "quantidades": {},
 
@@ -454,6 +450,7 @@ def inicializar_estado():
     for chave, valor in defaults.items():
 
         if chave not in st.session_state:
+
             st.session_state[chave] = valor
 
 
@@ -470,10 +467,7 @@ def gerar_pdf(projeto):
 
         from reportlab.lib import colors
 
-        from reportlab.lib.enums import (
-            TA_CENTER,
-            TA_RIGHT,
-        )
+        from reportlab.lib.enums import TA_CENTER, TA_RIGHT
 
         from reportlab.lib.pagesizes import A4
 
@@ -503,6 +497,7 @@ def gerar_pdf(projeto):
     buffer = BytesIO()
 
     doc = SimpleDocTemplate(
+
         buffer,
 
         pagesize=A4,
@@ -529,82 +524,57 @@ def gerar_pdf(projeto):
     titulo = ParagraphStyle(
         "TituloSteel",
         parent=styles["Title"],
-
         fontName="Helvetica-Bold",
-
         fontSize=19,
-
         alignment=TA_CENTER,
-
-        textColor=
-            colors.HexColor(
-                "#263746"
-            ),
-
+        textColor=colors.HexColor("#263746"),
         spaceAfter=5,
     )
 
     subtitulo = ParagraphStyle(
         "SubtituloSteel",
         parent=styles["Normal"],
-
         fontSize=9,
-
         alignment=TA_CENTER,
-
         textColor=colors.grey,
-
         spaceAfter=15,
     )
 
     secao = ParagraphStyle(
         "SecaoSteel",
         parent=styles["Heading2"],
-
         fontName="Helvetica-Bold",
-
         fontSize=12,
-
-        textColor=
-            colors.HexColor(
-                "#263746"
-            ),
-
+        textColor=colors.HexColor("#263746"),
         spaceBefore=10,
-
         spaceAfter=8,
     )
 
     normal = ParagraphStyle(
         "NormalSteel",
         parent=styles["Normal"],
-
         fontSize=9,
-
         leading=12,
     )
 
     direita = ParagraphStyle(
         "DireitaSteel",
         parent=normal,
-
         alignment=TA_RIGHT,
     )
 
     pequeno = ParagraphStyle(
         "PequenoSteel",
         parent=normal,
-
         fontSize=8,
-
         leading=10,
     )
 
     elementos = []
 
-    # --------------------------------------------------------
+    # ========================================================
     # CABEÇALHO
-    # --------------------------------------------------------
+    # ========================================================
 
     elementos.append(
         Paragraph(
@@ -620,9 +590,9 @@ def gerar_pdf(projeto):
         )
     )
 
-    # --------------------------------------------------------
+    # ========================================================
     # DADOS
-    # --------------------------------------------------------
+    # ========================================================
 
     elementos.append(
         Paragraph(
@@ -662,6 +632,7 @@ def gerar_pdf(projeto):
     )
 
     dados = [
+
         [
             Paragraph(
                 f"<b>Projeto:</b><br/>"
@@ -772,9 +743,9 @@ def gerar_pdf(projeto):
 
     elementos.append(tabela)
 
-    # --------------------------------------------------------
+    # ========================================================
     # RESUMO
-    # --------------------------------------------------------
+    # ========================================================
 
     elementos.append(
         Paragraph(
@@ -784,8 +755,13 @@ def gerar_pdf(projeto):
     )
 
     resumo = [
+
         [
-            Paragraph("Área", normal),
+            Paragraph(
+                "Área",
+                normal,
+            ),
+
             Paragraph(
                 f"{numero(projeto.get('area')):.2f} m²",
                 direita,
@@ -793,7 +769,11 @@ def gerar_pdf(projeto):
         ],
 
         [
-            Paragraph("Comprimento", normal),
+            Paragraph(
+                "Comprimento",
+                normal,
+            ),
+
             Paragraph(
                 f"{numero(projeto.get('comprimento')):.2f} m",
                 direita,
@@ -801,7 +781,11 @@ def gerar_pdf(projeto):
         ],
 
         [
-            Paragraph("Altura", normal),
+            Paragraph(
+                "Altura",
+                normal,
+            ),
+
             Paragraph(
                 f"{numero(projeto.get('altura')):.2f} m",
                 direita,
@@ -848,9 +832,9 @@ def gerar_pdf(projeto):
 
     elementos.append(tabela)
 
-    # --------------------------------------------------------
+    # ========================================================
     # MATERIAIS
-    # --------------------------------------------------------
+    # ========================================================
 
     elementos.append(
         Paragraph(
@@ -990,9 +974,9 @@ def gerar_pdf(projeto):
 
     elementos.append(tabela)
 
-    # --------------------------------------------------------
+    # ========================================================
     # FINANCEIRO
-    # --------------------------------------------------------
+    # ========================================================
 
     elementos.append(
         Paragraph(
@@ -1016,21 +1000,12 @@ def gerar_pdf(projeto):
     )
 
     mao_obra = numero(
-        projeto.get(
-            "mao_de_obra",
-            {},
+        obter_mao_de_obra(
+            projeto
         ).get(
             "custo",
             0,
         )
-        if isinstance(
-            projeto.get(
-                "mao_de_obra",
-                {},
-            ),
-            dict,
-        )
-        else 0
     )
 
     total = numero(
@@ -1041,6 +1016,7 @@ def gerar_pdf(projeto):
     )
 
     financeiro = [
+
         [
             "Materiais",
             formatar_moeda(subtotal),
@@ -1108,9 +1084,9 @@ def gerar_pdf(projeto):
 
     elementos.append(tabela)
 
-    # --------------------------------------------------------
+    # ========================================================
     # OBSERVAÇÕES
-    # --------------------------------------------------------
+    # ========================================================
 
     elementos.append(
         Paragraph(
@@ -1128,16 +1104,19 @@ def gerar_pdf(projeto):
         "Nenhuma observação técnica informada."
     )
 
+    observacoes_pdf = escape(
+        observacoes
+    ).replace(
+        "\n",
+        "<br/>",
+    )
+
     elementos.append(
         Paragraph(
-            escape(observacoes),
+            observacoes_pdf,
             normal,
         )
     )
-
-    # --------------------------------------------------------
-    # ASSINATURA
-    # --------------------------------------------------------
 
     elementos.append(
         Spacer(
@@ -1204,7 +1183,6 @@ def gerar_excel(projeto):
     wb = Workbook()
 
     ws = wb.active
-
     ws.title = "Resumo"
 
     ws_mat = wb.create_sheet(
@@ -1219,18 +1197,12 @@ def gerar_excel(projeto):
         "Dados"
     )
 
-    # --------------------------------------------------------
+    # ========================================================
     # ESTILOS
-    # --------------------------------------------------------
+    # ========================================================
 
     azul = "263746"
-
-    verde = "176B35"
-
-    verde_claro = "ECFDF3"
-
     branco = "FFFFFF"
-
     cinza = "E1E6EB"
 
     border = Border(
@@ -1255,17 +1227,13 @@ def gerar_excel(projeto):
         ),
     )
 
-    moeda = (
-        'R$ #,##0.00'
-    )
+    moeda = "R$ #,##0.00"
 
-    # --------------------------------------------------------
+    # ========================================================
     # RESUMO
-    # --------------------------------------------------------
+    # ========================================================
 
-    ws["A1"] = (
-        "ORÇAMENTO STEEL FRAMING"
-    )
+    ws["A1"] = "ORÇAMENTO STEEL FRAMING"
 
     ws["A1"].font = Font(
         bold=True,
@@ -1278,8 +1246,10 @@ def gerar_excel(projeto):
         fgColor=azul,
     )
 
-    ws.merge_cells(
-        "A1:B1"
+    ws.merge_cells("A1:B1")
+
+    mao_obra = obter_mao_de_obra(
+        projeto
     )
 
     resumo = [
@@ -1359,21 +1329,10 @@ def gerar_excel(projeto):
         (
             "Mão de obra",
             numero(
-                projeto.get(
-                    "mao_de_obra",
-                    {},
-                ).get(
+                mao_obra.get(
                     "custo",
                     0,
                 )
-                if isinstance(
-                    projeto.get(
-                        "mao_de_obra",
-                        {},
-                    ),
-                    dict,
-                )
-                else 0
             ),
         ),
 
@@ -1426,9 +1385,9 @@ def gerar_excel(projeto):
 
         linha += 1
 
-    # --------------------------------------------------------
+    # ========================================================
     # MATERIAIS
-    # --------------------------------------------------------
+    # ========================================================
 
     ws_mat.append(
         [
@@ -1530,40 +1489,42 @@ def gerar_excel(projeto):
 
         linha_mat += 1
 
-    ws_mat.cell(
-        linha_mat,
-        4,
-        "TOTAL",
-    )
+    if linha_mat > 2:
 
-    ws_mat.cell(
-        linha_mat,
-        5,
-        f"=SUM(E2:E{linha_mat-1})",
-    )
+        ws_mat.cell(
+            linha_mat,
+            4,
+            "TOTAL",
+        )
 
-    ws_mat.cell(
-        linha_mat,
-        4,
-    ).font = Font(
-        bold=True
-    )
+        ws_mat.cell(
+            linha_mat,
+            5,
+            f"=SUM(E2:E{linha_mat-1})",
+        )
 
-    ws_mat.cell(
-        linha_mat,
-        5,
-    ).font = Font(
-        bold=True
-    )
+        ws_mat.cell(
+            linha_mat,
+            4,
+        ).font = Font(
+            bold=True
+        )
 
-    ws_mat.cell(
-        linha_mat,
-        5,
-    ).number_format = moeda
+        ws_mat.cell(
+            linha_mat,
+            5,
+        ).font = Font(
+            bold=True
+        )
 
-    # --------------------------------------------------------
+        ws_mat.cell(
+            linha_mat,
+            5,
+        ).number_format = moeda
+
+    # ========================================================
     # MÃO DE OBRA
-    # --------------------------------------------------------
+    # ========================================================
 
     ws_mo.append(
         [
@@ -1588,21 +1549,11 @@ def gerar_excel(projeto):
 
         cell.border = border
 
-    mao_obra = projeto.get(
-        "mao_de_obra",
-        {},
-    )
-
     dias = numero(
         mao_obra.get(
             "dias",
             0,
         )
-        if isinstance(
-            mao_obra,
-            dict,
-        )
-        else 0
     )
 
     diaria = numero(
@@ -1610,11 +1561,6 @@ def gerar_excel(projeto):
             "diaria",
             0,
         )
-        if isinstance(
-            mao_obra,
-            dict,
-        )
-        else 0
     )
 
     ws_mo.append(
@@ -1627,16 +1573,14 @@ def gerar_excel(projeto):
     )
 
     for cell in ws_mo[2]:
-
         cell.border = border
 
     ws_mo["C2"].number_format = moeda
-
     ws_mo["D2"].number_format = moeda
 
-    # --------------------------------------------------------
+    # ========================================================
     # DADOS
-    # --------------------------------------------------------
+    # ========================================================
 
     ws_dados.append(
         [
@@ -1748,14 +1692,13 @@ def gerar_excel(projeto):
     ]
 
     for item in dados:
-
         ws_dados.append(
             list(item)
         )
 
-    # --------------------------------------------------------
+    # ========================================================
     # FORMATAÇÃO
-    # --------------------------------------------------------
+    # ========================================================
 
     for planilha in [
         ws,
@@ -1775,75 +1718,38 @@ def gerar_excel(projeto):
                     wrap_text=True,
                 )
 
-    # --------------------------------------------------------
+    # ========================================================
     # LARGURAS
-    # --------------------------------------------------------
+    # ========================================================
 
-    ws.column_dimensions[
-        "A"
-    ].width = 32
+    ws.column_dimensions["A"].width = 32
+    ws.column_dimensions["B"].width = 28
 
-    ws.column_dimensions[
-        "B"
-    ].width = 28
+    ws_mat.column_dimensions["A"].width = 34
+    ws_mat.column_dimensions["B"].width = 14
+    ws_mat.column_dimensions["C"].width = 16
+    ws_mat.column_dimensions["D"].width = 18
+    ws_mat.column_dimensions["E"].width = 20
 
-    ws_mat.column_dimensions[
-        "A"
-    ].width = 34
+    ws_mo.column_dimensions["A"].width = 30
+    ws_mo.column_dimensions["B"].width = 18
+    ws_mo.column_dimensions["C"].width = 20
+    ws_mo.column_dimensions["D"].width = 20
 
-    ws_mat.column_dimensions[
-        "B"
-    ].width = 14
+    ws_dados.column_dimensions["A"].width = 30
+    ws_dados.column_dimensions["B"].width = 70
 
-    ws_mat.column_dimensions[
-        "C"
-    ].width = 16
-
-    ws_mat.column_dimensions[
-        "D"
-    ].width = 18
-
-    ws_mat.column_dimensions[
-        "E"
-    ].width = 20
-
-    ws_mo.column_dimensions[
-        "A"
-    ].width = 30
-
-    ws_mo.column_dimensions[
-        "B"
-    ].width = 18
-
-    ws_mo.column_dimensions[
-        "C"
-    ].width = 20
-
-    ws_mo.column_dimensions[
-        "D"
-    ].width = 20
-
-    ws_dados.column_dimensions[
-        "A"
-    ].width = 30
-
-    ws_dados.column_dimensions[
-        "B"
-    ].width = 70
-
-    # --------------------------------------------------------
+    # ========================================================
     # FREEZE
-    # --------------------------------------------------------
+    # ========================================================
 
     ws_mat.freeze_panes = "A2"
-
     ws_mo.freeze_panes = "A2"
-
     ws_dados.freeze_panes = "A2"
 
-    # --------------------------------------------------------
+    # ========================================================
     # SALVAR
-    # --------------------------------------------------------
+    # ========================================================
 
     buffer = BytesIO()
 
@@ -1855,7 +1761,7 @@ def gerar_excel(projeto):
 
 
 # ============================================================
-# HERO
+# HERO PRINCIPAL
 # ============================================================
 
 st.markdown(
@@ -1882,7 +1788,7 @@ st.markdown(
 
 
 # ============================================================
-# IDENTIFICAÇÃO
+# IDENTIFICAÇÃO DO PROJETO
 # ============================================================
 
 st.markdown(
@@ -1908,53 +1814,35 @@ with col1:
 
     nome_projeto = st.text_input(
         "Nome do projeto",
-
-        placeholder=
-            "Ex.: Residência Atibaia",
-
-        key="nome_projeto_input",
+        placeholder="Ex.: Residência Atibaia",
+        key="nome_projeto_widget",
     )
 
     cliente = st.text_input(
         "Cliente",
-
-        placeholder=
-            "Nome do cliente",
-
-        key="cliente_input",
+        placeholder="Nome do cliente",
+        key="cliente_widget",
     )
 
 with col2:
 
     local_obra = st.text_input(
         "Local da obra",
-
-        placeholder=
-            "Ex.: Atibaia - SP",
-
-        key="local_obra_input",
+        placeholder="Ex.: Atibaia - SP",
+        key="local_obra_widget",
     )
 
     responsavel = st.text_input(
         "Responsável pelo orçamento",
-
-        placeholder=
-            "Nome do profissional",
-
-        key="responsavel_input",
+        placeholder="Nome do profissional",
+        key="responsavel_widget",
     )
 
 
 data_orcamento = st.date_input(
     "Data do orçamento",
-
-    value=
-        st.session_state.get(
-            "data_orcamento",
-            date.today(),
-        ),
-
-    key="data_orcamento_input",
+    value=st.session_state["data_orcamento"],
+    key="data_orcamento_widget",
 )
 
 
@@ -1985,44 +1873,32 @@ with col1:
 
     validade_orcamento = st.number_input(
         "Validade do orçamento (dias)",
-
         min_value=1,
-
         value=int(
-            st.session_state.get(
-                "validade_orcamento",
-                10,
-            )
+            st.session_state[
+                "validade_orcamento"
+            ]
         ),
-
         step=1,
-
-        key="validade_input",
+        key="validade_orcamento_widget",
     )
 
     prazo_execucao = st.text_input(
         "Prazo estimado de execução",
-
-        placeholder=
-            "Ex.: 30 dias úteis",
-
-        key="prazo_input",
+        placeholder="Ex.: 30 dias úteis",
+        key="prazo_execucao_widget",
     )
 
 with col2:
 
     condicao_pagamento = st.text_input(
         "Condição de pagamento",
-
-        placeholder=
-            "Ex.: 50% entrada + 50% entrega",
-
-        key="condicao_input",
+        placeholder="Ex.: 50% entrada + 50% entrega",
+        key="condicao_pagamento_widget",
     )
 
     forma_pagamento = st.selectbox(
         "Forma de pagamento",
-
         [
             "Pix",
             "Transferência bancária",
@@ -2031,18 +1907,17 @@ with col2:
             "Dinheiro",
             "A combinar",
         ],
-
-        key="forma_pagamento_input",
+        key="forma_pagamento_widget",
     )
 
 
 observacoes_comerciais = st.text_area(
     "Inclusões / observações comerciais",
-
-    placeholder=
-        "Informe inclusões, exclusões e demais condições comerciais.",
-
-    key="observacoes_comerciais_input",
+    placeholder=(
+        "Informe inclusões, exclusões e demais "
+        "condições comerciais."
+    ),
+    key="observacoes_comerciais_widget",
 )
 
 
@@ -2073,42 +1948,30 @@ with col1:
 
     comprimento = st.number_input(
         "Comprimento (m)",
-
         min_value=0.01,
-
         value=float(
-            st.session_state.get(
-                "comprimento",
-                30.00,
-            )
+            st.session_state[
+                "comprimento"
+            ]
         ),
-
         step=0.10,
-
         format="%.2f",
-
-        key="comprimento_input",
+        key="comprimento_widget",
     )
 
 with col2:
 
     altura = st.number_input(
         "Altura (m)",
-
         min_value=0.01,
-
         value=float(
-            st.session_state.get(
-                "altura",
-                3.00,
-            )
+            st.session_state[
+                "altura"
+            ]
         ),
-
         step=0.10,
-
         format="%.2f",
-
-        key="altura_input",
+        key="altura_widget",
     )
 
 with col3:
@@ -2137,306 +2000,7 @@ with col3:
 
 
 # ============================================================
-# PREÇOS
-# ============================================================
-
-st.markdown(
-    """
-    <div class="section-header">
-
-        <div class="section-title">
-            💰 Preços dos materiais
-        </div>
-
-        <div class="section-subtitle">
-            Os preços padrão podem ser alterados conforme
-            fornecedor, região ou condição de compra.
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-precos_atualizados = {}
-
-colunas_precos = st.columns(3)
-
-for indice, (
-    nome,
-    preco_padrao,
-) in enumerate(
-    PRECOS_BASE.items()
-):
-
-    with colunas_precos[
-        indice % 3
-    ]:
-
-        preco = st.number_input(
-            nome,
-
-            min_value=0.00,
-
-            value=float(
-                st.session_state[
-                    "precos"
-                ].get(
-                    nome,
-                    preco_padrao,
-                )
-            ),
-
-            step=0.01,
-
-            format="%.2f",
-
-            key=f"preco_{nome}",
-        )
-
-        precos_atualizados[
-            nome
-        ] = preco
-
-
-st.session_state[
-    "precos"
-] = precos_atualizados
-
-
-# ============================================================
-# PRÉ-CÁLCULO
-# ============================================================
-
-try:
-
-    previa = calcular_projeto(
-
-        comprimento=comprimento,
-
-        altura=altura,
-
-        precos=
-            st.session_state[
-                "precos"
-            ],
-
-    )
-
-except Exception as erro:
-
-    st.error(
-        f"Erro no cálculo inicial: {erro}"
-    )
-
-    st.stop()
-
-
-# ============================================================
-# QUANTIDADES
-# ============================================================
-
-st.markdown(
-    """
-    <div class="section-header">
-
-        <div class="section-title">
-            📦 Quantidades dos materiais
-        </div>
-
-        <div class="section-subtitle">
-            A quantidade automática é calculada pelo sistema.
-            Você pode alterar manualmente qualquer quantidade.
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-st.markdown(
-    """
-    <div class="notice-card">
-        <b>Como funciona:</b><br>
-        A quantidade automática é calculada conforme a área
-        e os coeficientes cadastrados. Se você alterar uma
-        quantidade abaixo, o valor manual passa a ser utilizado
-        no orçamento.
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-quantidades_atualizadas = {}
-
-colunas_quantidades = st.columns(3)
-
-for indice, (
-    nome,
-    material,
-) in enumerate(
-    previa.get(
-        "materiais",
-        {},
-    ).items()
-):
-
-    quantidade_automatica = numero(
-        material.get(
-            "quantidade",
-            0,
-        )
-    )
-
-    if nome not in st.session_state[
-        "quantidades"
-    ]:
-
-        st.session_state[
-            "quantidades"
-        ][nome] = quantidade_automatica
-
-    with colunas_quantidades[
-        indice % 3
-    ]:
-
-        quantidade_atual = st.number_input(
-
-            nome,
-
-            min_value=0.0,
-
-            value=float(
-                st.session_state[
-                    "quantidades"
-                ].get(
-                    nome,
-                    quantidade_automatica,
-                )
-            ),
-
-            step=1.0,
-
-            format="%.2f",
-
-            key=f"quantidade_{nome}",
-        )
-
-        quantidades_atualizadas[
-            nome
-        ] = quantidade_atual
-
-        st.caption(
-            f"Automática: "
-            f"{quantidade_automatica:.2f} "
-            f"{material.get('unidade', '')}"
-        )
-
-
-st.session_state[
-    "quantidades"
-] = quantidades_atualizadas
-
-
-# ============================================================
-# MASSAS E TELAS
-# ============================================================
-
-st.markdown(
-    """
-    <div class="section-header">
-
-        <div class="section-title">
-            🧱 Massas e telas
-        </div>
-
-        <div class="section-subtitle">
-            Este custo é calculado separadamente dos demais materiais.
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-subtotal_previo = numero(
-    previa.get(
-        "subtotal_materiais",
-        0,
-    )
-)
-
-percentual_massas = numero(
-    CONFIGURACAO_PROJETO.get(
-        "percentual_massas_telas",
-        0.05,
-    )
-)
-
-
-massas_automaticas = (
-    subtotal_previo *
-    percentual_massas
-)
-
-
-col1, col2 = st.columns(2)
-
-with col1:
-
-    st.markdown(
-        f"""
-        <div class="metric-card">
-
-            <div class="metric-label">
-                VALOR AUTOMÁTICO
-            </div>
-
-            <div class="metric-value">
-                {formatar_moeda(massas_automaticas)}
-            </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-with col2:
-
-    usar_manual = st.checkbox(
-        "Informar valor manual",
-        value=False,
-        key="usar_massas_manual",
-    )
-
-    if usar_manual:
-
-        valor_massas_telas = st.number_input(
-            "Valor de Massas e Telas",
-
-            min_value=0.00,
-
-            value=float(
-                massas_automaticas
-            ),
-
-            step=10.00,
-
-            format="%.2f",
-
-            key="massas_manual_input",
-        )
-
-    else:
-
-        valor_massas_telas = None
-
-
-# ============================================================
-# MÃO DE OBRA
+# MÃO DE OBRA — CONFIGURAÇÃO ANTES DO PRÉ-CÁLCULO
 # ============================================================
 
 st.markdown(
@@ -2456,53 +2020,48 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
 col1, col2 = st.columns(2)
 
 with col1:
 
     diaria_mao_obra = st.number_input(
         "Diária de mão de obra",
-
         min_value=0.00,
-
         value=float(
-            st.session_state.get(
-                "diaria_mao_obra",
-                CONFIGURACAO_PROJETO.get(
-                    "diaria_mao_de_obra",
-                    755.00,
-                ),
-            )
+            st.session_state[
+                "diaria_mao_obra"
+            ]
         ),
-
         step=10.00,
-
         format="%.2f",
-
-        key="diaria_input",
+        key="diaria_mao_obra_widget",
     )
 
 with col2:
 
-    dias_preview = (
-        (
-            area_preview /
-            numero(
-                CONFIGURACAO_PROJETO.get(
-                    "area_referencia",
-                    30.00,
-                )
-            )
-        )
-        *
-        numero(
-            CONFIGURACAO_PROJETO.get(
-                "dias_mao_de_obra_referencia",
-                10.00,
-            )
-        )
+    area_referencia = numero(
+        CONFIGURACAO_PROJETO.get(
+            "area_referencia",
+            30.00,
+        ),
+        30.00,
     )
+
+    dias_referencia = numero(
+        CONFIGURACAO_PROJETO.get(
+            "dias_mao_de_obra_referencia",
+            10.00,
+        ),
+        10.00,
+    )
+
+    if area_referencia <= 0:
+        area_referencia = 30.00
+
+    dias_preview = (
+        area_preview /
+        area_referencia
+    ) * dias_referencia
 
     custo_mao_preview = (
         dias_preview *
@@ -2536,6 +2095,309 @@ with col2:
 
 
 # ============================================================
+# PREÇOS DOS MATERIAIS
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            💰 Preços dos materiais
+        </div>
+
+        <div class="section-subtitle">
+            Os preços padrão podem ser alterados conforme
+            fornecedor, região ou condição de compra.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+precos_atualizados = {}
+
+colunas_precos = st.columns(3)
+
+for indice, (
+    nome,
+    preco_padrao,
+) in enumerate(
+    PRECOS_BASE.items()
+):
+
+    valor_inicial = numero(
+        st.session_state[
+            "precos"
+        ].get(
+            nome,
+            preco_padrao,
+        ),
+        preco_padrao,
+    )
+
+    with colunas_precos[
+        indice % 3
+    ]:
+
+        preco = st.number_input(
+            nome,
+            min_value=0.00,
+            value=float(
+                valor_inicial
+            ),
+            step=0.01,
+            format="%.2f",
+            key=f"preco_widget_{indice}",
+        )
+
+        precos_atualizados[
+            nome
+        ] = preco
+
+
+# ============================================================
+# PRÉ-CÁLCULO
+# ============================================================
+
+try:
+
+    previa = calcular_projeto(
+
+        comprimento=comprimento,
+
+        altura=altura,
+
+        diaria=diaria_mao_obra,
+
+        precos=precos_atualizados,
+
+    )
+
+except Exception as erro:
+
+    st.error(
+        "Erro no cálculo inicial."
+    )
+
+    st.exception(erro)
+
+    st.stop()
+
+
+# ============================================================
+# QUANTIDADES
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📦 Quantidades dos materiais
+        </div>
+
+        <div class="section-subtitle">
+            A quantidade automática é calculada pelo sistema.
+            Você pode alterar manualmente qualquer quantidade.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <div class="notice-card">
+
+        <b>Como funciona:</b><br>
+
+        A quantidade automática é calculada conforme a área
+        e os coeficientes cadastrados. Se você alterar uma
+        quantidade abaixo, o valor manual passa a ser utilizado
+        no orçamento.
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+quantidades_atualizadas = {}
+
+colunas_quantidades = st.columns(3)
+
+for indice, (
+    nome,
+    material,
+) in enumerate(
+    previa.get(
+        "materiais",
+        {},
+    ).items()
+):
+
+    quantidade_automatica = numero(
+        material.get(
+            "quantidade",
+            0,
+        )
+    )
+
+    if nome not in st.session_state[
+        "quantidades"
+    ]:
+
+        st.session_state[
+            "quantidades"
+        ][nome] = quantidade_automatica
+
+    quantidade_salva = numero(
+        st.session_state[
+            "quantidades"
+        ].get(
+            nome,
+            quantidade_automatica,
+        ),
+        quantidade_automatica,
+    )
+
+    with colunas_quantidades[
+        indice % 3
+    ]:
+
+        quantidade_atual = st.number_input(
+
+            nome,
+
+            min_value=0.0,
+
+            value=float(
+                quantidade_salva
+            ),
+
+            step=1.0,
+
+            format="%.2f",
+
+            key=f"quantidade_widget_{indice}",
+
+        )
+
+        quantidades_atualizadas[
+            nome
+        ] = quantidade_atual
+
+        st.caption(
+            f"Automática: "
+            f"{quantidade_automatica:.2f} "
+            f"{material.get('unidade', '')}"
+        )
+
+
+# ============================================================
+# MASSAS E TELAS
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            🧱 Massas e telas
+        </div>
+
+        <div class="section-subtitle">
+            Este custo é calculado separadamente dos demais materiais.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+subtotal_previo = numero(
+    previa.get(
+        "subtotal_materiais",
+        0,
+    )
+)
+
+percentual_massas = numero(
+    CONFIGURACAO_PROJETO.get(
+        "percentual_massas_telas",
+        0.05,
+    ),
+    0.05,
+)
+
+massas_automaticas = (
+    subtotal_previo *
+    percentual_massas
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    st.markdown(
+        f"""
+        <div class="metric-card">
+
+            <div class="metric-label">
+                VALOR AUTOMÁTICO
+            </div>
+
+            <div class="metric-value">
+                {formatar_moeda(massas_automaticas)}
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with col2:
+
+    usar_manual = st.checkbox(
+        "Informar valor manual",
+        value=(
+            st.session_state[
+                "massas_telas_manual"
+            ] is not None
+        ),
+        key="usar_massas_manual_widget",
+    )
+
+    if usar_manual:
+
+        valor_padrao_massas = (
+            st.session_state[
+                "massas_telas_manual"
+            ]
+        )
+
+        if valor_padrao_massas is None:
+            valor_padrao_massas = massas_automaticas
+
+        valor_massas_telas = st.number_input(
+            "Valor de Massas e Telas",
+            min_value=0.00,
+            value=float(
+                valor_padrao_massas
+            ),
+            step=10.00,
+            format="%.2f",
+            key="massas_manual_widget",
+        )
+
+    else:
+
+        valor_massas_telas = None
+
+
+# ============================================================
 # OBSERVAÇÕES TÉCNICAS
 # ============================================================
 
@@ -2547,7 +2409,7 @@ observacoes_tecnicas = st.text_area(
         "antes da fabricação."
     ),
 
-    key="observacoes_tecnicas_input",
+    key="observacoes_tecnicas_widget",
 )
 
 
@@ -2560,14 +2422,19 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
-if st.button(
+calcular = st.button(
     "🧮 CALCULAR / ATUALIZAR ORÇAMENTO",
-
     type="primary",
-
     width="stretch",
-):
+    key="calcular_orcamento",
+)
+
+
+# ============================================================
+# EXECUTA CÁLCULO
+# ============================================================
+
+if calcular:
 
     try:
 
@@ -2579,55 +2446,36 @@ if st.button(
 
             diaria=diaria_mao_obra,
 
-            precos=
-                st.session_state[
-                    "precos"
-                ],
+            precos=precos_atualizados,
 
-            quantidades=
-                st.session_state[
-                    "quantidades"
-                ],
+            quantidades=quantidades_atualizadas,
 
-            valor_massas_telas=
-                valor_massas_telas,
+            valor_massas_telas=valor_massas_telas,
+
         )
 
     except Exception as erro:
 
         st.error(
-            f"Não foi possível calcular o orçamento: {erro}"
+            "Não foi possível calcular o orçamento."
         )
+
+        st.exception(erro)
 
         st.stop()
 
-    # --------------------------------------------------------
-    # SALVAR DADOS
-    # --------------------------------------------------------
+    # ========================================================
+    # SALVA ESTADO PERMANENTE
+    # ========================================================
 
-    st.session_state[
-        "projeto"
-    ] = resultado
+    st.session_state["projeto"] = resultado
 
-    st.session_state[
-        "nome_projeto"
-    ] = nome_projeto
+    st.session_state["nome_projeto"] = nome_projeto
+    st.session_state["cliente"] = cliente
+    st.session_state["local_obra"] = local_obra
+    st.session_state["responsavel"] = responsavel
 
-    st.session_state[
-        "cliente"
-    ] = cliente
-
-    st.session_state[
-        "local_obra"
-    ] = local_obra
-
-    st.session_state[
-        "responsavel"
-    ] = responsavel
-
-    st.session_state[
-        "data_orcamento"
-    ] = data_orcamento
+    st.session_state["data_orcamento"] = data_orcamento
 
     st.session_state[
         "validade_orcamento"
@@ -2666,6 +2514,14 @@ if st.button(
     ] = diaria_mao_obra
 
     st.session_state[
+        "precos"
+    ] = precos_atualizados
+
+    st.session_state[
+        "quantidades"
+    ] = quantidades_atualizadas
+
+    st.session_state[
         "massas_telas_manual"
     ] = valor_massas_telas
 
@@ -2678,234 +2534,135 @@ if st.button(
 # RESULTADO
 # ============================================================
 
-if not st.session_state.get(
+projeto = st.session_state.get(
     "projeto"
-):
+)
+
+
+if not projeto:
 
     st.info(
         "Preencha os dados e clique em "
         "🧮 CALCULAR / ATUALIZAR ORÇAMENTO."
     )
 
-else:
+    st.stop()
 
-    projeto = st.session_state[
-        "projeto"
-    ]
 
-    # ========================================================
-    # CABEÇALHO DO RESULTADO
-    # ========================================================
+# ============================================================
+# CABEÇALHO DO RESULTADO
+# ============================================================
 
-    st.markdown(
-        """
-        <div class="hero">
+st.markdown(
+    """
+    <div class="hero">
 
-            <div class="hero-title">
-                📄 ORÇAMENTO PROFISSIONAL
-            </div>
-
-            <div class="hero-subtitle">
-                Quantitativo de materiais, custos e mão de obra
-            </div>
-
-            <div class="hero-badge">
-                VERSÃO 6B
-            </div>
-
+        <div class="hero-title">
+            📄 ORÇAMENTO PROFISSIONAL
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
-
-    # ========================================================
-    # INDICADORES
-    # ========================================================
-
-    indicadores = (
-        calcular_indicadores_projeto(
-            projeto
-        )
-    )
-
-    area = numero(
-        projeto.get(
-            "area",
-            0,
-        )
-    )
-
-    materiais_total = numero(
-        projeto.get(
-            "subtotal_materiais",
-            0,
-        )
-    )
-
-    massas_total = numero(
-        projeto.get(
-            "massas_telas",
-            0,
-        )
-    )
-
-    mao_obra_dados = projeto.get(
-        "mao_de_obra",
-        {},
-    )
-
-    mao_obra_total = numero(
-        mao_obra_dados.get(
-            "custo",
-            0,
-        )
-        if isinstance(
-            mao_obra_dados,
-            dict,
-        )
-        else 0
-    )
-
-    custo_geral = numero(
-        projeto.get(
-            "custo_geral",
-            0,
-        )
-    )
-
-
-    st.markdown(
-        """
-        <div class="section-header">
-
-            <div class="section-title">
-                📊 Indicadores do orçamento
-            </div>
-
+        <div class="hero-subtitle">
+            Quantitativo de materiais, custos e mão de obra
         </div>
-        """,
-        unsafe_allow_html=True,
+
+        <div class="hero-badge">
+            VERSÃO 6B
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# ============================================================
+# INDICADORES
+# ============================================================
+
+try:
+
+    indicadores = calcular_indicadores_projeto(
+        projeto
     )
 
+except Exception as erro:
 
-    c1, c2, c3, c4, c5 = st.columns(5)
+    st.error(
+        "Erro ao calcular os indicadores."
+    )
 
-    with c1:
+    st.exception(erro)
 
-        st.markdown(
-            f"""
-            <div class="metric-card">
-
-                <div class="metric-label">
-                    ÁREA
-                </div>
-
-                <div class="metric-value">
-                    {area:.2f} m²
-                </div>
-
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with c2:
-
-        st.markdown(
-            f"""
-            <div class="metric-card">
-
-                <div class="metric-label">
-                    MATERIAIS
-                </div>
-
-                <div class="metric-value">
-                    {formatar_moeda(materiais_total)}
-                </div>
-
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with c3:
-
-        st.markdown(
-            f"""
-            <div class="metric-card">
-
-                <div class="metric-label">
-                    MASSAS E TELAS
-                </div>
-
-                <div class="metric-value">
-                    {formatar_moeda(massas_total)}
-                </div>
-
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with c4:
-
-        st.markdown(
-            f"""
-            <div class="metric-card">
-
-                <div class="metric-label">
-                    MÃO DE OBRA
-                </div>
-
-                <div class="metric-value">
-                    {formatar_moeda(mao_obra_total)}
-                </div>
-
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with c5:
-
-        st.markdown(
-            f"""
-            <div class="metric-card">
-
-                <div class="metric-label">
-                    CUSTO / m²
-                </div>
-
-                <div class="metric-value">
-                    {formatar_moeda(
-                        indicadores.get(
-                            "custo_por_m2",
-                            0,
-                        )
-                    )}
-                </div>
-
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    indicadores = {}
 
 
-    # ========================================================
-    # TOTAL
-    # ========================================================
+area = numero(
+    projeto.get(
+        "area",
+        0,
+    )
+)
+
+materiais_total = numero(
+    projeto.get(
+        "subtotal_materiais",
+        0,
+    )
+)
+
+massas_total = numero(
+    projeto.get(
+        "massas_telas",
+        0,
+    )
+)
+
+mao_obra_dados = obter_mao_de_obra(
+    projeto
+)
+
+mao_obra_total = numero(
+    mao_obra_dados.get(
+        "custo",
+        0,
+    )
+)
+
+custo_geral = numero(
+    projeto.get(
+        "custo_geral",
+        0,
+    )
+)
+
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📊 Indicadores do orçamento
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+c1, c2, c3, c4, c5 = st.columns(5)
+
+with c1:
 
     st.markdown(
         f"""
-        <div class="total-card">
+        <div class="metric-card">
 
-            <div class="total-label">
-                VALOR TOTAL DO ORÇAMENTO
+            <div class="metric-label">
+                ÁREA
             </div>
 
-            <div class="total-value">
-                {formatar_moeda(custo_geral)}
+            <div class="metric-value">
+                {area:.2f} m²
             </div>
 
         </div>
@@ -2913,17 +2670,18 @@ else:
         unsafe_allow_html=True,
     )
 
-
-    # ========================================================
-    # DADOS DO CLIENTE
-    # ========================================================
+with c2:
 
     st.markdown(
-        """
-        <div class="section-header">
+        f"""
+        <div class="metric-card">
 
-            <div class="section-title">
-                📋 Dados do orçamento
+            <div class="metric-label">
+                MATERIAIS
+            </div>
+
+            <div class="metric-value">
+                {formatar_moeda(materiais_total)}
             </div>
 
         </div>
@@ -2931,145 +2689,18 @@ else:
         unsafe_allow_html=True,
     )
 
-
-    projeto_nome = (
-        st.session_state.get(
-            "nome_projeto",
-            "",
-        )
-        or
-        "Não informado"
-    )
-
-    cliente_salvo = (
-        st.session_state.get(
-            "cliente",
-            "",
-        )
-        or
-        "Não informado"
-    )
-
-    local_salvo = (
-        st.session_state.get(
-            "local_obra",
-            "",
-        )
-        or
-        "Não informado"
-    )
-
-    responsavel_salvo = (
-        st.session_state.get(
-            "responsavel",
-            "",
-        )
-        or
-        "Não informado"
-    )
-
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        st.markdown(
-            f"""
-            <div class="info-card">
-
-                <div class="card-label">
-                    Projeto
-                </div>
-
-                <div class="card-value">
-                    {escape(projeto_nome)}
-                </div>
-
-                <br>
-
-                <div class="card-label">
-                    Cliente
-                </div>
-
-                <div class="card-value">
-                    {escape(cliente_salvo)}
-                </div>
-
-                <br>
-
-                <div class="card-label">
-                    Local da obra
-                </div>
-
-                <div class="card-value">
-                    {escape(local_salvo)}
-                </div>
-
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with col2:
-
-        st.markdown(
-            f"""
-            <div class="info-card">
-
-                <div class="card-label">
-                    Responsável
-                </div>
-
-                <div class="card-value">
-                    {escape(responsavel_salvo)}
-                </div>
-
-                <br>
-
-                <div class="card-label">
-                    Data
-                </div>
-
-                <div class="card-value">
-                    {st.session_state.get(
-                        "data_orcamento",
-                        date.today()
-                    ).strftime("%d/%m/%Y")}
-                </div>
-
-                <br>
-
-                <div class="card-label">
-                    Validade
-                </div>
-
-                <div class="card-value">
-                    {st.session_state.get(
-                        "validade_orcamento",
-                        10
-                    )} dias
-                </div>
-
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-
-    # ========================================================
-    # QUANTITATIVO
-    # ========================================================
+with c3:
 
     st.markdown(
-        """
-        <div class="section-header">
+        f"""
+        <div class="metric-card">
 
-            <div class="section-title">
-                📦 Quantitativo de materiais
+            <div class="metric-label">
+                MASSAS E TELAS
             </div>
 
-            <div class="section-subtitle">
-                Quantidades finais utilizadas no orçamento.
+            <div class="metric-value">
+                {formatar_moeda(massas_total)}
             </div>
 
         </div>
@@ -3077,129 +2708,44 @@ else:
         unsafe_allow_html=True,
     )
 
-
-    linhas = []
-
-    for nome, material in projeto.get(
-        "materiais",
-        {},
-    ).items():
-
-        quantidade = numero(
-            material.get(
-                "quantidade",
-                0,
-            )
-        )
-
-        quantidade_auto = numero(
-            material.get(
-                "quantidade_automatica",
-                0,
-            )
-        )
-
-        preco = numero(
-            material.get(
-                "preco_unitario",
-                0,
-            )
-        )
-
-        custo = numero(
-            material.get(
-                "custo",
-                0,
-            )
-        )
-
-        origem = (
-            "Manual"
-            if material.get(
-                "origem_quantidade"
-            )
-            == "manual"
-            else
-            "Automática"
-        )
-
-        linhas.append(
-            {
-                "Material": nome,
-
-                "Unidade":
-                    material.get(
-                        "unidade",
-                        "",
-                    ),
-
-                "Quantidade":
-                    quantidade,
-
-                "Qtd. automática":
-                    quantidade_auto,
-
-                "Origem":
-                    origem,
-
-                "Preço unitário":
-                    preco,
-
-                "Total":
-                    custo,
-            }
-        )
-
-
-    df_materiais = pd.DataFrame(
-        linhas
-    )
-
-
-    if not df_materiais.empty:
-
-        st.dataframe(
-            df_materiais,
-
-            width="stretch",
-
-            hide_index=True,
-
-            column_config={
-
-                "Quantidade":
-                    st.column_config.NumberColumn(
-                        format="%.2f"
-                    ),
-
-                "Qtd. automática":
-                    st.column_config.NumberColumn(
-                        format="%.2f"
-                    ),
-
-                "Preço unitário":
-                    st.column_config.NumberColumn(
-                        format="R$ %.2f"
-                    ),
-
-                "Total":
-                    st.column_config.NumberColumn(
-                        format="R$ %.2f"
-                    ),
-            },
-        )
-
-
-    # ========================================================
-    # RESUMO FINANCEIRO
-    # ========================================================
+with c4:
 
     st.markdown(
-        """
-        <div class="section-header">
+        f"""
+        <div class="metric-card">
 
-            <div class="section-title">
-                💰 Resumo financeiro
+            <div class="metric-label">
+                MÃO DE OBRA
+            </div>
+
+            <div class="metric-value">
+                {formatar_moeda(mao_obra_total)}
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with c5:
+
+    custo_m2 = numero(
+        indicadores.get(
+            "custo_por_m2",
+            0,
+        )
+    )
+
+    st.markdown(
+        f"""
+        <div class="metric-card">
+
+            <div class="metric-label">
+                CUSTO / m²
+            </div>
+
+            <div class="metric-value">
+                {formatar_moeda(custo_m2)}
             </div>
 
         </div>
@@ -3208,46 +2754,273 @@ else:
     )
 
 
-    financeiro = pd.DataFrame(
-        [
-            {
-                "Categoria": "Materiais",
-                "Valor": materiais_total,
-                "%": indicadores.get(
-                    "percentual_materiais",
-                    0,
-                ),
-            },
+# ============================================================
+# TOTAL
+# ============================================================
 
-            {
-                "Categoria": "Massas e Telas",
-                "Valor": massas_total,
-                "%": indicadores.get(
-                    "percentual_massas_telas",
-                    0,
-                ),
-            },
+st.markdown(
+    f"""
+    <div class="total-card">
 
-            {
-                "Categoria": "Mão de obra",
-                "Valor": mao_obra_total,
-                "%": indicadores.get(
-                    "percentual_mao_de_obra",
-                    0,
-                ),
-            },
+        <div class="total-label">
+            VALOR TOTAL DO ORÇAMENTO
+        </div>
 
-            {
-                "Categoria": "CUSTO GERAL",
-                "Valor": custo_geral,
-                "%": 100.00,
-            },
-        ]
+        <div class="total-value">
+            {formatar_moeda(custo_geral)}
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# ============================================================
+# DADOS DO ORÇAMENTO
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📋 Dados do orçamento
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+projeto_nome = (
+    st.session_state.get(
+        "nome_projeto",
+        "",
+    )
+    or
+    "Não informado"
+)
+
+cliente_salvo = (
+    st.session_state.get(
+        "cliente",
+        "",
+    )
+    or
+    "Não informado"
+)
+
+local_salvo = (
+    st.session_state.get(
+        "local_obra",
+        "",
+    )
+    or
+    "Não informado"
+)
+
+responsavel_salvo = (
+    st.session_state.get(
+        "responsavel",
+        "",
+    )
+    or
+    "Não informado"
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    st.markdown(
+        f"""
+        <div class="info-card">
+
+            <div class="card-label">
+                Projeto
+            </div>
+
+            <div class="card-value">
+                {escape(projeto_nome)}
+            </div>
+
+            <br>
+
+            <div class="card-label">
+                Cliente
+            </div>
+
+            <div class="card-value">
+                {escape(cliente_salvo)}
+            </div>
+
+            <br>
+
+            <div class="card-label">
+                Local da obra
+            </div>
+
+            <div class="card-value">
+                {escape(local_salvo)}
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
+with col2:
+
+    data_salva = st.session_state.get(
+        "data_orcamento",
+        date.today(),
+    )
+
+    st.markdown(
+        f"""
+        <div class="info-card">
+
+            <div class="card-label">
+                Responsável
+            </div>
+
+            <div class="card-value">
+                {escape(responsavel_salvo)}
+            </div>
+
+            <br>
+
+            <div class="card-label">
+                Data
+            </div>
+
+            <div class="card-value">
+                {data_salva.strftime("%d/%m/%Y")}
+            </div>
+
+            <br>
+
+            <div class="card-label">
+                Validade
+            </div>
+
+            <div class="card-value">
+                {st.session_state.get(
+                    "validade_orcamento",
+                    10
+                )} dias
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+# ============================================================
+# QUANTITATIVO DE MATERIAIS
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📦 Quantitativo de materiais
+        </div>
+
+        <div class="section-subtitle">
+            Quantidades finais utilizadas no orçamento.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+linhas = []
+
+for nome, material in projeto.get(
+    "materiais",
+    {},
+).items():
+
+    quantidade = numero(
+        material.get(
+            "quantidade",
+            0,
+        )
+    )
+
+    quantidade_auto = numero(
+        material.get(
+            "quantidade_automatica",
+            quantidade,
+        )
+    )
+
+    preco = numero(
+        material.get(
+            "preco_unitario",
+            0,
+        )
+    )
+
+    custo = numero(
+        material.get(
+            "custo",
+            quantidade * preco,
+        )
+    )
+
+    origem = (
+        "Manual"
+        if material.get(
+            "origem_quantidade"
+        ) == "manual"
+        else
+        "Automática"
+    )
+
+    linhas.append(
+        {
+            "Material": nome,
+
+            "Unidade":
+                material.get(
+                    "unidade",
+                    "",
+                ),
+
+            "Quantidade":
+                quantidade,
+
+            "Qtd. automática":
+                quantidade_auto,
+
+            "Origem":
+                origem,
+
+            "Preço unitário":
+                preco,
+
+            "Total":
+                custo,
+        }
+    )
+
+
+df_materiais = pd.DataFrame(
+    linhas
+)
+
+
+if not df_materiais.empty:
 
     st.dataframe(
-        financeiro,
+
+        df_materiais,
 
         width="stretch",
 
@@ -3255,375 +3028,462 @@ else:
 
         column_config={
 
-            "Valor":
+            "Quantidade":
+                st.column_config.NumberColumn(
+                    format="%.2f"
+                ),
+
+            "Qtd. automática":
+                st.column_config.NumberColumn(
+                    format="%.2f"
+                ),
+
+            "Preço unitário":
                 st.column_config.NumberColumn(
                     format="R$ %.2f"
                 ),
 
-            "%":
+            "Total":
                 st.column_config.NumberColumn(
-                    format="%.2f%%"
+                    format="R$ %.2f"
                 ),
         },
     )
 
 
-    # ========================================================
-    # MÃO DE OBRA
-    # ========================================================
+# ============================================================
+# RESUMO FINANCEIRO
+# ============================================================
 
-    st.markdown(
-        """
-        <div class="section-header">
+st.markdown(
+    """
+    <div class="section-header">
 
-            <div class="section-title">
-                👷 Composição da mão de obra
-            </div>
-
+        <div class="section-title">
+            💰 Resumo financeiro
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-    dias = numero(
-        mao_obra_dados.get(
-            "dias",
-            0,
-        )
-        if isinstance(
-            mao_obra_dados,
-            dict,
-        )
-        else 0
-    )
+financeiro = pd.DataFrame(
+    [
 
-    diaria = numero(
-        mao_obra_dados.get(
-            "diaria",
-            0,
-        )
-        if isinstance(
-            mao_obra_dados,
-            dict,
-        )
-        else 0
-    )
-
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-
-        st.metric(
-            "Dias estimados",
-            f"{dias:.2f}",
-        )
-
-    with col2:
-
-        st.metric(
-            "Diária",
-            formatar_moeda(
-                diaria
+        {
+            "Categoria": "Materiais",
+            "Valor": materiais_total,
+            "%": numero(
+                indicadores.get(
+                    "percentual_materiais",
+                    0,
+                )
             ),
-        )
+        },
 
-    with col3:
-
-        st.metric(
-            "Total",
-            formatar_moeda(
-                mao_obra_total
+        {
+            "Categoria": "Massas e Telas",
+            "Valor": massas_total,
+            "%": numero(
+                indicadores.get(
+                    "percentual_massas_telas",
+                    0,
+                )
             ),
+        },
+
+        {
+            "Categoria": "Mão de obra",
+            "Valor": mao_obra_total,
+            "%": numero(
+                indicadores.get(
+                    "percentual_mao_de_obra",
+                    0,
+                )
+            ),
+        },
+
+        {
+            "Categoria": "CUSTO GERAL",
+            "Valor": custo_geral,
+            "%": 100.00,
+        },
+    ]
+)
+
+st.dataframe(
+
+    financeiro,
+
+    width="stretch",
+
+    hide_index=True,
+
+    column_config={
+
+        "Valor":
+            st.column_config.NumberColumn(
+                format="R$ %.2f"
+            ),
+
+        "%":
+            st.column_config.NumberColumn(
+                format="%.2f%%"
+            ),
+    },
+)
+
+
+# ============================================================
+# COMPOSIÇÃO DA MÃO DE OBRA
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            👷 Composição da mão de obra
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+dias = numero(
+    mao_obra_dados.get(
+        "dias",
+        0,
+    )
+)
+
+diaria = numero(
+    mao_obra_dados.get(
+        "diaria",
+        0,
+    )
+)
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+
+    st.metric(
+        "Dias estimados",
+        f"{dias:.2f}",
+    )
+
+with col2:
+
+    st.metric(
+        "Diária",
+        formatar_moeda(
+            diaria
+        ),
+    )
+
+with col3:
+
+    st.metric(
+        "Total",
+        formatar_moeda(
+            mao_obra_total
+        ),
+    )
+
+
+# ============================================================
+# CONDIÇÕES COMERCIAIS
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            💼 Condições comerciais
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+condicoes_df = pd.DataFrame(
+    [
+
+        {
+            "Campo":
+                "Prazo de execução",
+
+            "Informação":
+                st.session_state.get(
+                    "prazo_execucao",
+                    "",
+                )
+                or
+                "Não informado",
+        },
+
+        {
+            "Campo":
+                "Condição de pagamento",
+
+            "Informação":
+                st.session_state.get(
+                    "condicao_pagamento",
+                    "",
+                )
+                or
+                "Não informado",
+        },
+
+        {
+            "Campo":
+                "Forma de pagamento",
+
+            "Informação":
+                st.session_state.get(
+                    "forma_pagamento",
+                    "",
+                )
+                or
+                "Não informado",
+        },
+
+        {
+            "Campo":
+                "Observações comerciais",
+
+            "Informação":
+                st.session_state.get(
+                    "observacoes_comerciais",
+                    "",
+                )
+                or
+                "Não informado",
+        },
+    ]
+)
+
+st.dataframe(
+    condicoes_df,
+    width="stretch",
+    hide_index=True,
+)
+
+
+# ============================================================
+# OBSERVAÇÕES TÉCNICAS
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📝 Observações técnicas
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+observacao_final = (
+    st.session_state.get(
+        "observacoes_tecnicas",
+        "",
+    )
+    or
+    "Nenhuma observação técnica informada."
+)
+
+observacao_html = escape(
+    observacao_final
+).replace(
+    "\n",
+    "<br>",
+)
+
+st.markdown(
+    f"""
+    <div class="notice-card">
+        {observacao_html}
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+# ============================================================
+# EXPORTAÇÃO
+# ============================================================
+
+st.markdown(
+    """
+    <div class="section-header">
+
+        <div class="section-title">
+            📤 Exportar orçamento
+        </div>
+
+        <div class="section-subtitle">
+            Gere os arquivos do orçamento para enviar
+            ao cliente ou arquivar.
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+col1, col2 = st.columns(2)
+
+
+# ============================================================
+# PDF
+# ============================================================
+
+with col1:
+
+    try:
+
+        pdf_bytes = gerar_pdf(
+            projeto
+        )
+
+        if pdf_bytes:
+
+            nome_pdf = (
+                projeto_nome
+                .strip()
+                .replace(
+                    " ",
+                    "_",
+                )
+                .replace(
+                    "/",
+                    "_",
+                )
+                or
+                "Orcamento_Steel_Framing"
+            )
+
+            st.download_button(
+
+                "📄 BAIXAR PDF",
+
+                data=pdf_bytes,
+
+                file_name=
+                    f"{nome_pdf}.pdf",
+
+                mime=
+                    "application/pdf",
+
+                width="stretch",
+
+                key="download_pdf",
+            )
+
+    except Exception as erro:
+
+        st.error(
+            f"Erro ao gerar PDF: {erro}"
         )
 
 
-    # ========================================================
-    # CONDIÇÕES
-    # ========================================================
+# ============================================================
+# EXCEL
+# ============================================================
 
-    st.markdown(
-        """
-        <div class="section-header">
+with col2:
 
-            <div class="section-title">
-                💼 Condições comerciais
-            </div>
+    try:
 
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-    condicoes_df = pd.DataFrame(
-        [
-            {
-                "Campo":
-                    "Prazo de execução",
-
-                "Informação":
-                    st.session_state.get(
-                        "prazo_execucao",
-                        "",
-                    )
-                    or
-                    "Não informado",
-            },
-
-            {
-                "Campo":
-                    "Condição de pagamento",
-
-                "Informação":
-                    st.session_state.get(
-                        "condicao_pagamento",
-                        "",
-                    )
-                    or
-                    "Não informado",
-            },
-
-            {
-                "Campo":
-                    "Forma de pagamento",
-
-                "Informação":
-                    st.session_state.get(
-                        "forma_pagamento",
-                        "",
-                    )
-                    or
-                    "Não informado",
-            },
-
-            {
-                "Campo":
-                    "Observações comerciais",
-
-                "Informação":
-                    st.session_state.get(
-                        "observacoes_comerciais",
-                        "",
-                    )
-                    or
-                    "Não informado",
-            },
-        ]
-    )
-
-
-    st.dataframe(
-        condicoes_df,
-
-        width="stretch",
-
-        hide_index=True,
-    )
-
-
-    # ========================================================
-    # OBSERVAÇÕES TÉCNICAS
-    # ========================================================
-
-    st.markdown(
-        """
-        <div class="section-header">
-
-            <div class="section-title">
-                📝 Observações técnicas
-            </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-    observacao_final = (
-        st.session_state.get(
-            "observacoes_tecnicas",
-            "",
+        excel_bytes = gerar_excel(
+            projeto
         )
-        or
-        "Nenhuma observação técnica informada."
-    )
 
+        if excel_bytes:
 
-    st.markdown(
-        f"""
-        <div class="notice-card">
-            {escape(observacao_final)}
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-    # ========================================================
-    # EXPORTAÇÃO
-    # ========================================================
-
-    st.markdown(
-        """
-        <div class="section-header">
-
-            <div class="section-title">
-                📤 Exportar orçamento
-            </div>
-
-            <div class="section-subtitle">
-                Gere os arquivos do orçamento para enviar
-                ao cliente ou arquivar.
-            </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-    col1, col2 = st.columns(2)
-
-
-    # --------------------------------------------------------
-    # PDF
-    # --------------------------------------------------------
-
-    with col1:
-
-        try:
-
-            pdf_bytes = gerar_pdf(
-                projeto
+            nome_excel = (
+                projeto_nome
+                .strip()
+                .replace(
+                    " ",
+                    "_",
+                )
+                .replace(
+                    "/",
+                    "_",
+                )
+                or
+                "Orcamento_Steel_Framing"
             )
 
-            if pdf_bytes:
+            st.download_button(
 
-                nome_pdf = (
-                    projeto_nome
-                    .strip()
-                    .replace(
-                        " ",
-                        "_",
-                    )
-                    .replace(
-                        "/",
-                        "_",
-                    )
-                    or
-                    "Orcamento_Steel_Framing"
-                )
+                "📊 BAIXAR EXCEL",
 
-                st.download_button(
+                data=excel_bytes,
 
-                    "📄 BAIXAR PDF",
+                file_name=
+                    f"{nome_excel}.xlsx",
 
-                    data=pdf_bytes,
+                mime=
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 
-                    file_name=
-                        f"{nome_pdf}.pdf",
+                width="stretch",
 
-                    mime=
-                        "application/pdf",
-
-                    width="stretch",
-                )
-
-        except Exception as erro:
-
-            st.error(
-                f"Erro ao gerar PDF: {erro}"
+                key="download_excel",
             )
 
+    except Exception as erro:
 
-    # --------------------------------------------------------
-    # EXCEL
-    # --------------------------------------------------------
-
-    with col2:
-
-        try:
-
-            excel_bytes = gerar_excel(
-                projeto
-            )
-
-            if excel_bytes:
-
-                nome_excel = (
-                    projeto_nome
-                    .strip()
-                    .replace(
-                        " ",
-                        "_",
-                    )
-                    .replace(
-                        "/",
-                        "_",
-                    )
-                    or
-                    "Orcamento_Steel_Framing"
-                )
-
-                st.download_button(
-
-                    "📊 BAIXAR EXCEL",
-
-                    data=excel_bytes,
-
-                    file_name=
-                        f"{nome_excel}.xlsx",
-
-                    mime=
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-
-                    width="stretch",
-                )
-
-        except Exception as erro:
-
-            st.error(
-                f"Erro ao gerar Excel: {erro}"
-            )
+        st.error(
+            f"Erro ao gerar Excel: {erro}"
+        )
 
 
-    # ========================================================
-    # ASSINATURA
-    # ========================================================
+# ============================================================
+# ASSINATURA
+# ============================================================
 
-    st.markdown(
-        f"""
+st.markdown(
+    f"""
+    <div style="
+        margin:55px auto 25px auto;
+        max-width:520px;
+        text-align:center;
+    ">
+
         <div style="
-            margin:55px auto 25px auto;
-            max-width:520px;
-            text-align:center;
+            border-top:1px solid #333;
+            width:85%;
+            margin:0 auto 10px auto;
+        "></div>
+
+        <div style="
+            font-weight:700;
+            color:#17202a;
+            font-size:0.95rem;
         ">
-
-            <div style="
-                border-top:1px solid #333;
-                width:85%;
-                margin:0 auto 10px auto;
-            "></div>
-
-            <div style="
-                font-weight:700;
-                color:#17202a;
-                font-size:0.95rem;
-            ">
-                {escape(responsavel_salvo)}
-            </div>
-
-            <div style="
-                color:#777;
-                font-size:0.8rem;
-                margin-top:5px;
-            ">
-                Responsável pelo orçamento
-            </div>
-
+            {escape(responsavel_salvo)}
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+
+        <div style="
+            color:#777;
+            font-size:0.8rem;
+            margin-top:5px;
+        ">
+            Responsável pelo orçamento
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
