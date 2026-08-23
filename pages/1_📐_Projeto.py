@@ -32,10 +32,6 @@ def formatar_moeda(valor):
 
 
 # ============================================================
-# CSS — VISUAL 6C
-# ============================================================
-
-# ============================================================
 # CSS — VISUAL PROFISSIONAL 6C
 # ============================================================
 
@@ -77,6 +73,7 @@ st.markdown(
     [data-testid="stHeader"] {
         background: transparent;
     }
+
 
     /* ======================================================
        HERO
@@ -137,6 +134,7 @@ st.markdown(
         color: #ffffff;
     }
 
+
     /* ======================================================
        TÍTULOS DAS SEÇÕES
        ====================================================== */
@@ -161,6 +159,7 @@ st.markdown(
         line-height: 1.5;
     }
 
+
     /* ======================================================
        CARDS
        ====================================================== */
@@ -179,6 +178,7 @@ st.markdown(
             0 3px 12px rgba(0, 0, 0, 0.04);
     }
 
+
     /* ======================================================
        MÉTRICAS
        ====================================================== */
@@ -195,6 +195,7 @@ st.markdown(
         box-shadow:
             0 3px 12px rgba(0, 0, 0, 0.04);
     }
+
 
     /* ======================================================
        INPUTS
@@ -224,123 +225,6 @@ st.markdown(
             sans-serif !important;
     }
 
-    /* ======================================================
-       BOTÕES
-       ====================================================== */
-
-    .stButton > button {
-        border-radius: 9px;
-        font-weight: 700;
-        min-height: 42px;
-    }
-
-    /* ======================================================
-       TABELAS
-       ====================================================== */
-
-    div[data-testid="stDataFrame"] {
-        border-radius: 12px;
-        overflow: hidden;
-    }
-
-    /* ======================================================
-       RESPONSIVIDADE
-       ====================================================== */
-
-    @media (max-width: 768px) {
-
-        .block-container {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-
-        .hero {
-            padding: 25px 22px;
-        }
-
-        .hero-title {
-            font-size: 1.65rem;
-        }
-
-        .hero-subtitle {
-            font-size: 0.9rem;
-        }
-
-    }
-
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-    /* ======================================================
-       SEÇÕES
-       ====================================================== */
-
-    .section-header {
-        margin-top: 28px;
-        margin-bottom: 16px;
-    }
-
-    .section-title {
-        font-size: 1.35rem;
-        font-weight: 800;
-        color: #17202a;
-        margin-bottom: 3px;
-        line-height: 1.3;
-    }
-
-    .section-subtitle {
-        color: #6b7280;
-        font-size: 0.9rem;
-        margin-bottom: 18px;
-        line-height: 1.5;
-    }
-
-    /* ======================================================
-       MÉTRICAS
-       ====================================================== */
-
-    div[data-testid="stMetric"] {
-        background: #ffffff;
-
-        border:
-            1px solid #e1e6eb;
-
-        border-radius: 14px;
-
-        padding: 15px;
-
-        box-shadow:
-            0 3px 12px rgba(0, 0, 0, 0.04);
-    }
-
-    /* ======================================================
-       CAMPOS
-       ====================================================== */
-
-    .stTextInput label,
-    .stNumberInput label,
-    .stDateInput label,
-    .stTextArea label,
-    .stSelectbox label {
-        font-size: 0.88rem !important;
-        font-weight: 600 !important;
-        color: #374151 !important;
-    }
-
-    div[data-baseweb="input"] > div,
-    div[data-baseweb="textarea"] > div {
-        border-radius: 9px;
-    }
-
-    input,
-    textarea,
-    [data-baseweb="select"] {
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
-    }
 
     /* ======================================================
        BOTÕES
@@ -353,6 +237,7 @@ st.markdown(
         min-height: 42px;
     }
 
+
     /* ======================================================
        TABELAS
        ====================================================== */
@@ -361,6 +246,7 @@ st.markdown(
         border-radius: 12px;
         overflow: hidden;
     }
+
 
     /* ======================================================
        RESPONSIVIDADE
@@ -388,6 +274,7 @@ st.markdown(
         .section-title {
             font-size: 1.15rem;
         }
+
     }
 
     </style>
@@ -446,6 +333,7 @@ st.markdown(
 
 
 col1, col2 = st.columns(2)
+
 
 with col1:
 
@@ -570,13 +458,18 @@ st.markdown(
 
 
 if "precos" not in st.session_state:
-    st.session_state["precos"] = PRECOS_BASE.copy()
+
+    st.session_state["precos"] = (
+        PRECOS_BASE.copy()
+    )
 
 
 precos_atualizados = {}
 
 
-for nome, preco_padrao in st.session_state["precos"].items():
+for nome, preco_padrao in (
+    st.session_state["precos"].items()
+):
 
     preco_atual = st.number_input(
         nome,
@@ -590,7 +483,9 @@ for nome, preco_padrao in st.session_state["precos"].items():
     precos_atualizados[nome] = preco_atual
 
 
-st.session_state["precos"] = precos_atualizados
+st.session_state["precos"] = (
+    precos_atualizados
+)
 
 
 st.divider()
@@ -632,6 +527,7 @@ st.markdown(
 
 
 if "quantidades" not in st.session_state:
+
     st.session_state["quantidades"] = {}
 
 
@@ -640,7 +536,9 @@ quantidades_atualizadas = {}
 
 for nome, material in previa["materiais"].items():
 
-    quantidade_automatica = material["quantidade"]
+    quantidade_automatica = material[
+        "quantidade"
+    ]
 
 
     if nome not in st.session_state["quantidades"]:
@@ -662,10 +560,14 @@ for nome, material in previa["materiais"].items():
     )
 
 
-    quantidades_atualizadas[nome] = quantidade_atual
+    quantidades_atualizadas[nome] = (
+        quantidade_atual
+    )
 
 
-st.session_state["quantidades"] = quantidades_atualizadas
+st.session_state["quantidades"] = (
+    quantidades_atualizadas
+)
 
 
 st.divider()
@@ -691,12 +593,29 @@ if st.button(
 
     st.session_state["projeto"] = resultado
 
-    st.session_state["nome_projeto"] = nome_projeto
-    st.session_state["cliente"] = cliente
-    st.session_state["local_obra"] = local_obra
-    st.session_state["responsavel"] = responsavel
-    st.session_state["data_orcamento"] = data_orcamento
-    st.session_state["observacoes"] = observacoes
+    st.session_state["nome_projeto"] = (
+        nome_projeto
+    )
+
+    st.session_state["cliente"] = (
+        cliente
+    )
+
+    st.session_state["local_obra"] = (
+        local_obra
+    )
+
+    st.session_state["responsavel"] = (
+        responsavel
+    )
+
+    st.session_state["data_orcamento"] = (
+        data_orcamento
+    )
+
+    st.session_state["observacoes"] = (
+        observacoes
+    )
 
 
 # ============================================================
@@ -762,7 +681,9 @@ if "projeto" in st.session_state:
     # RESUMO
     # ========================================================
 
-    st.subheader("📊 Resumo do orçamento")
+    st.subheader(
+        "📊 Resumo do orçamento"
+    )
 
 
     col1, col2, col3, col4 = st.columns(4)
@@ -821,13 +742,17 @@ if "projeto" in st.session_state:
     tabela_materiais = []
 
 
-    for nome, material in projeto["materiais"].items():
+    for nome, material in (
+        projeto["materiais"].items()
+    ):
 
         tabela_materiais.append(
             {
                 "Material": nome,
                 "Unidade": material["unidade"],
-                "Quantidade": f'{material["quantidade"]:.2f}',
+                "Quantidade": (
+                    f'{material["quantidade"]:.2f}'
+                ),
                 "Preço unitário": formatar_moeda(
                     material["preco_unitario"]
                 ),
@@ -882,7 +807,9 @@ if "projeto" in st.session_state:
     )
 
 
-    mao_de_obra = projeto["mao_de_obra"]
+    mao_de_obra = projeto[
+        "mao_de_obra"
+    ]
 
 
     col1, col2, col3 = st.columns(3)
@@ -931,7 +858,9 @@ if "projeto" in st.session_state:
 
     if observacoes_salvas:
 
-        st.subheader("📝 Observações")
+        st.subheader(
+            "📝 Observações"
+        )
 
         st.write(
             observacoes_salvas
