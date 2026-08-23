@@ -1,3 +1,4 @@
 streamlit
 pandas
 reportlab
+Adiciona openpyxl para exportação Excel
