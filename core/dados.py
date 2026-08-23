@@ -1,83 +1,111 @@
-# Catálogo padrão de materiais da Calculadora Steel
-#
-# "base" define sobre qual dimensão o consumo é calculado:
-# - comprimento: materiais relacionados ao comprimento do projeto
-# - area: materiais relacionados à área do projeto
-#
-# "consumo_referencia" representa a quantidade utilizada
-# na dimensão indicada em "referencia".
+"""
+Catálogo de materiais e parâmetros padrão
+da Calculadora Profissional de Steel Frame.
+
+IMPORTANTE:
+Os valores abaixo são parâmetros padrão.
+O usuário poderá alterá-los na interface
+conforme sua realidade de obra.
+"""
+
+# ============================================================
+# CONFIGURAÇÕES GERAIS
+# ============================================================
+
+CONFIGURACAO_PROJETO = {
+    "diaria_mao_de_obra": 755.00,
+    "dias_mao_de_obra_referencia": 10.00,
+    "area_referencia": 30.00,
+    "percentual_massas_telas": 0.05,
+}
+
+
+# ============================================================
+# CATÁLOGO DE MATERIAIS
+# ============================================================
 
 MATERIAIS = {
+
     "Perfil 90x0,80": {
-        "base": "comprimento",
-        "consumo_referencia": 113.0,
-        "referencia": 30.0,
+        "categoria": "Estrutura",
         "unidade": "un",
-        "preco": 60.0,
+        "coeficiente": 113.00,
+        "preco": 60.00,
+        "ativo": True,
     },
+
     "Guia Perimetral": {
-        "base": "comprimento",
-        "consumo_referencia": 20.0,
-        "referencia": 30.0,
+        "categoria": "Estrutura",
         "unidade": "m",
-        "preco": 50.0,
+        "coeficiente": 20.00,
+        "preco": 50.00,
+        "ativo": True,
     },
+
     "Plywood 8mm": {
-        "base": "area",
-        "consumo_referencia": 20.0,
-        "referencia": 90.0,
+        "categoria": "Fechamento",
         "unidade": "chapa",
-        "preco": 80.0,
+        "coeficiente": 20.00,
+        "preco": 80.00,
+        "ativo": True,
     },
+
     "Placa ST 12.5mm": {
-        "base": "area",
-        "consumo_referencia": 12.0,
-        "referencia": 90.0,
+        "categoria": "Drywall",
         "unidade": "chapa",
-        "preco": 40.0,
+        "coeficiente": 12.00,
+        "preco": 40.00,
+        "ativo": True,
     },
+
     "Placa Cimentícia 12mm": {
-        "base": "area",
-        "consumo_referencia": 12.0,
-        "referencia": 90.0,
+        "categoria": "Fechamento",
         "unidade": "chapa",
-        "preco": 140.0,
+        "coeficiente": 12.00,
+        "preco": 140.00,
+        "ativo": True,
     },
+
     "Lã PET": {
-        "base": "area",
-        "consumo_referencia": 2.0,
-        "referencia": 90.0,
+        "categoria": "Isolamento",
         "unidade": "pacote",
-        "preco": 200.0,
+        "coeficiente": 2.00,
+        "preco": 200.00,
+        "ativo": True,
     },
+
     "Parafusos": {
-        "base": "area",
-        "consumo_referencia": 2400.0,
-        "referencia": 90.0,
+        "categoria": "Fixação",
         "unidade": "un",
+        "coeficiente": 2400.00,
         "preco": 0.07,
+        "ativo": True,
     },
+
     "Cola PU 40": {
-        "base": "area",
-        "consumo_referencia": 12.0,
-        "referencia": 90.0,
+        "categoria": "Fixação",
         "unidade": "un",
-        "preco": 40.0,
+        "coeficiente": 12.00,
+        "preco": 40.00,
+        "ativo": True,
     },
+
     "Manta Hidrófuga": {
-        "base": "area",
-        "consumo_referencia": 1.0,
-        "referencia": 90.0,
+        "categoria": "Impermeabilização",
         "unidade": "rolo",
-        "preco": 500.0,
+        "coeficiente": 1.00,
+        "preco": 500.00,
+        "ativo": True,
     },
 }
 
 
-# Compatibilidade com a interface atual.
-# A página Materiais ainda utiliza estes dicionários.
+# ============================================================
+# COMPATIBILIDADE COM A VERSÃO ATUAL DO APLICATIVO
+# ============================================================
+
 COEFICIENTES = {
-    nome: dados["consumo_referencia"] / dados["referencia"]
+    nome: dados["coeficiente"]
     for nome, dados in MATERIAIS.items()
 }
 
@@ -88,30 +116,47 @@ PRECOS_BASE = {
 }
 
 
-CONFIGURACAO_PROJETO = {
-    "comprimento_padrao": 30.00,
-    "altura_padrao": 3.00,
-    "diaria_mao_de_obra": 755.0,
-    "coeficiente_dias_mao_de_obra": 30.0,
-    "area_referencia_mao_de_obra": 90.0,
-    "percentual_massas_telas": 0.05,
-}
-
+# ============================================================
+# FUNÇÕES DE ACESSO
+# ============================================================
 
 def obter_materiais():
+    """
+    Retorna uma cópia do catálogo de materiais.
+    """
     return {
         nome: dados.copy()
         for nome, dados in MATERIAIS.items()
     }
 
 
+def obter_materiais_ativos():
+    """
+    Retorna somente os materiais ativos.
+    """
+    return {
+        nome: dados.copy()
+        for nome, dados in MATERIAIS.items()
+        if dados.get("ativo", True)
+    }
+
+
 def obter_coeficientes():
+    """
+    Retorna os coeficientes padrão.
+    """
     return COEFICIENTES.copy()
 
 
 def obter_precos():
+    """
+    Retorna os preços padrão.
+    """
     return PRECOS_BASE.copy()
 
 
 def obter_configuracao():
+    """
+    Retorna as configurações gerais do projeto.
+    """
     return CONFIGURACAO_PROJETO.copy()
