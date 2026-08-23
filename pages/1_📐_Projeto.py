@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+
 from datetime import date
 
 from core.calculos import calcular_projeto
@@ -7,7 +8,7 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO
+# CONFIGURAÇÃO DA PÁGINA
 # ============================================================
 
 st.set_page_config(
@@ -38,13 +39,13 @@ st.markdown(
     """
     <style>
 
-    @import url(
-        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
-    );
-
     /* ======================================================
        BASE
        ====================================================== */
+
+    @import url(
+        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
+    );
 
     html,
     body,
@@ -135,7 +136,7 @@ st.markdown(
 
 
     /* ======================================================
-       SEÇÕES
+       TÍTULOS DAS SEÇÕES
        ====================================================== */
 
     .section-header {
@@ -189,7 +190,6 @@ st.markdown(
             1px solid #e1e6eb;
 
         border-radius: 14px;
-
         padding: 15px;
 
         box-shadow:
@@ -198,7 +198,7 @@ st.markdown(
 
 
     /* ======================================================
-       CAMPOS
+       INPUTS
        ====================================================== */
 
     .stTextInput label,
@@ -284,7 +284,7 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO 6C
+# CABEÇALHO
 # ============================================================
 
 st.markdown(
@@ -333,6 +333,7 @@ st.markdown(
 
 
 col1, col2 = st.columns(2)
+
 
 with col1:
 
@@ -399,6 +400,7 @@ st.markdown(
 
 col1, col2, col3 = st.columns(3)
 
+
 with col1:
 
     comprimento = st.number_input(
@@ -457,13 +459,17 @@ st.markdown(
 
 if "precos" not in st.session_state:
 
-    st.session_state["precos"] = PRECOS_BASE.copy()
+    st.session_state["precos"] = (
+        PRECOS_BASE.copy()
+    )
 
 
 precos_atualizados = {}
 
 
-for nome, preco_padrao in st.session_state["precos"].items():
+for nome, preco_padrao in (
+    st.session_state["precos"].items()
+):
 
     preco_atual = st.number_input(
         nome,
@@ -477,7 +483,9 @@ for nome, preco_padrao in st.session_state["precos"].items():
     precos_atualizados[nome] = preco_atual
 
 
-st.session_state["precos"] = precos_atualizados
+st.session_state["precos"] = (
+    precos_atualizados
+)
 
 
 st.divider()
@@ -547,17 +555,21 @@ for nome, material in previa["materiais"].items():
         key=f"quantidade_{nome}",
     )
 
-    quantidades_atualizadas[nome] = quantidade_atual
+    quantidades_atualizadas[nome] = (
+        quantidade_atual
+    )
 
 
-st.session_state["quantidades"] = quantidades_atualizadas
+st.session_state["quantidades"] = (
+    quantidades_atualizadas
+)
 
 
 st.divider()
 
 
 # ============================================================
-# CALCULAR ORÇAMENTO
+# BOTÃO CALCULAR
 # ============================================================
 
 if st.button(
@@ -584,7 +596,7 @@ if st.button(
 
 
 # ============================================================
-# RESULTADO
+# RESULTADO DO ORÇAMENTO
 # ============================================================
 
 if "projeto" in st.session_state:
@@ -601,6 +613,7 @@ if "projeto" in st.session_state:
     # ========================================================
 
     col1, col2 = st.columns(2)
+
 
     with col1:
 
@@ -706,7 +719,9 @@ if "projeto" in st.session_state:
     tabela_materiais = []
 
 
-    for nome, material in projeto["materiais"].items():
+    for nome, material in (
+        projeto["materiais"].items()
+    ):
 
         tabela_materiais.append(
             {
