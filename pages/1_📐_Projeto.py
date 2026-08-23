@@ -7,7 +7,7 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO
+# CONFIGURAÇÃO DA PÁGINA
 # ============================================================
 
 st.set_page_config(
@@ -30,43 +30,11 @@ def formatar_moeda(valor):
     )
 
 
-def titulo_secao(titulo, subtitulo=None):
-    st.markdown(
-        f"""
-        <div style="
-            margin-top: 28px;
-            margin-bottom: 16px;
-        ">
-            <div style="
-                font-size: 1.35rem;
-                font-weight: 800;
-                color: #17202a;
-                line-height: 1.3;
-                margin-bottom: 4px;
-            ">
-                {titulo}
-            </div>
-            {
-                f'''
-                <div style="
-                    color: #6b7280;
-                    font-size: 0.9rem;
-                    line-height: 1.5;
-                ">
-                    {subtitulo}
-                </div>
-                '''
-                if subtitulo
-                else ""
-            }
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 # ============================================================
 # CSS
+# IMPORTANTE:
+# O conteúdo visual abaixo usa apenas CSS para estilização.
+# Os textos principais são gerados pelo próprio Streamlit.
 # ============================================================
 
 st.markdown(
@@ -105,15 +73,98 @@ st.markdown(
     }
 
     /* ========================================================
-       MÉTRICAS
+       HERO
        ======================================================== */
 
-    div[data-testid="stMetric"] {
-        background: #ffffff;
-        border: 1px solid #e1e6eb;
-        border-radius: 14px;
-        padding: 15px;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    .sf-hero {
+        background: linear-gradient(
+            135deg,
+            #17202a 0%,
+            #263746 55%,
+            #34495e 100%
+        );
+
+        border-radius: 18px;
+        padding: 34px 38px;
+        margin-bottom: 30px;
+
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.12);
+
+        color: white;
+    }
+
+    .sf-hero h1 {
+        margin: 0 0 10px 0;
+        padding: 0;
+
+        font-size: 2.15rem;
+        line-height: 1.2;
+        font-weight: 800;
+
+        letter-spacing: -0.5px;
+
+        color: white;
+    }
+
+    .sf-hero p {
+        margin: 0 0 18px 0;
+        padding: 0;
+
+        font-size: 1rem;
+        line-height: 1.6;
+        font-weight: 400;
+
+        color: #dce3e8;
+    }
+
+    .sf-badge {
+        display: inline-block;
+
+        padding: 7px 14px;
+
+        border-radius: 999px;
+
+        background: rgba(255, 255, 255, 0.12);
+
+        border: 1px solid rgba(255, 255, 255, 0.22);
+
+        font-size: 0.75rem;
+        font-weight: 700;
+
+        letter-spacing: 0.6px;
+
+        color: white;
+    }
+
+    /* ========================================================
+       SEÇÕES
+       ======================================================== */
+
+    .sf-section {
+        margin-top: 28px;
+        margin-bottom: 16px;
+    }
+
+    .sf-section h2 {
+        margin: 0 0 4px 0;
+        padding: 0;
+
+        font-size: 1.35rem;
+        line-height: 1.3;
+
+        font-weight: 800;
+
+        color: #17202a;
+    }
+
+    .sf-section p {
+        margin: 0;
+
+        font-size: 0.9rem;
+        line-height: 1.5;
+
+        color: #6b7280;
     }
 
     /* ========================================================
@@ -145,6 +196,23 @@ st.markdown(
     }
 
     /* ========================================================
+       MÉTRICAS
+       ======================================================== */
+
+    div[data-testid="stMetric"] {
+        background: #ffffff;
+
+        border: 1px solid #e1e6eb;
+
+        border-radius: 14px;
+
+        padding: 15px;
+
+        box-shadow:
+            0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    /* ========================================================
        BOTÕES
        ======================================================== */
 
@@ -156,7 +224,7 @@ st.markdown(
     }
 
     /* ========================================================
-       TABELAS
+       TABELA
        ======================================================== */
 
     div[data-testid="stDataFrame"] {
@@ -175,6 +243,21 @@ st.markdown(
             padding-right: 1rem;
         }
 
+        .sf-hero {
+            padding: 25px 22px;
+        }
+
+        .sf-hero h1 {
+            font-size: 1.65rem;
+        }
+
+        .sf-hero p {
+            font-size: 0.9rem;
+        }
+
+        .sf-section h2 {
+            font-size: 1.15rem;
+        }
     }
 
     </style>
@@ -184,61 +267,29 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO PRINCIPAL
+# CABEÇALHO
+#
+# Não existem mais os blocos:
+# <div class="hero-title">
+# <div class="hero-subtitle">
+# <div class="hero-badge">
+#
+# O HTML inteiro está dentro de UMA única string markdown.
 # ============================================================
 
 st.markdown(
     """
-    <div style="
-        background: linear-gradient(
-            135deg,
-            #17202a 0%,
-            #263746 55%,
-            #34495e 100%
-        );
-        border-radius: 18px;
-        padding: 34px 38px;
-        margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-        color: white;
-    ">
+    <div class="sf-hero">
+        <h1>📐 CALCULADORA STEEL FRAMING</h1>
 
-        <div style="
-            font-size: 2.15rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-            margin-bottom: 10px;
-            color: white;
-        ">
-            📐 CALCULADORA STEEL FRAMING
-        </div>
-
-        <div style="
-            font-size: 1rem;
-            font-weight: 400;
-            color: #dce3e8;
-            line-height: 1.6;
-            margin-bottom: 18px;
-        ">
+        <p>
             Sistema profissional para orçamento de
             materiais, quantitativos e mão de obra.
-        </div>
+        </p>
 
-        <div style="
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            border-radius: 999px;
-            padding: 7px 14px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.6px;
-            color: white;
-        ">
+        <span class="sf-badge">
             ORÇAMENTO PROFISSIONAL • VERSÃO 6C
-        </div>
-
+        </span>
     </div>
     """,
     unsafe_allow_html=True,
@@ -249,9 +300,14 @@ st.markdown(
 # IDENTIFICAÇÃO DO PROJETO
 # ============================================================
 
-titulo_secao(
-    "📋 Identificação do projeto",
-    "Informe os dados principais do orçamento.",
+st.markdown(
+    """
+    <div class="sf-section">
+        <h2>📋 Identificação do projeto</h2>
+        <p>Informe os dados principais do orçamento.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -303,9 +359,14 @@ st.divider()
 # DIMENSÕES DO PROJETO
 # ============================================================
 
-titulo_secao(
-    "📐 Dimensões do projeto",
-    "Informe as dimensões utilizadas no cálculo.",
+st.markdown(
+    """
+    <div class="sf-section">
+        <h2>📐 Dimensões do projeto</h2>
+        <p>Informe as dimensões utilizadas no cálculo.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -351,9 +412,17 @@ st.divider()
 # PREÇOS DOS MATERIAIS
 # ============================================================
 
-titulo_secao(
-    "💰 Preços dos materiais",
-    "Altere os preços conforme fornecedor, região ou condição de compra.",
+st.markdown(
+    """
+    <div class="sf-section">
+        <h2>💰 Preços dos materiais</h2>
+        <p>
+            Altere os preços conforme fornecedor,
+            região ou condição de compra.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -400,10 +469,18 @@ previa = calcular_projeto(
 # QUANTIDADES DOS MATERIAIS
 # ============================================================
 
-titulo_secao(
-    "📦 Quantidades dos materiais",
-    "As quantidades são calculadas automaticamente. "
-    "Você pode alterar qualquer quantidade conforme a necessidade da obra.",
+st.markdown(
+    """
+    <div class="sf-section">
+        <h2>📦 Quantidades dos materiais</h2>
+        <p>
+            As quantidades são calculadas automaticamente.
+            Você pode alterar qualquer quantidade conforme
+            a necessidade da obra.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
@@ -449,7 +526,7 @@ st.divider()
 
 
 # ============================================================
-# CALCULAR ORÇAMENTO
+# BOTÃO DE CÁLCULO
 # ============================================================
 
 if st.button(
@@ -477,7 +554,7 @@ if st.button(
 
 
 # ============================================================
-# RESULTADO
+# RESULTADO DO ORÇAMENTO
 # ============================================================
 
 if "projeto" in st.session_state:
@@ -490,7 +567,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # IDENTIFICAÇÃO DO ORÇAMENTO
+    # IDENTIFICAÇÃO
     # ========================================================
 
     col1, col2 = st.columns(2)
@@ -589,7 +666,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # QUANTITATIVO
+    # QUANTITATIVO DE MATERIAIS
     # ========================================================
 
     st.subheader("📋 Quantitativo de materiais")
