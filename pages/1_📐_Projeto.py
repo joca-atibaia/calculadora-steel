@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-
 from datetime import date
 
 from core.calculos import calcular_projeto
@@ -89,9 +88,7 @@ st.markdown(
             );
 
         border-radius: 18px;
-
         padding: 34px 38px;
-
         margin-bottom: 30px;
 
         box-shadow:
@@ -102,27 +99,18 @@ st.markdown(
 
     .hero-title {
         font-size: 2.15rem;
-
         font-weight: 800;
-
         letter-spacing: -0.5px;
-
         line-height: 1.2;
-
         margin-bottom: 10px;
-
         color: #ffffff;
     }
 
     .hero-subtitle {
         font-size: 1rem;
-
         font-weight: 400;
-
         color: #dce3e8;
-
         line-height: 1.6;
-
         margin-bottom: 18px;
     }
 
@@ -136,13 +124,10 @@ st.markdown(
             1px solid rgba(255, 255, 255, 0.22);
 
         border-radius: 999px;
-
         padding: 7px 14px;
 
         font-size: 0.75rem;
-
         font-weight: 700;
-
         letter-spacing: 0.6px;
 
         color: #ffffff;
@@ -160,23 +145,16 @@ st.markdown(
 
     .section-title {
         font-size: 1.35rem;
-
         font-weight: 800;
-
         color: #17202a;
-
         margin-bottom: 3px;
-
         line-height: 1.3;
     }
 
     .section-subtitle {
         color: #6b7280;
-
         font-size: 0.9rem;
-
         margin-bottom: 18px;
-
         line-height: 1.5;
     }
 
@@ -192,9 +170,7 @@ st.markdown(
             1px solid #e1e6eb;
 
         border-radius: 14px;
-
         padding: 18px 20px;
-
         margin-bottom: 14px;
 
         box-shadow:
@@ -213,7 +189,6 @@ st.markdown(
             1px solid #e1e6eb;
 
         border-radius: 14px;
-
         padding: 15px;
 
         box-shadow:
@@ -231,9 +206,7 @@ st.markdown(
     .stTextArea label,
     .stSelectbox label {
         font-size: 0.88rem !important;
-
         font-weight: 600 !important;
-
         color: #374151 !important;
     }
 
@@ -259,9 +232,7 @@ st.markdown(
     .stButton > button,
     .stDownloadButton > button {
         border-radius: 9px;
-
         font-weight: 700;
-
         min-height: 42px;
     }
 
@@ -272,7 +243,6 @@ st.markdown(
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
-
         overflow: hidden;
     }
 
@@ -390,16 +360,23 @@ with col2:
     )
 
 
-data_orcamento = st.date_input(
-    "Data do orçamento",
-    value=date.today(),
-)
+col1, col2 = st.columns(2)
 
 
-observacoes = st.text_area(
-    "Observações",
-    placeholder="Informações adicionais sobre o orçamento...",
-)
+with col1:
+
+    data_orcamento = st.date_input(
+        "Data do orçamento",
+        value=date.today(),
+    )
+
+
+with col2:
+
+    observacoes = st.text_area(
+        "Observações",
+        placeholder="Informações adicionais sobre o orçamento...",
+    )
 
 
 st.divider()
@@ -563,11 +540,13 @@ for nome, material in previa["materiais"].items():
 
     quantidade_automatica = material["quantidade"]
 
+
     if nome not in st.session_state["quantidades"]:
 
         st.session_state["quantidades"][nome] = (
             quantidade_automatica
         )
+
 
     quantidade_atual = st.number_input(
         nome,
@@ -580,6 +559,7 @@ for nome, material in previa["materiais"].items():
         key=f"quantidade_{nome}",
     )
 
+
     quantidades_atualizadas[nome] = quantidade_atual
 
 
@@ -590,7 +570,7 @@ st.divider()
 
 
 # ============================================================
-# CALCULAR ORÇAMENTO
+# BOTÃO CALCULAR ORÇAMENTO
 # ============================================================
 
 if st.button(
@@ -606,6 +586,7 @@ if st.button(
         quantidades=st.session_state["quantidades"],
     )
 
+
     st.session_state["projeto"] = resultado
 
     st.session_state["nome_projeto"] = nome_projeto
@@ -617,14 +598,20 @@ if st.button(
 
 
 # ============================================================
-# RESULTADO
+# RESULTADO DO ORÇAMENTO
 # ============================================================
 
 if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
+
     st.divider()
+
+
+    # ========================================================
+    # TÍTULO
+    # ========================================================
 
     st.header("📊 Orçamento")
 
@@ -661,10 +648,12 @@ if "projeto" in st.session_state:
             f"{st.session_state.get('responsavel', '')}"
         )
 
+
         data_salva = st.session_state.get(
             "data_orcamento",
             data_orcamento,
         )
+
 
         st.write(
             f"**Data:** "
@@ -676,7 +665,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # RESUMO DO ORÇAMENTO
+    # RESUMO
     # ========================================================
 
     st.subheader(
@@ -856,9 +845,11 @@ if "projeto" in st.session_state:
             "📝 Observações"
         )
 
+
         st.write(
             observacoes_salvas
         )
+
 
         st.divider()
 
