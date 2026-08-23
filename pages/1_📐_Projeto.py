@@ -76,7 +76,7 @@ st.markdown(
 
 
     /* ========================================================
-       ESTILIZAÇÃO NATIVA DO CABEÇALHO (ESTRATÉGIA COMPATÍVEL)
+       ESTILIZAÇÃO NATIVA DO CABEÇALHO
        ======================================================== */
 
     /* Caixa de fundo do cabeçalho */
@@ -231,7 +231,7 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO PRINCIPAL (MÉTODOS NATIVOS APLICADOS)
+# CABEÇALHO PRINCIPAL
 # ============================================================
 
 st.title("📐 CALCULADORA STEEL FRAMING")
@@ -363,7 +363,10 @@ st.divider()
 
 st.markdown(
     '<div class="section-title">💰 Preços dos materiais</div>',
-    thought=st.markdown(
+    unsafe_allow_html=True,
+)
+
+st.markdown(
     '<div class="section-description">'
     'Altere os preços conforme fornecedor, região ou condição de compra.'
     '</div>',
@@ -372,12 +375,21 @@ st.markdown(
 
 
 if "precos" not in st.session_state:
-
     st.session_state["precos"] = PRECOS_BASE.copy()
 
 
 precos_atualizados = {}
 
+# Loop completo para renderizar os campos numéricos de preço por colunas
+cols_precos = st.columns(2)
+for i, (nome, preco_padrao) in enumerate(st.session_state["precos"].items()):
+    with cols_precos[i % 2]:
+        precos_atualizados[nome] = st.number_input(
+            f"Preço: {nome}",
+            min_value=0.0,
+            value=float(preco_padrao),
+            step=0.5,
+            format="%.2f"
+        )
 
-for nome, preco_padrao in st.session_state["precos"].items():
-    pass
+st.session_state["precos"] = precos_atualizados
