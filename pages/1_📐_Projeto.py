@@ -113,7 +113,7 @@ st.markdown(
 
 
     /* ========================================================
-       DESCRIÇÃO
+       SUBTÍTULO
        ======================================================== */
 
     .sf-description {
@@ -436,7 +436,6 @@ st.markdown(
 
 
 if "precos" not in st.session_state:
-
     st.session_state["precos"] = PRECOS_BASE.copy()
 
 
@@ -493,7 +492,6 @@ st.markdown(
 
 
 if "quantidades" not in st.session_state:
-
     st.session_state["quantidades"] = {}
 
 
@@ -505,10 +503,7 @@ for nome, material in previa["materiais"].items():
     quantidade_automatica = material["quantidade"]
 
     if nome not in st.session_state["quantidades"]:
-
-        st.session_state["quantidades"][nome] = (
-            quantidade_automatica
-        )
+        st.session_state["quantidades"][nome] = quantidade_automatica
 
     quantidade_atual = st.number_input(
         nome,
@@ -550,15 +545,10 @@ if st.button(
     st.session_state["projeto"] = resultado
 
     st.session_state["nome_projeto"] = nome_projeto
-
     st.session_state["cliente"] = cliente
-
     st.session_state["local_obra"] = local_obra
-
     st.session_state["responsavel"] = responsavel
-
     st.session_state["data_orcamento"] = data_orcamento
-
     st.session_state["observacoes"] = observacoes
 
 
@@ -632,7 +622,6 @@ if "projeto" in st.session_state:
 
 
     with col1:
-
         st.metric(
             "Área",
             f'{projeto["area"]:.2f} m²',
@@ -640,7 +629,6 @@ if "projeto" in st.session_state:
 
 
     with col2:
-
         st.metric(
             "Materiais",
             formatar_moeda(
@@ -650,7 +638,6 @@ if "projeto" in st.session_state:
 
 
     with col3:
-
         st.metric(
             "Mão de obra",
             formatar_moeda(
@@ -660,7 +647,6 @@ if "projeto" in st.session_state:
 
 
     with col4:
-
         st.metric(
             "Custo geral",
             formatar_moeda(
@@ -689,17 +675,11 @@ if "projeto" in st.session_state:
         tabela_materiais.append(
             {
                 "Material": nome,
-
                 "Unidade": material["unidade"],
-
-                "Quantidade": (
-                    f'{material["quantidade"]:.2f}'
-                ),
-
+                "Quantidade": f'{material["quantidade"]:.2f}',
                 "Preço unitário": formatar_moeda(
                     material["preco_unitario"]
                 ),
-
                 "Total": formatar_moeda(
                     material["custo"]
                 ),
@@ -758,7 +738,6 @@ if "projeto" in st.session_state:
 
 
     with col1:
-
         st.metric(
             "Dias estimados",
             f'{mao_de_obra["dias"]:.1f}',
@@ -766,7 +745,6 @@ if "projeto" in st.session_state:
 
 
     with col2:
-
         st.metric(
             "Diária",
             formatar_moeda(
@@ -776,7 +754,6 @@ if "projeto" in st.session_state:
 
 
     with col3:
-
         st.metric(
             "Custo da mão de obra",
             formatar_moeda(
