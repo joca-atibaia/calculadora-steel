@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-
 from datetime import date
 
 from core.calculos import calcular_projeto
@@ -39,13 +38,13 @@ st.markdown(
     """
     <style>
 
-    /* ======================================================
-       BASE
-       ====================================================== */
-
     @import url(
         'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
     );
+
+    /* ======================================================
+       BASE
+       ====================================================== */
 
     html,
     body,
@@ -136,7 +135,7 @@ st.markdown(
 
 
     /* ======================================================
-       TÍTULOS DAS SEÇÕES
+       SEÇÕES
        ====================================================== */
 
     .section-header {
@@ -190,6 +189,7 @@ st.markdown(
             1px solid #e1e6eb;
 
         border-radius: 14px;
+
         padding: 15px;
 
         box-shadow:
@@ -198,7 +198,7 @@ st.markdown(
 
 
     /* ======================================================
-       INPUTS
+       CAMPOS
        ====================================================== */
 
     .stTextInput label,
@@ -284,7 +284,7 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO
+# CABEÇALHO 6C
 # ============================================================
 
 st.markdown(
@@ -334,7 +334,6 @@ st.markdown(
 
 col1, col2 = st.columns(2)
 
-
 with col1:
 
     nome_projeto = st.text_input(
@@ -377,7 +376,7 @@ st.divider()
 
 
 # ============================================================
-# DIMENSÕES
+# DIMENSÕES DO PROJETO
 # ============================================================
 
 st.markdown(
@@ -399,7 +398,6 @@ st.markdown(
 
 
 col1, col2, col3 = st.columns(3)
-
 
 with col1:
 
@@ -497,7 +495,7 @@ previa = calcular_projeto(
 
 
 # ============================================================
-# QUANTIDADES
+# QUANTIDADES DOS MATERIAIS
 # ============================================================
 
 st.markdown(
@@ -604,7 +602,6 @@ if "projeto" in st.session_state:
 
     col1, col2 = st.columns(2)
 
-
     with col1:
 
         st.write(
@@ -698,7 +695,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # QUANTITATIVO
+    # QUANTITATIVO DE MATERIAIS
     # ========================================================
 
     st.subheader(
@@ -709,9 +706,7 @@ if "projeto" in st.session_state:
     tabela_materiais = []
 
 
-    for nome, material in (
-        projeto["materiais"].items()
-    ):
+    for nome, material in projeto["materiais"].items():
 
         tabela_materiais.append(
             {
