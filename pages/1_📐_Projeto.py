@@ -8,7 +8,7 @@ from core.dados import PRECOS_BASE
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
@@ -32,16 +32,12 @@ def formatar_moeda(valor):
 
 
 # ============================================================
-# CSS — VISUAL PROFISSIONAL 6C
+# CSS — VISUAL 6C
 # ============================================================
 
 st.markdown(
     """
     <style>
-
-    /* ======================================================
-       BASE
-       ====================================================== */
 
     @import url(
         'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
@@ -49,8 +45,8 @@ st.markdown(
 
     html,
     body,
-    [data-testid="stAppViewContainer"],
-    .stApp {
+    .stApp,
+    [data-testid="stAppViewContainer"] {
         font-family:
             "Inter",
             "Segoe UI",
@@ -74,7 +70,6 @@ st.markdown(
         background: transparent;
     }
 
-
     /* ======================================================
        HERO
        ====================================================== */
@@ -89,9 +84,7 @@ st.markdown(
             );
 
         border-radius: 18px;
-
         padding: 34px 38px;
-
         margin-bottom: 30px;
 
         box-shadow:
@@ -102,27 +95,18 @@ st.markdown(
 
     .hero-title {
         font-size: 2.15rem;
-
         font-weight: 800;
-
         letter-spacing: -0.5px;
-
         line-height: 1.2;
-
         margin-bottom: 10px;
-
         color: #ffffff;
     }
 
     .hero-subtitle {
         font-size: 1rem;
-
         font-weight: 400;
-
         color: #dce3e8;
-
         line-height: 1.6;
-
         margin-bottom: 18px;
     }
 
@@ -140,68 +124,35 @@ st.markdown(
         padding: 7px 14px;
 
         font-size: 0.75rem;
-
         font-weight: 700;
-
         letter-spacing: 0.6px;
 
         color: #ffffff;
     }
 
-
     /* ======================================================
-       TÍTULOS DAS SEÇÕES
+       SEÇÕES
        ====================================================== */
 
     .section-header {
         margin-top: 28px;
-
         margin-bottom: 16px;
     }
 
     .section-title {
         font-size: 1.35rem;
-
         font-weight: 800;
-
         color: #17202a;
-
         margin-bottom: 3px;
-
         line-height: 1.3;
     }
 
     .section-subtitle {
         color: #6b7280;
-
         font-size: 0.9rem;
-
         margin-bottom: 18px;
-
         line-height: 1.5;
     }
-
-
-    /* ======================================================
-       CARDS
-       ====================================================== */
-
-    .info-card {
-        background: #ffffff;
-
-        border:
-            1px solid #e1e6eb;
-
-        border-radius: 14px;
-
-        padding: 18px 20px;
-
-        margin-bottom: 14px;
-
-        box-shadow:
-            0 3px 12px rgba(0, 0, 0, 0.04);
-    }
-
 
     /* ======================================================
        MÉTRICAS
@@ -221,9 +172,8 @@ st.markdown(
             0 3px 12px rgba(0, 0, 0, 0.04);
     }
 
-
     /* ======================================================
-       INPUTS
+       CAMPOS
        ====================================================== */
 
     .stTextInput label,
@@ -232,9 +182,7 @@ st.markdown(
     .stTextArea label,
     .stSelectbox label {
         font-size: 0.88rem !important;
-
         font-weight: 600 !important;
-
         color: #374151 !important;
     }
 
@@ -252,19 +200,16 @@ st.markdown(
             sans-serif !important;
     }
 
-
     /* ======================================================
        BOTÕES
        ====================================================== */
 
-    .stButton > button {
+    .stButton > button,
+    .stDownloadButton > button {
         border-radius: 9px;
-
         font-weight: 700;
-
         min-height: 42px;
     }
-
 
     /* ======================================================
        TABELAS
@@ -272,10 +217,8 @@ st.markdown(
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
-
         overflow: hidden;
     }
-
 
     /* ======================================================
        RESPONSIVIDADE
@@ -303,7 +246,6 @@ st.markdown(
         .section-title {
             font-size: 1.15rem;
         }
-
     }
 
     </style>
@@ -313,7 +255,7 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO PROFISSIONAL
+# CABEÇALHO
 # ============================================================
 
 st.markdown(
@@ -363,7 +305,6 @@ st.markdown(
 
 col1, col2 = st.columns(2)
 
-
 with col1:
 
     nome_projeto = st.text_input(
@@ -406,7 +347,7 @@ st.divider()
 
 
 # ============================================================
-# DADOS DO PROJETO
+# DIMENSÕES
 # ============================================================
 
 st.markdown(
@@ -464,7 +405,7 @@ st.divider()
 
 
 # ============================================================
-# PREÇOS
+# PREÇOS DOS MATERIAIS
 # ============================================================
 
 st.markdown(
@@ -487,7 +428,6 @@ st.markdown(
 
 
 if "precos" not in st.session_state:
-
     st.session_state["precos"] = PRECOS_BASE.copy()
 
 
@@ -550,7 +490,6 @@ st.markdown(
 
 
 if "quantidades" not in st.session_state:
-
     st.session_state["quantidades"] = {}
 
 
@@ -611,15 +550,10 @@ if st.button(
     st.session_state["projeto"] = resultado
 
     st.session_state["nome_projeto"] = nome_projeto
-
     st.session_state["cliente"] = cliente
-
     st.session_state["local_obra"] = local_obra
-
     st.session_state["responsavel"] = responsavel
-
     st.session_state["data_orcamento"] = data_orcamento
-
     st.session_state["observacoes"] = observacoes
 
 
@@ -734,7 +668,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # TABELA PROFISSIONAL DE MATERIAIS
+    # QUANTITATIVO
     # ========================================================
 
     st.subheader(
@@ -865,7 +799,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # CUSTO GERAL
+    # TOTAL
     # ========================================================
 
     st.success(
