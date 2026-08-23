@@ -71,7 +71,7 @@ st.markdown(
 
 
     /* ========================================================
-       CABEÇALHO
+       CABEÇALHO NATIVO
        ======================================================== */
 
     .sf-title-box {
@@ -92,11 +92,6 @@ st.markdown(
             0 10px 30px rgba(0, 0, 0, 0.12);
     }
 
-
-    /* ========================================================
-       TÍTULO — AZUL-AÇO
-       ======================================================== */
-
     .sf-title {
         color: #6fa8c9;
 
@@ -111,11 +106,6 @@ st.markdown(
         margin-bottom: 8px;
     }
 
-
-    /* ========================================================
-       SUBTÍTULO — PRETO
-       ======================================================== */
-
     .sf-description {
         color: #000000;
 
@@ -125,11 +115,6 @@ st.markdown(
 
         margin-bottom: 14px;
     }
-
-
-    /* ========================================================
-       VERSÃO — PRETO
-       ======================================================== */
 
     .sf-version {
         display: inline-block;
@@ -277,24 +262,27 @@ st.markdown(
 # ============================================================
 
 st.markdown(
-    """
-    <div class="sf-title-box">
+    '<div class="sf-title-box">',
+    unsafe_allow_html=True,
+)
 
-        <div class="sf-title">
-            📐 CALCULADORA STEEL FRAMING
-        </div>
+st.markdown(
+    "📐 CALCULADORA STEEL FRAMING",
+    unsafe_allow_html=False,
+)
 
-        <div class="sf-description">
-            Sistema profissional para orçamento de materiais,
-            quantitativos e mão de obra.
-        </div>
+st.markdown(
+    "Sistema profissional para orçamento de materiais, "
+    "quantitativos e mão de obra.",
+    unsafe_allow_html=False,
+)
 
-        <div class="sf-version">
-            ORÇAMENTO PROFISSIONAL • VERSÃO 6C
-        </div>
+st.caption(
+    "ORÇAMENTO PROFISSIONAL • VERSÃO 6C"
+)
 
-    </div>
-    """,
+st.markdown(
+    "</div>",
     unsafe_allow_html=True,
 )
 
