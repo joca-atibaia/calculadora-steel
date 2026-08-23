@@ -94,18 +94,19 @@ st.markdown(
 
 
     /* ========================================================
-       TÍTULO NATIVO DO STREAMLIT
+       TÍTULO DO CABEÇALHO
        ======================================================== */
 
     .sf-header-title {
         font-size: 2.15rem;
+
         line-height: 1.2;
 
         font-weight: 800;
 
         letter-spacing: -0.5px;
 
-        color: white;
+        color: #ffffff;
 
         margin: 0;
     }
@@ -122,9 +123,9 @@ st.markdown(
 
         line-height: 1.6;
 
-        margin-top: 0;
+        margin-top: 8px;
 
-        margin-bottom: 10px;
+        margin-bottom: 14px;
     }
 
 
@@ -149,7 +150,7 @@ st.markdown(
 
         letter-spacing: 0.6px;
 
-        color: white;
+        color: #ffffff;
     }
 
 
@@ -159,11 +160,13 @@ st.markdown(
 
     .sf-section {
         margin-top: 28px;
+
         margin-bottom: 16px;
     }
 
     .sf-section h2 {
         margin: 0 0 4px 0;
+
         padding: 0;
 
         font-size: 1.35rem;
@@ -268,6 +271,7 @@ st.markdown(
 
         .block-container {
             padding-left: 1rem;
+
             padding-right: 1rem;
         }
 
@@ -298,42 +302,29 @@ st.markdown(
 # CABEÇALHO PRINCIPAL
 #
 # IMPORTANTE:
-# Não usamos <p>, <span> ou <div> para os textos.
-# O título, subtítulo e badge são renderizados pelo Streamlit.
+# O cabeçalho inteiro fica dentro de um único st.markdown().
+# Isso garante que o HTML seja renderizado corretamente.
 # ============================================================
 
 st.markdown(
     """
     <div class="sf-header">
-    """,
-    unsafe_allow_html=True,
-)
 
-st.markdown(
-    "📐 CALCULADORA STEEL FRAMING"
-)
+        <div class="sf-header-title">
+            📐 CALCULADORA STEEL FRAMING
+        </div>
 
-st.markdown(
-    """
-    <div class="sf-subtitle">
-        Sistema profissional para orçamento de
-        materiais, quantitativos e mão de obra.
+        <div class="sf-subtitle">
+            Sistema profissional para orçamento de
+            materiais, quantitativos e mão de obra.
+        </div>
+
+        <div class="sf-badge">
+            ORÇAMENTO PROFISSIONAL • VERSÃO 6C
+        </div>
+
     </div>
     """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    """
-    <div class="sf-badge">
-        ORÇAMENTO PROFISSIONAL • VERSÃO 6C
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    "</div>",
     unsafe_allow_html=True,
 )
 
@@ -584,10 +575,15 @@ if st.button(
     st.session_state["projeto"] = resultado
 
     st.session_state["nome_projeto"] = nome_projeto
+
     st.session_state["cliente"] = cliente
+
     st.session_state["local_obra"] = local_obra
+
     st.session_state["responsavel"] = responsavel
+
     st.session_state["data_orcamento"] = data_orcamento
+
     st.session_state["observacoes"] = observacoes
 
 
@@ -718,13 +714,17 @@ if "projeto" in st.session_state:
         tabela_materiais.append(
             {
                 "Material": nome,
+
                 "Unidade": material["unidade"],
+
                 "Quantidade": (
                     f'{material["quantidade"]:.2f}'
                 ),
+
                 "Preço unitário": formatar_moeda(
                     material["preco_unitario"]
                 ),
+
                 "Total": formatar_moeda(
                     material["custo"]
                 ),
