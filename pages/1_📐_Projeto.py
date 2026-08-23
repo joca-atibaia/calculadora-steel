@@ -1446,100 +1446,102 @@ def gerar_pdf(projeto):
     # Uma única linha + nome + cargo.
     # ========================================================
 
-    elementos.append(
-        Spacer(1, 32)
-    )
+    # ========================================================
+# ASSINATURA
+# ========================================================
 
+elementos.append(
+    Spacer(1, 28)
+)
 
-    assinatura = Table(
+# Caixa da assinatura
+assinatura = Table(
+    [
         [
-            [
-                Paragraph(
-                    " ",
-                    estilo_normal,
-                )
-            ],
-            [
-                Paragraph(
-                    texto_seguro(
-                        responsavel,
-                        "Responsável pelo orçamento",
-                    ),
-                    estilo_assinatura_nome,
-                )
-            ],
-            [
-                Paragraph(
-                    "Responsável pelo orçamento",
-                    estilo_assinatura_cargo,
-                )
-            ],
-        ],
-        colWidths=[
-            100 * mm,
-        ],
+            Paragraph(
+                " ",
+                estilo_normal,
+            )
+        ]
+    ],
+    colWidths=[
+        100 * mm,
+    ],
+    rowHeights=[
+        12 * mm,
+    ],
+)
+
+assinatura.setStyle(
+    TableStyle(
+        [
+            (
+                "LINEBELOW",
+                (0, 0),
+                (-1, -1),
+                0.8,
+                colors.HexColor("#333333"),
+            ),
+            (
+                "ALIGN",
+                (0, 0),
+                (-1, -1),
+                "CENTER",
+            ),
+            (
+                "VALIGN",
+                (0, 0),
+                (-1, -1),
+                "BOTTOM",
+            ),
+        ]
     )
+)
 
+elementos.append(assinatura)
 
-    assinatura.setStyle(
-        TableStyle(
-            [
-                (
-                    "LINEABOVE",
-                    (0, 0),
-                    (-1, 0),
-                    0.8,
-                    colors.HexColor("#333333"),
-                ),
-                (
-                    "ALIGN",
-                    (0, 0),
-                    (-1, -1),
-                    "CENTER",
-                ),
-                (
-                    "TOPPADDING",
-                    (0, 0),
-                    (-1, 0),
-                    0,
-                ),
-                (
-                    "BOTTOMPADDING",
-                    (0, 0),
-                    (-1, 0),
-                    4,
-                ),
-                (
-                    "TOPPADDING",
-                    (0, 1),
-                    (-1, 1),
-                    2,
-                ),
-                (
-                    "BOTTOMPADDING",
-                    (0, 1),
-                    (-1, 1),
-                    1,
-                ),
-                (
-                    "TOPPADDING",
-                    (0, 2),
-                    (-1, 2),
-                    1,
-                ),
-                (
-                    "BOTTOMPADDING",
-                    (0, 2),
-                    (-1, 2),
-                    0,
-                ),
-            ]
+# Nome do responsável — somente se informado
+if responsavel and responsavel.strip():
+
+    elementos.append(
+        Paragraph(
+            f"<b>{responsavel.strip()}</b>",
+            ParagraphStyle(
+                "NomeResponsavel",
+                parent=estilo_normal,
+                alignment=TA_CENTER,
+                spaceBefore=5,
+                spaceAfter=2,
+            ),
         )
     )
 
-
     elementos.append(
-        assinatura
+        Paragraph(
+            "Responsável pelo orçamento",
+            ParagraphStyle(
+                "CargoResponsavel",
+                parent=estilo_pequeno,
+                alignment=TA_CENTER,
+                textColor=colors.grey,
+            ),
+        )
+    )
+
+else:
+
+    # Se não houver nome informado,
+    # aparece somente uma identificação.
+    elementos.append(
+        Paragraph(
+            "<b>Responsável pelo orçamento</b>",
+            ParagraphStyle(
+                "ResponsavelSemNome",
+                parent=estilo_normal,
+                alignment=TA_CENTER,
+                spaceBefore=5,
+            ),
+        )
     )
 
 
