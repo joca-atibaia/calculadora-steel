@@ -38,20 +38,14 @@ st.markdown(
     """
     <style>
 
-    /* ========================================================
-       FONTE GERAL
-       ======================================================== */
-
     @import url(
         'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
     );
-
 
     html,
     body,
     [data-testid="stAppViewContainer"],
     .stApp {
-
         font-family:
             "Inter",
             "Segoe UI",
@@ -61,26 +55,15 @@ st.markdown(
             sans-serif !important;
     }
 
-
-    /* ========================================================
-       FUNDO
-       ======================================================== */
-
     .stApp {
         background: #f5f7fa;
-        color: #17202a;
     }
-
 
     .block-container {
-
         max-width: 1400px;
-
         padding-top: 2rem;
-
         padding-bottom: 4rem;
     }
-
 
     [data-testid="stHeader"] {
         background: transparent;
@@ -92,7 +75,6 @@ st.markdown(
        ======================================================== */
 
     .sf-title-box {
-
         background: linear-gradient(
             135deg,
             #17202a 0%,
@@ -112,130 +94,93 @@ st.markdown(
 
 
     /* ========================================================
-       TÍTULO DO CABEÇALHO
-       AZUL-AÇO
+       TÍTULO — AZUL-AÇO
        ======================================================== */
 
     .sf-title {
+        color: #6fa8c9;
 
-        color: #7dd3fc !important;
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
-
-        font-size: 2.15rem !important;
+        font-size: 2.15rem;
 
         line-height: 1.2;
 
-        font-weight: 800 !important;
+        font-weight: 800;
 
         letter-spacing: -0.5px;
 
-        margin: 0 0 8px 0 !important;
-
-        padding: 0 !important;
+        margin-bottom: 8px;
     }
 
 
     /* ========================================================
-       SUBTÍTULO
-       CINZA CLARO
+       SUBTÍTULO — PRETO
        ======================================================== */
 
     .sf-description {
+        color: #000000;
 
-        color: #e2e8f0 !important;
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
-
-        font-size: 1rem !important;
+        font-size: 1rem;
 
         line-height: 1.6;
 
-        font-weight: 400 !important;
+        margin-bottom: 14px;
 
-        margin: 0 0 14px 0 !important;
-
-        padding: 0 !important;
+        font-weight: 500;
     }
 
 
     /* ========================================================
-       BADGE
+       VERSÃO — PRETO
        ======================================================== */
 
     .sf-version {
-
         display: inline-block;
 
-        color: #ffffff !important;
+        color: #000000;
 
-        background: rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.80);
 
-        border: 1px solid rgba(255, 255, 255, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.90);
 
         border-radius: 999px;
 
         padding: 7px 14px;
 
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
+        font-size: 0.75rem;
 
-        font-size: 0.75rem !important;
-
-        font-weight: 700 !important;
+        font-weight: 700;
 
         letter-spacing: 0.6px;
     }
 
 
     /* ========================================================
-       TÍTULOS DAS SEÇÕES
+       SEÇÕES
        ======================================================== */
 
     .section-title {
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
-
         font-size: 1.35rem;
 
         font-weight: 800;
 
-        color: #17202a !important;
+        color: #17202a;
 
         margin-top: 28px;
 
         margin-bottom: 4px;
     }
 
-
     .section-description {
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
-
         font-size: 0.9rem;
 
-        color: #6b7280 !important;
+        color: #6b7280;
 
         margin-bottom: 16px;
     }
 
 
     /* ========================================================
-       LABELS DOS CAMPOS
+       CAMPOS
        ======================================================== */
 
     .stTextInput label,
@@ -243,12 +188,6 @@ st.markdown(
     .stDateInput label,
     .stTextArea label,
     .stSelectbox label {
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
-
         font-size: 0.88rem !important;
 
         font-weight: 600 !important;
@@ -256,36 +195,9 @@ st.markdown(
         color: #374151 !important;
     }
 
-
-    /* ========================================================
-       TEXTO DOS CAMPOS
-       ======================================================== */
-
-    .stTextInput input,
-    .stNumberInput input,
-    .stDateInput input,
-    .stTextArea textarea {
-
-        color: #17202a !important;
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
-    }
-
-
-    /* ========================================================
-       PLACEHOLDER
-       ======================================================== */
-
-    .stTextInput input::placeholder,
-    .stNumberInput input::placeholder,
-    .stTextArea textarea::placeholder {
-
-        color: #9ca3af !important;
-
-        opacity: 1 !important;
+    div[data-baseweb="input"] > div,
+    div[data-baseweb="textarea"] > div {
+        border-radius: 9px;
     }
 
 
@@ -294,7 +206,6 @@ st.markdown(
        ======================================================== */
 
     div[data-testid="stMetric"] {
-
         background: #ffffff;
 
         border: 1px solid #e1e6eb;
@@ -308,51 +219,17 @@ st.markdown(
     }
 
 
-    div[data-testid="stMetricLabel"] {
-
-        color: #374151 !important;
-
-        font-weight: 600 !important;
-    }
-
-
-    div[data-testid="stMetricValue"] {
-
-        color: #17202a !important;
-
-        font-weight: 800 !important;
-    }
-
-
-    div[data-testid="stMetricDelta"] {
-
-        color: #374151 !important;
-    }
-
-
     /* ========================================================
        BOTÕES
        ======================================================== */
 
     .stButton > button,
     .stDownloadButton > button {
-
         border-radius: 9px;
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
 
         font-weight: 700;
 
         min-height: 42px;
-    }
-
-
-    .stButton > button[kind="primary"] {
-
-        color: #ffffff !important;
     }
 
 
@@ -361,50 +238,9 @@ st.markdown(
        ======================================================== */
 
     div[data-testid="stDataFrame"] {
-
         border-radius: 12px;
 
         overflow: hidden;
-    }
-
-
-    /* ========================================================
-       TÍTULOS NATIVOS DO RESULTADO
-       ======================================================== */
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-
-        color: #17202a !important;
-
-        font-family:
-            "Inter",
-            "Segoe UI",
-            sans-serif !important;
-    }
-
-
-    /* ========================================================
-       TEXTOS GERAIS
-       ======================================================== */
-
-    .stMarkdown p {
-
-        color: #17202a;
-    }
-
-
-    /* ========================================================
-       DIVISORES
-       ======================================================== */
-
-    hr {
-
-        border-color: #dfe4e8 !important;
     }
 
 
@@ -415,27 +251,19 @@ st.markdown(
     @media (max-width: 768px) {
 
         .block-container {
-
             padding-left: 1rem;
-
             padding-right: 1rem;
         }
 
-
         .sf-title {
-
-            font-size: 1.65rem !important;
+            font-size: 1.65rem;
         }
-
 
         .sf-description {
-
-            font-size: 0.9rem !important;
+            font-size: 0.9rem;
         }
 
-
         .section-title {
-
             font-size: 1.15rem;
         }
     }
@@ -451,38 +279,24 @@ st.markdown(
 # ============================================================
 
 st.markdown(
-    '<div class="sf-title-box">',
-    unsafe_allow_html=True,
-)
+    """
+    <div class="sf-title-box">
 
+        <div class="sf-title">
+            📐 CALCULADORA STEEL FRAMING
+        </div>
 
-st.markdown(
-    '<div class="sf-title">'
-    '📐 CALCULADORA STEEL FRAMING'
-    '</div>',
-    unsafe_allow_html=True,
-)
+        <div class="sf-description">
+            Sistema profissional para orçamento de materiais,
+            quantitativos e mão de obra.
+        </div>
 
+        <div class="sf-version">
+            ORÇAMENTO PROFISSIONAL • VERSÃO 6C
+        </div>
 
-st.markdown(
-    '<div class="sf-description">'
-    'Sistema profissional para orçamento de materiais, '
-    'quantitativos e mão de obra.'
-    '</div>',
-    unsafe_allow_html=True,
-)
-
-
-st.markdown(
-    '<div class="sf-version">'
-    'ORÇAMENTO PROFISSIONAL • VERSÃO 6C'
-    '</div>',
-    unsafe_allow_html=True,
-)
-
-
-st.markdown(
-    '</div>',
+    </div>
+    """,
     unsafe_allow_html=True,
 )
 
@@ -492,12 +306,9 @@ st.markdown(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">'
-    '📋 Identificação do projeto'
-    '</div>',
+    '<div class="section-title">📋 Identificação do projeto</div>',
     unsafe_allow_html=True,
 )
-
 
 st.markdown(
     '<div class="section-description">'
@@ -556,12 +367,9 @@ st.divider()
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">'
-    '📐 Dimensões do projeto'
-    '</div>',
+    '<div class="section-title">📐 Dimensões do projeto</div>',
     unsafe_allow_html=True,
 )
-
 
 st.markdown(
     '<div class="section-description">'
@@ -614,12 +422,9 @@ st.divider()
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">'
-    '💰 Preços dos materiais'
-    '</div>',
+    '<div class="section-title">💰 Preços dos materiais</div>',
     unsafe_allow_html=True,
 )
-
 
 st.markdown(
     '<div class="section-description">'
@@ -673,12 +478,9 @@ previa = calcular_projeto(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">'
-    '📦 Quantidades dos materiais'
-    '</div>',
+    '<div class="section-title">📦 Quantidades dos materiais</div>',
     unsafe_allow_html=True,
 )
-
 
 st.markdown(
     '<div class="section-description">'
@@ -701,13 +503,11 @@ for nome, material in previa["materiais"].items():
 
     quantidade_automatica = material["quantidade"]
 
-
     if nome not in st.session_state["quantidades"]:
 
         st.session_state["quantidades"][nome] = (
             quantidade_automatica
         )
-
 
     quantidade_atual = st.number_input(
         nome,
@@ -719,7 +519,6 @@ for nome, material in previa["materiais"].items():
         format="%.2f",
         key=f"quantidade_{nome}",
     )
-
 
     quantidades_atualizadas[nome] = quantidade_atual
 
@@ -746,7 +545,6 @@ if st.button(
         precos=st.session_state["precos"],
         quantidades=st.session_state["quantidades"],
     )
-
 
     st.session_state["projeto"] = resultado
 
@@ -808,12 +606,10 @@ if "projeto" in st.session_state:
             f"{st.session_state.get('responsavel', '')}"
         )
 
-
         data_salva = st.session_state.get(
             "data_orcamento",
             data_orcamento,
         )
-
 
         st.write(
             f"**Data:** "
@@ -828,9 +624,7 @@ if "projeto" in st.session_state:
     # RESUMO
     # ========================================================
 
-    st.subheader(
-        "📊 Resumo do orçamento"
-    )
+    st.subheader("📊 Resumo do orçamento")
 
 
     col1, col2, col3, col4 = st.columns(4)
@@ -1009,11 +803,9 @@ if "projeto" in st.session_state:
             "📝 Observações"
         )
 
-
         st.write(
             observacoes_salvas
         )
-
 
         st.divider()
 
