@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-
 from datetime import date
 
 from core.calculos import calcular_projeto
@@ -24,7 +23,7 @@ st.set_page_config(
 
 def formatar_moeda(valor):
     return (
-        f"R$ {valor:,.2f}"
+        f"R$ {float(valor):,.2f}"
         .replace(",", "X")
         .replace(".", ",")
         .replace("X", ".")
@@ -124,15 +123,9 @@ st.markdown(
 
     .hero-badge {
         display: inline-block;
-
-        background:
-            rgba(255, 255, 255, 0.12);
-
-        border:
-            1px solid rgba(255, 255, 255, 0.22);
-
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.22);
         border-radius: 999px;
-
         padding: 7px 14px;
 
         font-size: 0.75rem;
@@ -143,7 +136,7 @@ st.markdown(
     }
 
     /* ======================================================
-       SEÇÕES
+       TÍTULOS DAS SEÇÕES
        ====================================================== */
 
     .section-header {
@@ -172,14 +165,9 @@ st.markdown(
 
     .info-card {
         background: #ffffff;
-
-        border:
-            1px solid #e1e6eb;
-
+        border: 1px solid #e1e6eb;
         border-radius: 14px;
-
         padding: 18px 20px;
-
         margin-bottom: 14px;
 
         box-shadow:
@@ -192,12 +180,8 @@ st.markdown(
 
     div[data-testid="stMetric"] {
         background: #ffffff;
-
-        border:
-            1px solid #e1e6eb;
-
+        border: 1px solid #e1e6eb;
         border-radius: 14px;
-
         padding: 15px;
 
         box-shadow:
@@ -523,9 +507,7 @@ for nome, material in previa["materiais"].items():
     quantidades_atualizadas[nome] = quantidade_atual
 
 
-st.session_state["quantidades"] = (
-    quantidades_atualizadas
-)
+st.session_state["quantidades"] = quantidades_atualizadas
 
 
 st.divider()
@@ -629,7 +611,9 @@ if "projeto" in st.session_state:
     # RESUMO DO ORÇAMENTO
     # ========================================================
 
-    st.subheader("📊 Resumo do orçamento")
+    st.subheader(
+        "📊 Resumo do orçamento"
+    )
 
 
     col1, col2, col3, col4 = st.columns(4)
@@ -812,7 +796,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # TOTAL FINAL
+    # TOTAL
     # ========================================================
 
     st.success(
