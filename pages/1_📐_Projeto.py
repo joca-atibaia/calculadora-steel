@@ -1,427 +1,372 @@
-"""
-Motor de cálculo da Calculadora Steel Framing.
+import streamlit as st
 
-Este módulo concentra toda a lógica matemática do aplicativo.
-A interface gráfica fica nas páginas do Streamlit.
-"""
+from core.calculos import calcular_projeto
+from core.dados import PRECOS_BASE
 
-from .dados import (
-    MATERIAIS,
-    CONFIGURACAO_PROJETO,
+
+# ============================================================
+# CONFIGURAÇÃO DA PÁGINA
+# ============================================================
+
+st.set_page_config(
+    page_title="Projeto | Calculadora Steel",
+    page_icon="📐",
+    layout="wide",
 )
 
 
 # ============================================================
-# PROJETO
+# FUNÇÕES AUXILIARES
 # ============================================================
 
-def calcular_area(comprimento, altura):
-    """
-    Calcula a área do projeto.
-
-    Fórmula:
-        área = comprimento × altura
-    """
-
-    if comprimento <= 0 or altura <= 0:
-        raise ValueError(
-            "Comprimento e altura devem ser maiores que zero."
-        )
-
-    return comprimento * altura
-
-
-# ============================================================
-# MATERIAIS
-# ============================================================
-
-def calcular_quantidade_material(
-    area,
-    coeficiente,
-):
-    """
-    Calcula a quantidade automática do material.
-
-    Metodologia atual:
-
-        quantidade =
-        (área do projeto ÷ área de referência)
-        × coeficiente
-
-    A área de referência padrão é 30 m².
-    """
-
-    if area <= 0:
-        return 0.0
-
-    area_referencia = CONFIGURACAO_PROJETO.get(
-        "area_referencia",
-        30.00,
-    )
-
-    if area_referencia <= 0:
-        raise ValueError(
-            "A área de referência deve ser maior que zero."
-        )
-
+def formatar_moeda(valor):
     return (
-        area / area_referencia
-    ) * coeficiente
-
-
-def calcular_custo_material(
-    quantidade,
-    preco_unitario,
-):
-    """
-    Calcula o custo total de um material.
-
-    Fórmula:
-        quantidade × preço unitário
-    """
-
-    return quantidade * preco_unitario
-
-
-def calcular_materiais(
-    area,
-    materiais=None,
-    precos=None,
-    quantidades=None,
-):
-    """
-    Calcula quantitativo e custo dos materiais.
-
-    O sistema calcula automaticamente a quantidade.
-
-    Se uma quantidade manual for informada,
-    ela substitui a quantidade automática.
-
-    Os preços personalizados têm prioridade
-    sobre os preços padrão.
-    """
-
-    if materiais is None:
-        materiais = MATERIAIS
-
-    if quantidades is None:
-        quantidades = {}
-
-    resultado = {}
-
-    for nome, dados in materiais.items():
-
-        # ----------------------------------------------------
-        # MATERIAL ATIVO
-        # ----------------------------------------------------
-
-        if not dados.get("ativo", True):
-            continue
-
-        # ----------------------------------------------------
-        # COEFICIENTE
-        # ----------------------------------------------------
-
-        coeficiente = dados.get(
-            "coeficiente",
-            0.0,
-        )
-
-        # ----------------------------------------------------
-        # PREÇO
-        # ----------------------------------------------------
-
-        preco = dados.get(
-            "preco",
-            0.0,
-        )
-
-        if precos is not None and nome in precos:
-            preco = precos[nome]
-
-        # ----------------------------------------------------
-        # QUANTIDADE AUTOMÁTICA
-        # ----------------------------------------------------
-
-        quantidade_automatica = (
-            calcular_quantidade_material(
-                area=area,
-                coeficiente=coeficiente,
-            )
-        )
-
-        # ----------------------------------------------------
-        # QUANTIDADE FINAL
-        # ----------------------------------------------------
-
-        if nome in quantidades:
-            quantidade = float(
-                quantidades[nome]
-            )
-        else:
-            quantidade = quantidade_automatica
-
-        # ----------------------------------------------------
-        # CUSTO
-        # ----------------------------------------------------
-
-        custo = calcular_custo_material(
-            quantidade=quantidade,
-            preco_unitario=preco,
-        )
-
-        # ----------------------------------------------------
-        # RESULTADO
-        # ----------------------------------------------------
-
-        resultado[nome] = {
-            "quantidade": quantidade,
-            "quantidade_automatica": quantidade_automatica,
-            "preco_unitario": preco,
-            "custo": custo,
-            "unidade": dados.get(
-                "unidade",
-                "un",
-            ),
-            "categoria": dados.get(
-                "categoria",
-                "Outros",
-            ),
-        }
-
-    return resultado
-
-
-def calcular_subtotal_materiais(materiais):
-    """
-    Soma o custo de todos os materiais.
-    """
-
-    return sum(
-        item["custo"]
-        for item in materiais.values()
+        f"R$ {valor:,.2f}"
+        .replace(",", "X")
+        .replace(".", ",")
+        .replace("X", ".")
     )
 
 
 # ============================================================
-# MASSAS E TELAS
+# CABEÇALHO
 # ============================================================
 
-def calcular_massas_telas(
-    subtotal_materiais,
-    valor_manual=None,
-):
-    """
-    Calcula o custo de Massas e Telas.
+st.title("📐 Novo Projeto")
+st.caption("Calculadora Steel Framing")
 
-    Se um valor manual for informado,
-    ele será utilizado.
+st.divider()
 
-    Caso contrário, utiliza o percentual
-    definido em CONFIGURACAO_PROJETO.
-    """
 
-    if valor_manual is not None:
-        return float(valor_manual)
+# ============================================================
+# DADOS DO PROJETO
+# ============================================================
 
-    percentual = CONFIGURACAO_PROJETO.get(
-        "percentual_massas_telas",
-        0.05,
+st.subheader("Dados do projeto")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    nome_projeto = st.text_input(
+        "Nome do projeto",
+        placeholder="Ex.: Residência Atibaia",
     )
 
-    return subtotal_materiais * percentual
+with col2:
+    comprimento = st.number_input(
+        "Comprimento (m)",
+        min_value=0.01,
+        value=30.00,
+        step=0.10,
+    )
+
+with col3:
+    altura = st.number_input(
+        "Altura (m)",
+        min_value=0.01,
+        value=3.00,
+        step=0.10,
+    )
+
+
+st.divider()
 
 
 # ============================================================
-# MÃO DE OBRA
+# PREÇOS
 # ============================================================
 
-def calcular_mao_de_obra(
-    area,
-    diaria=None,
+if "precos" not in st.session_state:
+    st.session_state["precos"] = PRECOS_BASE.copy()
+
+
+st.subheader("💰 Preços dos materiais")
+
+st.caption(
+    "Os preços podem ser alterados conforme "
+    "fornecedor, região ou condição de compra."
+)
+
+
+precos_atualizados = {}
+
+
+for nome, preco_padrao in (
+    st.session_state["precos"].items()
 ):
-    """
-    Calcula a mão de obra.
 
-    O número de dias é proporcional à área.
-    """
+    preco_atual = st.number_input(
+        nome,
+        min_value=0.00,
+        value=float(preco_padrao),
+        step=0.01,
+        format="%.2f",
+        key=f"preco_{nome}",
+    )
 
-    if area <= 0:
-        return {
-            "dias": 0.0,
-            "diaria": diaria or 0.0,
-            "custo": 0.0,
-        }
+    precos_atualizados[nome] = preco_atual
 
-    if diaria is None:
-        diaria = CONFIGURACAO_PROJETO.get(
-            "diaria_mao_de_obra",
-            755.00,
+
+st.session_state["precos"] = precos_atualizados
+
+
+st.divider()
+
+
+# ============================================================
+# PRÉ-CÁLCULO DAS QUANTIDADES
+# ============================================================
+
+# Calculamos uma prévia somente para descobrir
+# as quantidades automáticas do projeto.
+
+previa = calcular_projeto(
+    comprimento=comprimento,
+    altura=altura,
+    precos=st.session_state["precos"],
+)
+
+
+# ============================================================
+# QUANTIDADES DOS MATERIAIS
+# ============================================================
+
+st.subheader("📦 Quantidades dos materiais")
+
+st.caption(
+    "As quantidades são calculadas automaticamente. "
+    "Você pode alterar qualquer quantidade conforme "
+    "a necessidade da obra."
+)
+
+
+if "quantidades" not in st.session_state:
+    st.session_state["quantidades"] = {}
+
+
+quantidades_atualizadas = {}
+
+
+for nome, material in previa["materiais"].items():
+
+    quantidade_automatica = material[
+        "quantidade"
+    ]
+
+    # Se ainda não existir quantidade salva,
+    # utiliza o cálculo automático.
+
+    if nome not in st.session_state["quantidades"]:
+        st.session_state["quantidades"][nome] = (
+            quantidade_automatica
         )
 
-    area_referencia = CONFIGURACAO_PROJETO.get(
-        "area_referencia",
-        30.00,
+    quantidade_atual = st.number_input(
+        nome,
+        min_value=0.0,
+        value=float(
+            st.session_state["quantidades"][nome]
+        ),
+        step=1.0,
+        format="%.2f",
+        key=f"quantidade_{nome}",
     )
 
-    dias_referencia = CONFIGURACAO_PROJETO.get(
-        "dias_mao_de_obra_referencia",
-        10.00,
+    quantidades_atualizadas[nome] = (
+        quantidade_atual
     )
 
-    if area_referencia <= 0:
-        raise ValueError(
-            "A área de referência deve ser maior que zero."
-        )
 
-    dias = (
-        area / area_referencia
-    ) * dias_referencia
+st.session_state["quantidades"] = (
+    quantidades_atualizadas
+)
 
-    custo = dias * diaria
 
-    return {
-        "dias": dias,
-        "diaria": diaria,
-        "custo": custo,
-    }
+st.divider()
 
 
 # ============================================================
-# PROJETO COMPLETO
+# BOTÃO CALCULAR
 # ============================================================
 
-def calcular_projeto(
-    comprimento,
-    altura,
-    diaria=None,
-    precos=None,
-    materiais=None,
-    quantidades=None,
-    valor_massas_telas=None,
+if st.button(
+    "🧮 CALCULAR PROJETO",
+    type="primary",
+    use_container_width=True,
 ):
-    """
-    Executa todos os cálculos do projeto.
 
-    Retorna:
-        área
-        materiais
-        subtotal dos materiais
-        massas e telas
-        mão de obra
-        custo geral
-    """
-
-    # --------------------------------------------------------
-    # ÁREA
-    # --------------------------------------------------------
-
-    area = calcular_area(
+    resultado = calcular_projeto(
         comprimento=comprimento,
         altura=altura,
+        precos=st.session_state["precos"],
+        quantidades=st.session_state["quantidades"],
     )
 
-    # --------------------------------------------------------
-    # MATERIAIS
-    # --------------------------------------------------------
+    st.session_state["projeto"] = resultado
 
-    materiais_calculados = calcular_materiais(
-        area=area,
-        materiais=materiais,
-        precos=precos,
-        quantidades=quantidades,
+    st.session_state["nome_projeto"] = (
+        nome_projeto
     )
 
-    subtotal_materiais = (
-        calcular_subtotal_materiais(
-            materiais_calculados
+
+# ============================================================
+# RESULTADO
+# ============================================================
+
+if "projeto" in st.session_state:
+
+    projeto = st.session_state["projeto"]
+
+    st.subheader("📊 Resultado")
+
+
+    # --------------------------------------------------------
+    # INDICADORES PRINCIPAIS
+    # --------------------------------------------------------
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            "Área",
+            f'{projeto["area"]:.2f} m²',
         )
+
+    with col2:
+        st.metric(
+            "Materiais",
+            formatar_moeda(
+                projeto["subtotal_materiais"]
+            ),
+        )
+
+    with col3:
+        st.metric(
+            "Mão de obra",
+            formatar_moeda(
+                projeto["mao_de_obra"]["custo"]
+            ),
+        )
+
+    with col4:
+        st.metric(
+            "Custo geral",
+            formatar_moeda(
+                projeto["custo_geral"]
+            ),
+        )
+
+
+    st.divider()
+
+
+    # ========================================================
+    # QUANTITATIVO DE MATERIAIS
+    # ========================================================
+
+    st.subheader(
+        "📋 Quantitativo de materiais"
     )
 
-    # --------------------------------------------------------
+
+    for nome, material in (
+        projeto["materiais"].items()
+    ):
+
+        col1, col2, col3, col4 = st.columns(
+            [4, 2, 2, 2]
+        )
+
+        with col1:
+            st.write(nome)
+
+        with col2:
+            st.write(
+                f'{material["quantidade"]:.2f}'
+            )
+
+        with col3:
+            st.write(
+                formatar_moeda(
+                    material["preco_unitario"]
+                )
+            )
+
+        with col4:
+            st.write(
+                formatar_moeda(
+                    material["custo"]
+                )
+            )
+
+
+    st.divider()
+
+
+    # ========================================================
     # MASSAS E TELAS
-    # --------------------------------------------------------
+    # ========================================================
 
-    massas_telas = calcular_massas_telas(
-        subtotal_materiais=subtotal_materiais,
-        valor_manual=valor_massas_telas,
+    st.subheader(
+        "🧱 Massas e Telas"
     )
 
-    # --------------------------------------------------------
+    st.write(
+        formatar_moeda(
+            projeto["massas_telas"]
+        )
+    )
+
+
+    st.divider()
+
+
+    # ========================================================
     # MÃO DE OBRA
-    # --------------------------------------------------------
+    # ========================================================
 
-    mao_de_obra = calcular_mao_de_obra(
-        area=area,
-        diaria=diaria,
+    st.subheader(
+        "👷 Mão de obra"
     )
 
-    # --------------------------------------------------------
+    mao_de_obra = projeto[
+        "mao_de_obra"
+    ]
+
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric(
+            "Dias estimados",
+            f'{mao_de_obra["dias"]:.1f}',
+        )
+
+    with col2:
+        st.metric(
+            "Diária",
+            formatar_moeda(
+                mao_de_obra["diaria"]
+            ),
+        )
+
+    with col3:
+        st.metric(
+            "Custo da mão de obra",
+            formatar_moeda(
+                mao_de_obra["custo"]
+            ),
+        )
+
+
+    st.divider()
+
+
+    # ========================================================
     # CUSTO GERAL
-    # --------------------------------------------------------
+    # ========================================================
 
-    custo_geral = (
-        subtotal_materiais
-        + massas_telas
-        + mao_de_obra["custo"]
+    st.success(
+        f'💰 CUSTO GERAL: '
+        f'{formatar_moeda(projeto["custo_geral"])}'
     )
-
-    # --------------------------------------------------------
-    # RESULTADO
-    # --------------------------------------------------------
-
-    return {
-        "comprimento": comprimento,
-        "altura": altura,
-        "area": area,
-        "materiais": materiais_calculados,
-        "subtotal_materiais": subtotal_materiais,
-        "massas_telas": massas_telas,
-        "mao_de_obra": mao_de_obra,
-        "custo_geral": custo_geral,
-    }
-
-
-# ============================================================
-# RESUMO
-# ============================================================
-
-def calcular_resumo(
-    comprimento,
-    altura,
-    diaria=None,
-    precos=None,
-    materiais=None,
-    quantidades=None,
-    valor_massas_telas=None,
-):
-    """
-    Retorna somente os principais indicadores
-    do projeto.
-    """
-
-    projeto = calcular_projeto(
-        comprimento=comprimento,
-        altura=altura,
-        diaria=diaria,
-        precos=precos,
-        materiais=materiais,
-        quantidades=quantidades,
-        valor_massas_telas=valor_massas_telas,
-    )
-
-    return {
-        "Área": projeto["area"],
-        "Materiais": projeto[
-            "subtotal_materiais"
-        ],
-        "Massas e Telas": projeto[
-            "massas_telas"
-        ],
-        "Mão de Obra": projeto[
-            "mao_de_obra"
-        ]["custo"],
-        "Custo Geral": projeto[
-            "custo_geral"
-        ],
-    }
