@@ -71,14 +71,13 @@ st.markdown(
         color: white;
     }
 
-    .hero-title {
-        font-size: 2.15rem;
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        line-height: 1.2;
-        margin-bottom: 10px;
-        color: #ffffff;
-    }
+    .section-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #17202a;
+    margin-bottom: 3px;
+    line-height: 1.3;
+}
 
     .hero-subtitle {
         font-size: 1rem;
