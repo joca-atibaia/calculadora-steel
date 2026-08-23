@@ -16,6 +16,23 @@ st.set_page_config(
 
 
 # ============================================================
+# FUNÇÃO DE FORMATAÇÃO
+# ============================================================
+
+def formatar_moeda(valor):
+    """
+    Formata valores no padrão brasileiro.
+    """
+
+    return (
+        f"R$ {valor:,.2f}"
+        .replace(",", "X")
+        .replace(".", ",")
+        .replace("X", ".")
+    )
+
+
+# ============================================================
 # CABEÇALHO
 # ============================================================
 
@@ -35,6 +52,7 @@ col1, col2, col3 = st.columns(3)
 
 
 with col1:
+
     nome_projeto = st.text_input(
         "Nome do projeto",
         placeholder="Ex.: Residência Atibaia",
@@ -42,6 +60,7 @@ with col1:
 
 
 with col2:
+
     comprimento = st.number_input(
         "Comprimento (m)",
         min_value=0.01,
@@ -51,6 +70,7 @@ with col2:
 
 
 with col3:
+
     altura = st.number_input(
         "Altura (m)",
         min_value=0.01,
@@ -63,11 +83,54 @@ st.divider()
 
 
 # ============================================================
-# PREÇOS
+# PREÇOS DOS MATERIAIS
 # ============================================================
 
+st.subheader("💰 Preços dos materiais")
+
+st.caption(
+    "Os preços podem ser ajustados conforme "
+    "o fornecedor e a realidade de cada obra."
+)
+
+
+# Inicializa os preços somente uma vez
 if "precos" not in st.session_state:
-    st.session_state["precos"] = PRECOS_BASE.copy()
+
+    st.session_state["precos"] = (
+        PRECOS_BASE.copy()
+    )
+
+
+# Cria os campos de preço
+precos_atualizados = {}
+
+
+for nome, preco_padrao in (
+    st.session_state["precos"].items()
+):
+
+    preco_atual = st.number_input(
+        nome,
+        min_value=0.00,
+        value=float(preco_padrao),
+        step=0.01,
+        format="%.2f",
+        key=f"preco_{nome}",
+    )
+
+    precos_atualizados[nome] = (
+        preco_atual
+    )
+
+
+# Atualiza os preços da sessão
+st.session_state["precos"] = (
+    precos_atualizados
+)
+
+
+st.divider()
 
 
 # ============================================================
@@ -87,7 +150,10 @@ if st.button(
     )
 
     st.session_state["projeto"] = resultado
-    st.session_state["nome_projeto"] = nome_projeto
+
+    st.session_state["nome_projeto"] = (
+        nome_projeto
+    )
 
 
 # ============================================================
@@ -98,7 +164,9 @@ if "projeto" in st.session_state:
 
     projeto = st.session_state["projeto"]
 
+
     st.subheader("📊 Resultado")
+
 
     col1, col2, col3, col4 = st.columns(4)
 
@@ -108,6 +176,7 @@ if "projeto" in st.session_state:
     # ========================================================
 
     with col1:
+
         st.metric(
             "Área",
             f'{projeto["area"]:.2f} m²',
@@ -119,12 +188,12 @@ if "projeto" in st.session_state:
     # ========================================================
 
     with col2:
+
         st.metric(
             "Materiais",
-            f'R$ {projeto["subtotal_materiais"]:,.2f}'
-            .replace(",", "X")
-            .replace(".", ",")
-            .replace("X", "."),
+            formatar_moeda(
+                projeto["subtotal_materiais"]
+            ),
         )
 
 
@@ -133,12 +202,12 @@ if "projeto" in st.session_state:
     # ========================================================
 
     with col3:
+
         st.metric(
             "Mão de obra",
-            f'R$ {projeto["mao_de_obra"]["custo"]:,.2f}'
-            .replace(",", "X")
-            .replace(".", ",")
-            .replace("X", "."),
+            formatar_moeda(
+                projeto["mao_de_obra"]["custo"]
+            ),
         )
 
 
@@ -147,12 +216,12 @@ if "projeto" in st.session_state:
     # ========================================================
 
     with col4:
+
         st.metric(
             "Custo geral",
-            f'R$ {projeto["custo_geral"]:,.2f}'
-            .replace(",", "X")
-            .replace(".", ",")
-            .replace("X", "."),
+            formatar_moeda(
+                projeto["custo_geral"]
+            ),
         )
 
 
@@ -163,10 +232,14 @@ if "projeto" in st.session_state:
     # QUANTITATIVO DE MATERIAIS
     # ========================================================
 
-    st.subheader("📋 Quantitativo de materiais")
+    st.subheader(
+        "📋 Quantitativo de materiais"
+    )
 
 
-    for nome, material in projeto["materiais"].items():
+    for nome, material in (
+        projeto["materiais"].items()
+    ):
 
         col1, col2, col3, col4 = st.columns(
             [4, 2, 2, 2]
@@ -174,30 +247,32 @@ if "projeto" in st.session_state:
 
 
         with col1:
+
             st.write(nome)
 
 
         with col2:
+
             st.write(
                 f'{material["quantidade"]:.2f}'
             )
 
 
         with col3:
+
             st.write(
-                f'R$ {material["preco_unitario"]:,.2f}'
-                .replace(",", "X")
-                .replace(".", ",")
-                .replace("X", ".")
+                formatar_moeda(
+                    material["preco_unitario"]
+                )
             )
 
 
         with col4:
+
             st.write(
-                f'R$ {material["custo"]:,.2f}'
-                .replace(",", "X")
-                .replace(".", ",")
-                .replace("X", ".")
+                formatar_moeda(
+                    material["custo"]
+                )
             )
 
 
@@ -208,13 +283,15 @@ if "projeto" in st.session_state:
     # MASSAS E TELAS
     # ========================================================
 
-    st.subheader("🧱 Massas e Telas")
+    st.subheader(
+        "🧱 Massas e Telas"
+    )
+
 
     st.write(
-        f'R$ {projeto["massas_telas"]:,.2f}'
-        .replace(",", "X")
-        .replace(".", ",")
-        .replace("X", ".")
+        formatar_moeda(
+            projeto["massas_telas"]
+        )
     )
 
 
@@ -225,15 +302,21 @@ if "projeto" in st.session_state:
     # MÃO DE OBRA
     # ========================================================
 
-    st.subheader("👷 Mão de obra")
+    st.subheader(
+        "👷 Mão de obra"
+    )
 
-    mao_de_obra = projeto["mao_de_obra"]
+
+    mao_de_obra = projeto[
+        "mao_de_obra"
+    ]
 
 
     col1, col2, col3 = st.columns(3)
 
 
     with col1:
+
         st.metric(
             "Dias estimados",
             f'{mao_de_obra["dias"]:.1f}',
@@ -241,22 +324,22 @@ if "projeto" in st.session_state:
 
 
     with col2:
+
         st.metric(
             "Diária",
-            f'R$ {mao_de_obra["diaria"]:,.2f}'
-            .replace(",", "X")
-            .replace(".", ",")
-            .replace("X", "."),
+            formatar_moeda(
+                mao_de_obra["diaria"]
+            ),
         )
 
 
     with col3:
+
         st.metric(
             "Custo da mão de obra",
-            f'R$ {mao_de_obra["custo"]:,.2f}'
-            .replace(",", "X")
-            .replace(".", ",")
-            .replace("X", "."),
+            formatar_moeda(
+                mao_de_obra["custo"]
+            ),
         )
 
 
@@ -269,8 +352,5 @@ if "projeto" in st.session_state:
 
     st.success(
         f'💰 CUSTO GERAL: '
-        f'R$ {projeto["custo_geral"]:,.2f}'
-        .replace(",", "X")
-        .replace(".", ",")
-        .replace("X", ".")
+        f'{formatar_moeda(projeto["custo_geral"])}'
     )
