@@ -31,10 +31,7 @@ def formatar_moeda(valor):
 
 
 # ============================================================
-# CSS
-# IMPORTANTE:
-# O conteúdo visual abaixo usa apenas CSS para estilização.
-# Os textos principais são gerados pelo próprio Streamlit.
+# CSS — VISUAL PROFISSIONAL 6C
 # ============================================================
 
 st.markdown(
@@ -72,11 +69,12 @@ st.markdown(
         background: transparent;
     }
 
+
     /* ========================================================
-       HERO
+       CABEÇALHO
        ======================================================== */
 
-    .sf-hero {
+    .sf-header {
         background: linear-gradient(
             135deg,
             #17202a 0%,
@@ -85,57 +83,75 @@ st.markdown(
         );
 
         border-radius: 18px;
-        padding: 34px 38px;
-        margin-bottom: 30px;
+
+        padding: 30px 38px 24px 38px;
+
+        margin-bottom: 8px;
 
         box-shadow:
             0 10px 30px rgba(0, 0, 0, 0.12);
-
-        color: white;
     }
 
-    .sf-hero h1 {
-        margin: 0 0 10px 0;
-        padding: 0;
 
+    /* ========================================================
+       TÍTULO NATIVO DO STREAMLIT
+       ======================================================== */
+
+    .sf-header-title {
         font-size: 2.15rem;
         line-height: 1.2;
+
         font-weight: 800;
 
         letter-spacing: -0.5px;
 
         color: white;
+
+        margin: 0;
     }
 
-    .sf-hero p {
-        margin: 0 0 18px 0;
-        padding: 0;
+
+    /* ========================================================
+       SUBTÍTULO
+       ======================================================== */
+
+    .sf-subtitle {
+        color: #dce3e8;
 
         font-size: 1rem;
-        line-height: 1.6;
-        font-weight: 400;
 
-        color: #dce3e8;
+        line-height: 1.6;
+
+        margin-top: 0;
+
+        margin-bottom: 10px;
     }
+
+
+    /* ========================================================
+       BADGE
+       ======================================================== */
 
     .sf-badge {
         display: inline-block;
-
-        padding: 7px 14px;
-
-        border-radius: 999px;
 
         background: rgba(255, 255, 255, 0.12);
 
         border: 1px solid rgba(255, 255, 255, 0.22);
 
+        border-radius: 999px;
+
+        padding: 7px 14px;
+
         font-size: 0.75rem;
+
         font-weight: 700;
 
         letter-spacing: 0.6px;
 
         color: white;
     }
+
 
     /* ========================================================
        SEÇÕES
@@ -151,6 +167,7 @@ st.markdown(
         padding: 0;
 
         font-size: 1.35rem;
+
         line-height: 1.3;
 
         font-weight: 800;
@@ -162,10 +179,12 @@ st.markdown(
         margin: 0;
 
         font-size: 0.9rem;
+
         line-height: 1.5;
 
         color: #6b7280;
     }
+
 
     /* ========================================================
        CAMPOS
@@ -177,7 +196,9 @@ st.markdown(
     .stTextArea label,
     .stSelectbox label {
         font-size: 0.88rem !important;
+
         font-weight: 600 !important;
+
         color: #374151 !important;
     }
 
@@ -194,6 +215,7 @@ st.markdown(
             "Segoe UI",
             sans-serif !important;
     }
+
 
     /* ========================================================
        MÉTRICAS
@@ -212,6 +234,7 @@ st.markdown(
             0 3px 12px rgba(0, 0, 0, 0.04);
     }
 
+
     /* ========================================================
        BOTÕES
        ======================================================== */
@@ -219,18 +242,23 @@ st.markdown(
     .stButton > button,
     .stDownloadButton > button {
         border-radius: 9px;
+
         font-weight: 700;
+
         min-height: 42px;
     }
 
+
     /* ========================================================
-       TABELA
+       TABELAS
        ======================================================== */
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
+
         overflow: hidden;
     }
+
 
     /* ========================================================
        RESPONSIVIDADE
@@ -243,15 +271,15 @@ st.markdown(
             padding-right: 1rem;
         }
 
-        .sf-hero {
-            padding: 25px 22px;
+        .sf-header {
+            padding: 25px 22px 20px 22px;
         }
 
-        .sf-hero h1 {
+        .sf-header-title {
             font-size: 1.65rem;
         }
 
-        .sf-hero p {
+        .sf-subtitle {
             font-size: 0.9rem;
         }
 
@@ -267,31 +295,45 @@ st.markdown(
 
 
 # ============================================================
-# CABEÇALHO
+# CABEÇALHO PRINCIPAL
 #
-# Não existem mais os blocos:
-# <div class="hero-title">
-# <div class="hero-subtitle">
-# <div class="hero-badge">
-#
-# O HTML inteiro está dentro de UMA única string markdown.
+# IMPORTANTE:
+# Não usamos <p>, <span> ou <div> para os textos.
+# O título, subtítulo e badge são renderizados pelo Streamlit.
 # ============================================================
 
 st.markdown(
     """
-    <div class="sf-hero">
-        <h1>📐 CALCULADORA STEEL FRAMING</h1>
+    <div class="sf-header">
+    """,
+    unsafe_allow_html=True,
+)
 
-        <p>
-            Sistema profissional para orçamento de
-            materiais, quantitativos e mão de obra.
-        </p>
+st.markdown(
+    "📐 CALCULADORA STEEL FRAMING"
+)
 
-        <span class="sf-badge">
-            ORÇAMENTO PROFISSIONAL • VERSÃO 6C
-        </span>
+st.markdown(
+    """
+    <div class="sf-subtitle">
+        Sistema profissional para orçamento de
+        materiais, quantitativos e mão de obra.
     </div>
     """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <div class="sf-badge">
+        ORÇAMENTO PROFISSIONAL • VERSÃO 6C
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    "</div>",
     unsafe_allow_html=True,
 )
 
@@ -496,13 +538,11 @@ for nome, material in previa["materiais"].items():
 
     quantidade_automatica = material["quantidade"]
 
-
     if nome not in st.session_state["quantidades"]:
 
         st.session_state["quantidades"][nome] = (
             quantidade_automatica
         )
-
 
     quantidade_atual = st.number_input(
         nome,
@@ -515,7 +555,6 @@ for nome, material in previa["materiais"].items():
         key=f"quantidade_{nome}",
     )
 
-
     quantidades_atualizadas[nome] = quantidade_atual
 
 
@@ -526,7 +565,7 @@ st.divider()
 
 
 # ============================================================
-# BOTÃO DE CÁLCULO
+# CALCULAR ORÇAMENTO
 # ============================================================
 
 if st.button(
@@ -542,7 +581,6 @@ if st.button(
         quantidades=st.session_state["quantidades"],
     )
 
-
     st.session_state["projeto"] = resultado
 
     st.session_state["nome_projeto"] = nome_projeto
@@ -554,7 +592,7 @@ if st.button(
 
 
 # ============================================================
-# RESULTADO DO ORÇAMENTO
+# RESULTADO
 # ============================================================
 
 if "projeto" in st.session_state:
@@ -567,7 +605,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # IDENTIFICAÇÃO
+    # IDENTIFICAÇÃO DO ORÇAMENTO
     # ========================================================
 
     col1, col2 = st.columns(2)
@@ -598,12 +636,10 @@ if "projeto" in st.session_state:
             f"{st.session_state.get('responsavel', '')}"
         )
 
-
         data_salva = st.session_state.get(
             "data_orcamento",
             data_orcamento,
         )
-
 
         st.write(
             f"**Data:** "
@@ -615,7 +651,7 @@ if "projeto" in st.session_state:
 
 
     # ========================================================
-    # RESUMO
+    # RESUMO DO ORÇAMENTO
     # ========================================================
 
     st.subheader("📊 Resumo do orçamento")
@@ -669,7 +705,9 @@ if "projeto" in st.session_state:
     # QUANTITATIVO DE MATERIAIS
     # ========================================================
 
-    st.subheader("📋 Quantitativo de materiais")
+    st.subheader(
+        "📋 Quantitativo de materiais"
+    )
 
 
     tabela_materiais = []
@@ -713,7 +751,9 @@ if "projeto" in st.session_state:
     # MASSAS E TELAS
     # ========================================================
 
-    st.subheader("🧱 Massas e Telas")
+    st.subheader(
+        "🧱 Massas e Telas"
+    )
 
 
     st.metric(
@@ -731,7 +771,9 @@ if "projeto" in st.session_state:
     # MÃO DE OBRA
     # ========================================================
 
-    st.subheader("👷 Mão de obra")
+    st.subheader(
+        "👷 Mão de obra"
+    )
 
 
     mao_de_obra = projeto["mao_de_obra"]
@@ -783,9 +825,13 @@ if "projeto" in st.session_state:
 
     if observacoes_salvas:
 
-        st.subheader("📝 Observações")
+        st.subheader(
+            "📝 Observações"
+        )
 
-        st.write(observacoes_salvas)
+        st.write(
+            observacoes_salvas
+        )
 
         st.divider()
 
