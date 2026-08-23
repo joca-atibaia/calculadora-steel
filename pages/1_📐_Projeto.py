@@ -71,7 +71,7 @@ st.markdown(
 
 
     /* ========================================================
-       CABEÇALHO NATIVO
+       CABEÇALHO
        ======================================================== */
 
     .sf-title-box {
@@ -92,34 +92,49 @@ st.markdown(
             0 10px 30px rgba(0, 0, 0, 0.12);
     }
 
-    .sf-title {
-        color: #6fa8c9;
 
-        font-size: 3.2rem;
+    /* ========================================================
+       TÍTULO
+       ======================================================== */
+
+    .sf-title {
+        color: #6fa8c9 !important;
+
+        font-size: 3.0rem !important;
 
         line-height: 1.2;
 
-        font-weight: 800;
+        font-weight: 800 !important;
 
         letter-spacing: -0.5px;
 
         margin-bottom: 8px;
     }
 
-    .sf-description {
-        color: #000000;
 
-        font-size: 1rem;
+    /* ========================================================
+       DESCRIÇÃO
+       ======================================================== */
+
+    .sf-description {
+        color: #000000 !important;
+
+        font-size: 1.15rem !important;
 
         line-height: 1.6;
 
         margin-bottom: 14px;
     }
 
+
+    /* ========================================================
+       VERSÃO
+       ======================================================== */
+
     .sf-version {
         display: inline-block;
 
-        color: #000000;
+        color: #000000 !important;
 
         background: rgba(255, 255, 255, 0.12);
 
@@ -239,11 +254,11 @@ st.markdown(
         }
 
         .sf-title {
-            font-size: 1.65rem;
+            font-size: 2.1rem !important;
         }
 
         .sf-description {
-            font-size: 0.9rem;
+            font-size: 0.95rem !important;
         }
 
         .section-title {
@@ -262,27 +277,24 @@ st.markdown(
 # ============================================================
 
 st.markdown(
-    '<div class="sf-title-box">',
-    unsafe_allow_html=True,
-)
+    """
+    <div class="sf-title-box">
 
-st.markdown(
-    "📐 CALCULADORA STEEL FRAMING",
-    unsafe_allow_html=False,
-)
+        <div class="sf-title">
+            📐 CALCULADORA STEEL FRAMING
+        </div>
 
-st.markdown(
-    "Sistema profissional para orçamento de materiais, "
-    "quantitativos e mão de obra.",
-    unsafe_allow_html=False,
-)
+        <div class="sf-description">
+            Sistema profissional para orçamento de materiais,
+            quantitativos e mão de obra.
+        </div>
 
-st.caption(
-    "ORÇAMENTO PROFISSIONAL • VERSÃO 6C"
-)
+        <div class="sf-version">
+            ORÇAMENTO PROFISSIONAL • VERSÃO 6C
+        </div>
 
-st.markdown(
-    "</div>",
+    </div>
+    """,
     unsafe_allow_html=True,
 )
 
