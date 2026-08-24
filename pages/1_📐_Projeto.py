@@ -15,13 +15,6 @@ st.set_page_config(
     page_icon="📐",
     layout="wide",
 )
-# Linkar o manifesto para transformação em App
-st.markdown(
-    """
-    <link rel="manifest" href="https://githubusercontent.com">
-    """,
-    unsafe_allow_html=True
-)
 
 
 # ============================================================
@@ -45,9 +38,7 @@ st.markdown(
     """
     <style>
 
-    @import url(
-        'https://googleapis.com'
-    );
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 
     /* ========================================================
@@ -86,7 +77,6 @@ st.markdown(
        ESTILIZAÇÃO NATIVA DO CABEÇALHO
        ======================================================== */
 
-    /* Caixa de fundo do cabeçalho */
     div[data-testid="stVerticalBlock"] > div:has(h1) {
         background: linear-gradient(
             135deg,
@@ -100,7 +90,11 @@ st.markdown(
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     }
 
-    /* Título principal interno */
+
+    /* ========================================================
+       TÍTULO PRINCIPAL
+       ======================================================== */
+
     div[data-testid="stVerticalBlock"] h1 {
         color: #6fa8c9 !important;
         font-size: 3.5rem !important;
@@ -112,7 +106,11 @@ st.markdown(
         border: none !important;
     }
 
-    /* Subtítulo / Descrição interna */
+
+    /* ========================================================
+       SUBTÍTULO
+       ======================================================== */
+
     div[data-testid="stVerticalBlock"] h1 + p {
         color: #ffffff !important;
         font-size: 1.2rem !important;
@@ -122,8 +120,12 @@ st.markdown(
         padding: 0 !important;
     }
 
-    /* Versão interna / Caption */
-    div[data-testid="stVerticalBlock"] .stCaption  {
+
+    /* ========================================================
+       CAPTION / VERSÃO
+       ======================================================== */
+
+    div[data-testid="stVerticalBlock"] .stCaption {
         display: inline-block !important;
         color: #ffffff !important;
         background: rgba(255, 255, 255, 0.15) !important;
@@ -212,22 +214,52 @@ st.markdown(
 
 
     /* ========================================================
+       VALORES DE SUBTOTAL
+       ======================================================== */
+
+    .total-item-value {
+        font-family:
+            "Inter",
+            "Segoe UI",
+            Roboto,
+            Helvetica,
+            Arial,
+            sans-serif !important;
+
+        font-size: 1.15rem !important;
+        font-weight: 800 !important;
+        color: #1e293b !important;
+        text-align: right !important;
+        display: block !important;
+        margin-top: 5px !important;
+    }
+
+
+    /* ========================================================
        RESPONSIVIDADE
        ======================================================== */
 
     @media (max-width: 768px) {
+
         .block-container {
             padding-left: 1rem;
             padding-right: 1rem;
         }
+
         div[data-testid="stVerticalBlock"] h1 {
             font-size: 2.2rem !important;
         }
+
         div[data-testid="stVerticalBlock"] h1 + p {
             font-size: 1rem !important;
         }
+
         .section-title {
             font-size: 1.15rem;
+        }
+
+        .total-item-value {
+            font-size: 1rem !important;
         }
     }
 
@@ -243,7 +275,10 @@ st.markdown(
 
 st.title("📐 CALCULADORA STEEL FRAMING")
 
-st.markdown("Sistema profissional para orçamento de materiais, quantitativos e mão de obra.")
+st.markdown(
+    "Sistema profissional para orçamento de materiais, "
+    "quantitativos e mão de obra."
+)
 
 st.caption("ORÇAMENTO PROFISSIONAL • VERSÃO 6C")
 
@@ -387,16 +422,22 @@ if "precos" not in st.session_state:
 
 precos_atualizados = {}
 
-# Loop completo para renderizar os campos numéricos de preço por colunas
 cols_precos = st.columns(2)
-for i, (nome, preco_padrao) in enumerate(st.session_state["precos"].items()):
+
+for i, (nome, preco_padrao) in enumerate(
+    st.session_state["precos"].items()
+):
+
     with cols_precos[i % 2]:
+
         precos_atualizados[nome] = st.number_input(
             f"Preço: {nome}",
             min_value=0.0,
             value=float(preco_padrao),
             step=0.5,
-            format="%.2f"
+            format="%.2f",
+            key=f"preco_projeto_{nome}",
         )
+
 
 st.session_state["precos"] = precos_atualizados
