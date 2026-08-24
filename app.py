@@ -295,20 +295,7 @@ for i, item in enumerate(itens_parciais):
 
         total_item = nova_qtd * novo_preco
 
-        st.markdown(
-            f"""
-            <div class='total-item-container'>
-                <span class='total-item-label'>
-                    Subtotal do Item:
-                </span>
-
-                <span>
-                    R$ {total_item:,.2f}
-                </span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        st.write(f"**Subtotal do Item:** R$ {total_item:,.2f}")
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -369,12 +356,21 @@ with col_m1:
             step=10.0,
             key=f"prc_massas_{id_metragem}"
         )
+        total_massas = qtd_massas * preco_massas
 
-    total_massas = qtd_massas * preco_massas
+    st.write(f"**Subtotal do Item:** R$ {total_massas:,.2f}")
 
+dados_atualizados.append(
+    {
+        "Item": "Massas e Telas",
+        "Quantidade": qtd_massas,
+        "Preço Unitário (R$)": preco_massas,
+        "Total (R$)": total_massas
+    }
+)
     
 
-        st.write(f"**Subtotal do Item:** R$ {total_item:,.2f}")
+
 
 dados_atualizados.append(
     {
