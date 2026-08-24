@@ -30,10 +30,10 @@ def calcular_subtotal_materiais(quantidade, preco_unitario):
     prc = _numero(preco_unitario)
     subtotal = qtd * prc
     # RETORNO LIMPO E AUMENTADO: Texto direto formatado sem tags que quebram o celular
-       return formatar_moeda(subtotal)
- {formatar_moeda(subtotal)}"
+       return formatar_moeda(subtotal)       
+return formatar_moeda(subtotal)
 
-# MOTORES DE CÁLCULO ORIGINAIS E COMPLETOS
+   
 def quantidade_de_material(area_total, pe_direito):
     area = validar_positivo(area_total, "Área")
     alt = validar_positivo(pe_direito, "Pé Direito")
