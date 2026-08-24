@@ -22,12 +22,33 @@ st.set_page_config(
 # ============================================================
 
 def formatar_moeda(valor):
+    """
+    Formata valores no padrão brasileiro.
+    Exemplo:
+        5650.00 -> R$ 5.650,00
+    """
+
     return (
-        f"R$ {valor:,.2f}"
+        f"R$ {float(valor):,.2f}"
         .replace(",", "X")
         .replace(".", ",")
         .replace("X", ".")
     )
+
+
+# ============================================================
+# MANIFEST
+# ============================================================
+
+st.markdown(
+    """
+    <link
+        rel="manifest"
+        href="https://githubusercontent.com"
+    >
+    """,
+    unsafe_allow_html=True,
+)
 
 
 # ============================================================
@@ -37,9 +58,6 @@ def formatar_moeda(valor):
 st.markdown(
     """
     <style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 
     /* ========================================================
        CONFIGURAÇÃO GERAL
@@ -74,7 +92,7 @@ st.markdown(
 
 
     /* ========================================================
-       ESTILIZAÇÃO NATIVA DO CABEÇALHO
+       CABEÇALHO
        ======================================================== */
 
     div[data-testid="stVerticalBlock"] > div:has(h1) {
@@ -84,10 +102,20 @@ st.markdown(
             #263746 55%,
             #34495e 100%
         );
+
         border-radius: 18px;
-        padding: 35px 38px 30px 38px;
+
+        padding:
+            35px
+            38px
+            30px
+            38px;
+
         margin-bottom: 25px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+        box-shadow:
+            0 10px 30px
+            rgba(0, 0, 0, 0.12);
     }
 
 
@@ -97,12 +125,23 @@ st.markdown(
 
     div[data-testid="stVerticalBlock"] h1 {
         color: #6fa8c9 !important;
+
         font-size: 3.5rem !important;
+
         line-height: 1.2 !important;
+
         font-weight: 900 !important;
+
         letter-spacing: -1px !important;
-        margin: 0 0 10px 0 !important;
+
+        margin:
+            0
+            0
+            10px
+            0 !important;
+
         padding: 0 !important;
+
         border: none !important;
     }
 
@@ -113,10 +152,19 @@ st.markdown(
 
     div[data-testid="stVerticalBlock"] h1 + p {
         color: #ffffff !important;
+
         font-size: 1.2rem !important;
+
         line-height: 1.6 !important;
+
         font-weight: 500 !important;
-        margin: 0 0 16px 0 !important;
+
+        margin:
+            0
+            0
+            16px
+            0 !important;
+
         padding: 0 !important;
     }
 
@@ -127,33 +175,64 @@ st.markdown(
 
     div[data-testid="stVerticalBlock"] .stCaption {
         display: inline-block !important;
+
         color: #ffffff !important;
-        background: rgba(255, 255, 255, 0.15) !important;
-        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+
+        background:
+            rgba(
+                255,
+                255,
+                255,
+                0.15
+            ) !important;
+
+        border:
+            1px solid
+            rgba(
+                255,
+                255,
+                255,
+                0.25
+            ) !important;
+
         border-radius: 999px !important;
-        padding: 7px 14px !important;
+
+        padding:
+            7px
+            14px !important;
+
         font-size: 0.75rem !important;
+
         font-weight: 700 !important;
+
         letter-spacing: 0.6px !important;
+
         margin: 0 !important;
     }
 
 
     /* ========================================================
-       SEÇÕES
+       TÍTULOS DE SEÇÃO
        ======================================================== */
 
     .section-title {
         font-size: 1.35rem;
+
         font-weight: 800;
+
         color: #17202a;
+
         margin-top: 28px;
+
         margin-bottom: 4px;
     }
 
+
     .section-description {
         font-size: 0.9rem;
+
         color: #6b7280;
+
         margin-bottom: 16px;
     }
 
@@ -168,9 +247,12 @@ st.markdown(
     .stTextArea label,
     .stSelectbox label {
         font-size: 0.88rem !important;
+
         font-weight: 600 !important;
+
         color: #374151 !important;
     }
+
 
     div[data-baseweb="input"] > div,
     div[data-baseweb="textarea"] > div {
@@ -184,10 +266,23 @@ st.markdown(
 
     div[data-testid="stMetric"] {
         background: #ffffff;
-        border: 1px solid #e1e6eb;
+
+        border:
+            1px solid
+            #e1e6eb;
+
         border-radius: 14px;
+
         padding: 15px;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+
+        box-shadow:
+            0 3px 12px
+            rgba(
+                0,
+                0,
+                0,
+                0.04
+            );
     }
 
 
@@ -198,7 +293,9 @@ st.markdown(
     .stButton > button,
     .stDownloadButton > button {
         border-radius: 9px;
+
         font-weight: 700;
+
         min-height: 42px;
     }
 
@@ -209,12 +306,13 @@ st.markdown(
 
     div[data-testid="stDataFrame"] {
         border-radius: 12px;
+
         overflow: hidden;
     }
 
 
     /* ========================================================
-       VALORES DE SUBTOTAL
+       VALOR DO SUBTOTAL
        ======================================================== */
 
     .total-item-value {
@@ -227,10 +325,15 @@ st.markdown(
             sans-serif !important;
 
         font-size: 1.15rem !important;
+
         font-weight: 800 !important;
+
         color: #1e293b !important;
+
         text-align: right !important;
+
         display: block !important;
+
         margin-top: 5px !important;
     }
 
@@ -243,20 +346,25 @@ st.markdown(
 
         .block-container {
             padding-left: 1rem;
+
             padding-right: 1rem;
         }
+
 
         div[data-testid="stVerticalBlock"] h1 {
             font-size: 2.2rem !important;
         }
 
+
         div[data-testid="stVerticalBlock"] h1 + p {
             font-size: 1rem !important;
         }
 
+
         .section-title {
             font-size: 1.15rem;
         }
+
 
         .total-item-value {
             font-size: 1rem !important;
@@ -273,14 +381,18 @@ st.markdown(
 # CABEÇALHO PRINCIPAL
 # ============================================================
 
-st.title("📐 CALCULADORA STEEL FRAMING")
-
-st.markdown(
-    "Sistema profissional para orçamento de materiais, "
-    "quantitativos e mão de obra."
+st.title(
+    "📐 CALCULADORA STEEL FRAMING"
 )
 
-st.caption("ORÇAMENTO PROFISSIONAL • VERSÃO 6C")
+st.markdown(
+    "Sistema profissional para orçamento "
+    "de materiais, quantitativos e mão de obra."
+)
+
+st.caption(
+    "ORÇAMENTO PROFISSIONAL • VERSÃO 6C"
+)
 
 
 # ============================================================
@@ -288,7 +400,9 @@ st.caption("ORÇAMENTO PROFISSIONAL • VERSÃO 6C")
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">📋 Identificação do projeto</div>',
+    '<div class="section-title">'
+    '📋 Identificação do projeto'
+    '</div>',
     unsafe_allow_html=True,
 )
 
@@ -337,7 +451,10 @@ data_orcamento = st.date_input(
 
 observacoes = st.text_area(
     "Observações",
-    placeholder="Informações adicionais sobre o orçamento...",
+    placeholder=(
+        "Informações adicionais "
+        "sobre o orçamento..."
+    ),
 )
 
 
@@ -349,7 +466,9 @@ st.divider()
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">📐 Dimensões do projeto</div>',
+    '<div class="section-title">'
+    '📐 Dimensões do projeto'
+    '</div>',
     unsafe_allow_html=True,
 )
 
@@ -368,9 +487,13 @@ with col1:
 
     comprimento = st.number_input(
         "Comprimento (m)",
+
         min_value=0.01,
+
         value=30.00,
+
         step=0.10,
+
         format="%.2f",
     )
 
@@ -379,19 +502,27 @@ with col2:
 
     altura = st.number_input(
         "Altura (m)",
+
         min_value=0.01,
+
         value=3.00,
+
         step=0.10,
+
         format="%.2f",
     )
 
 
 with col3:
 
-    area_preview = comprimento * altura
+    area_preview = (
+        comprimento *
+        altura
+    )
 
     st.metric(
         "Área do projeto",
+
         f"{area_preview:.2f} m²",
     )
 
@@ -404,40 +535,66 @@ st.divider()
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">💰 Preços dos materiais</div>',
+    '<div class="section-title">'
+    '💰 Preços dos materiais'
+    '</div>',
     unsafe_allow_html=True,
 )
 
 st.markdown(
     '<div class="section-description">'
-    'Altere os preços conforme fornecedor, região ou condição de compra.'
+    'Altere os preços conforme fornecedor, '
+    'região ou condição de compra.'
     '</div>',
     unsafe_allow_html=True,
 )
 
 
 if "precos" not in st.session_state:
-    st.session_state["precos"] = PRECOS_BASE.copy()
+
+    st.session_state["precos"] = (
+        PRECOS_BASE.copy()
+    )
 
 
 precos_atualizados = {}
 
+
+# ============================================================
+# CAMPOS DE PREÇOS
+# ============================================================
+
 cols_precos = st.columns(2)
 
-for i, (nome, preco_padrao) in enumerate(
+
+for i, (
+    nome,
+    preco_padrao,
+) in enumerate(
     st.session_state["precos"].items()
 ):
 
     with cols_precos[i % 2]:
 
-        precos_atualizados[nome] = st.number_input(
-            f"Preço: {nome}",
-            min_value=0.0,
-            value=float(preco_padrao),
-            step=0.5,
-            format="%.2f",
-            key=f"preco_projeto_{nome}",
+        precos_atualizados[nome] = (
+            st.number_input(
+                f"Preço: {nome}",
+
+                min_value=0.0,
+
+                value=float(
+                    preco_padrao
+                ),
+
+                step=0.5,
+
+                format="%.2f",
+
+                key=f"preco_material_{nome}",
+            )
         )
 
 
-st.session_state["precos"] = precos_atualizados
+st.session_state["precos"] = (
+    precos_atualizados
+)
