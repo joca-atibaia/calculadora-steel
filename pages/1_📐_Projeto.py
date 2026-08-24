@@ -123,7 +123,7 @@ st.markdown(
     }
 
     /* Versão interna / Caption */
-    div[data-testid="stVerticalBlock"] .stCaption span {
+    div[data-testid="stVerticalBlock"] .stCaption  {
         display: inline-block !important;
         color: #ffffff !important;
         background: rgba(255, 255, 255, 0.15) !important;
