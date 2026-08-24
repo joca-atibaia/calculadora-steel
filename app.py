@@ -302,7 +302,7 @@ for i, item in enumerate(itens_parciais):
                     Subtotal do Item:
                 </span>
 
-                <span class='total-item-value'>
+                <span>
                     R$ {total_item:,.2f}
                 </span>
             </div>
@@ -372,22 +372,9 @@ with col_m1:
 
     total_massas = qtd_massas * preco_massas
 
-    st.markdown(
-        f"""
-        <div class='total-item-container'>
-            <span class='total-item-label'>
-                Subtotal do Item:
-            </span>
+    
 
-            <span class='total-item-value'>
-                R$ {total_massas:,.2f}
-            </span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("</div>", unsafe_allow_html=True)
+        st.write(f"**Subtotal do Item:** R$ {total_item:,.2f}")
 
 dados_atualizados.append(
     {
