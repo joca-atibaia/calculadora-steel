@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from datetime import date
+import math
 
 # ============================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -10,29 +10,19 @@ st.set_page_config(
     page_title="Calculadora Steel Framing",
     page_icon="📐",
     layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
 # ============================================================
-# CSS CUSTOMIZADO
+# CSS
 # ============================================================
 
 st.markdown(
     """
     <style>
 
-    /* ======================================================
-       CONFIGURAÇÃO GERAL
-       ====================================================== */
-
-    html,
-    body,
-    [data-testid="stAppViewContainer"],
-    .stApp {
-        font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-    }
-
-    .stApp {
-        background: #f5f7fa;
+    .main {
+        background-color: #0f1115;
     }
 
     .block-container {
@@ -41,445 +31,216 @@ st.markdown(
         padding-bottom: 4rem;
     }
 
-
-    /* ======================================================
-       CABEÇALHO PRINCIPAL
-       ====================================================== */
-
-    div[data-testid="stVerticalBlock"] > div:has(h1) {
-        background: linear-gradient(
-            135deg,
-            #17202a 0%,
-            #263746 55%,
-            #34495e 100%
-        );
-
-        border-radius: 18px;
-
-        padding: 35px 38px 30px 38px;
-
-        margin-bottom: 25px;
-
-        box-shadow:
-            0 10px 30px rgba(0, 0, 0, 0.12);
+    div[data-testid="stMetricValue"] {
+        font-size: 28px !important;
+        color: #ff9f1c !important;
     }
 
-
-    div[data-testid="stVerticalBlock"] h1 {
-        color: #6fa8c9 !important;
-
-        font-size: 3.5rem !important;
-
-        line-height: 1.2 !important;
-
-        font-weight: 900 !important;
-
-        letter-spacing: -1px !important;
-
-        margin: 0 0 10px 0 !important;
-
-        border: none !important;
-    }
-
-
-    div[data-testid="stVerticalBlock"] h1 + p {
-        color: #ffffff !important;
-
-        font-size: 1.2rem !important;
-
-        line-height: 1.6 !important;
-
-        font-weight: 500 !important;
-    }
-
-
-    /* ======================================================
-       TÍTULOS DAS SEÇÕES
-       ====================================================== */
-
-    .stApp h2,
-    .stApp h3,
-    .stApp h4 {
-        color: #17202a !important;
-
-        visibility: visible !important;
-
-        opacity: 1 !important;
-    }
-
-
-    /* ======================================================
-       NOME DOS INSUMOS
-       ====================================================== */
-
-    .stApp h3 {
-        color: #17202a !important;
-
-        font-weight: 800 !important;
-
-        visibility: visible !important;
-
-        opacity: 1 !important;
-    }
-
-
-    /* ======================================================
-       LABELS DOS CAMPOS
-       ====================================================== */
-
-    [data-testid="stNumberInput"] label,
-    [data-testid="stNumberInput"] label p,
-
-    [data-testid="stTextInput"] label,
-    [data-testid="stTextInput"] label p,
-
-    [data-testid="stDateInput"] label,
-    [data-testid="stDateInput"] label p {
-
-        color: #17202a !important;
-
-        font-weight: 600 !important;
-
-        visibility: visible !important;
-
-        opacity: 1 !important;
-    }
-
-
-    /* ======================================================
-       VALORES DOS CAMPOS
-       ====================================================== */
-
-    [data-testid="stNumberInput"] input,
-    [data-testid="stTextInput"] input {
-
-        color: #17202a !important;
-
-        background-color: #ffffff !important;
-
-        visibility: visible !important;
-
-        opacity: 1 !important;
-    }
-
-
-    /* ======================================================
-       SUBTOTAL
-       ====================================================== */
-
-    .stApp p {
-        visibility: visible !important;
-    }
-
-
-    /* ======================================================
-       BOTÃO
-       ====================================================== */
-
-    div.stButton > button {
-
-        min-height: 55px;
-
-        font-size: 1.10rem;
-
-        font-weight: 800;
-
+    .card-total {
+        background-color: #1e222b;
+        padding: 25px;
         border-radius: 12px;
-
-        width: 100%;
+        border-left: 6px solid #ff9f1c;
+        box-shadow: 2px 4px 15px rgba(0,0,0,0.4);
+        margin-top: 15px;
+        margin-bottom: 25px;
+        text-align: center;
     }
 
-
-    /* ======================================================
-       TABELA
-       ====================================================== */
-
-    [data-testid="stDataFrame"] {
-
-        color: #17202a !important;
-
-        visibility: visible !important;
-
-        opacity: 1 !important;
+    .card-total h4 {
+        color: #8a92a6;
+        margin: 0;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
     }
 
+    .card-total p {
+        color: #ffffff;
+        margin: 8px 0 0 0;
+        font-size: 38px;
+        font-weight: bold;
+    }
 
-    /* ======================================================
-       CELULAR
-       ====================================================== */
-
-    @media (max-width: 768px) {
-
-        .block-container {
-
-            padding-left: 1rem;
-
-            padding-right: 1rem;
-
-            padding-top: 1rem;
-        }
-
-
-        div[data-testid="stVerticalBlock"] > div:has(h1) {
-
-            padding: 25px 20px 22px 20px;
-
-            border-radius: 14px;
-        }
-
-
-        div[data-testid="stVerticalBlock"] h1 {
-
-            font-size: 2.1rem !important;
-        }
-
-
-        div[data-testid="stVerticalBlock"] h1 + p {
-
-            font-size: 1rem !important;
-        }
-
-
-        .stApp h3 {
-
-            font-size: 1.15rem !important;
-
-            color: #17202a !important;
-        }
-
-
-        [data-testid="stNumberInput"] label p {
-
-            font-size: 0.85rem !important;
-
-            color: #17202a !important;
-        }
-
+    .card-item {
+        background-color: #161a22;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #2e3440;
+        margin-bottom: 15px;
     }
 
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
-
 # ============================================================
-# TÍTULO PRINCIPAL
+# CABEÇALHO
 # ============================================================
 
 st.title("📐 Detalhamento do Projeto")
 
 st.markdown(
-    "Preencha as dimensões da estrutura para gerar "
-    "automaticamente a lista de materiais necessários."
+    "Insira as dimensões do projeto abaixo para gerar automaticamente "
+    "os quantitativos e custos dos materiais."
 )
 
+st.markdown("---")
 
 # ============================================================
-# SEÇÃO 1 — INFORMAÇÕES DO CLIENTE
+# DIMENSÕES DO PROJETO
 # ============================================================
 
-st.header("📋 Informações Gerais")
+st.header("📐 Dimensões do Projeto")
 
-col_cli1, col_cli2 = st.columns(2)
+col_geo1, col_geo2, col_geo3 = st.columns(3)
 
-with col_cli1:
-
-    cliente = st.text_input(
-        "Nome do Cliente",
-        value="João Silva"
-    )
-
-
-with col_cli2:
-
-    data_projeto = st.date_input(
-        "Data do Orçamento",
-        date.today()
-    )
-
-
-# ============================================================
-# DIMENSÕES
-# ============================================================
-
-st.header("🏠 Dimensões da Estrutura")
-
-col_dim1, col_dim2, col_dim3 = st.columns(3)
-
-
-with col_dim1:
-
-    area_total = st.number_input(
-        "Área Total de Paredes (m²)",
-        min_value=1.0,
-        value=90.0,
-        step=5.0
-    )
-
-
-with col_dim2:
-
-    pe_direito = st.number_input(
-        "Pé Direito (m)",
-        min_value=1.0,
-        value=3.0,
-        step=0.1
-    )
-
-
-with col_dim3:
-
-    area_cobertura = st.number_input(
-        "Área de Cobertura/Telhado (m²)",
+with col_geo1:
+    comp_linear = st.number_input(
+        "Comprimento Linear (Metros)",
         min_value=0.0,
-        value=80.0,
-        step=5.0
+        value=30.00,
+        step=0.01,
     )
 
+with col_geo2:
+    altura_parede = st.number_input(
+        "Altura da Parede / Pé-Direito (Metros)",
+        min_value=0.0,
+        value=3.00,
+        step=0.01,
+    )
+
+area_calculada = comp_linear * altura_parede
+
+with col_geo3:
+    st.metric(
+        label="Área Total Calculada (m²)",
+        value=f"{area_calculada:.2f} m²",
+    )
+
+st.markdown("---")
+
+# ============================================================
+# COEFICIENTES
+# ============================================================
+
+COEFICIENTES = {
+    "Perfil 90x0,80": 113.0 / 30.0,
+    "Guia Perimetral": 20.0 / 30.0,
+    "Plywood 8mm": 60.0 / 90.0,
+    "Placa ST 12.5mm": 36.0 / 90.0,
+    "Placa Cimentícia 12mm": 36.0 / 90.0,
+    "Lã PET": 6.0 / 90.0,
+    "Parafusos": 80.0,
+    "Cola PU 40": 36.0 / 90.0,
+    "Manta Hidrófuga": 3.0 / 90.0,
+}
 
 # ============================================================
 # PREÇOS BASE
 # ============================================================
 
 PRECOS_BASE = {
-
-    "perfil": 50.0,
-
-    "guia": 50.0,
-
-    "plywood": 80.0,
-
-    "placa_st": 40.0,
-
-    "placa_cimenticia": 140.0,
-
-    "la_pet": 200.0,
-
-    "parafusos": 35.0,
-
-    "massas": 500.0,
-
-    "telas": 500.0,
-
-    "adesivo": 150.0,
-
-    "telha": 400.0,
-
-    "manta": 1000.0,
-
+    "Perfil 90x0,80": 50.0,
+    "Guia Perimetral": 50.0,
+    "Plywood 8mm": 80.0,
+    "Placa ST 12.5mm": 40.0,
+    "Placa Cimentícia 12mm": 140.0,
+    "Lã PET": 200.0,
+    "Parafusos": 0.07,
+    "Cola PU 40": 40.0,
+    "Manta Hidrófuga": 500.0,
 }
 
-
 # ============================================================
-# CÁLCULOS
-# ============================================================
-
-qtd_perfil = area_total * 1.25
-
-qtd_guia = area_total * 0.55
-
-qtd_plywood = area_total / 2.2
-
-qtd_placa_st = area_total / 2.4
-
-qtd_cimenticia = area_total / 2.4
-
-qtd_la = area_total / 10.0
-
-qtd_parafuso = area_total * 0.5
-
-qtd_massa = area_total / 30.0
-
-qtd_tela = area_total / 40.0
-
-qtd_adesivo = area_total / 15.0
-
-qtd_telha = area_cobertura * 1.15
-
-qtd_manta = area_cobertura / 50.0
-
-
-# ============================================================
-# LISTA DE MATERIAIS
+# QUANTIDADES
 # ============================================================
 
-lista_materiais = [
+qtd_perfil = math.ceil(
+    comp_linear * COEFICIENTES["Perfil 90x0,80"]
+)
 
+qtd_guia = math.ceil(
+    comp_linear * COEFICIENTES["Guia Perimetral"]
+)
+
+qtd_plywood = math.ceil(
+    area_calculada * COEFICIENTES["Plywood 8mm"]
+)
+
+qtd_placa_st = math.ceil(
+    area_calculada * COEFICIENTES["Placa ST 12.5mm"]
+)
+
+qtd_placa_cimenticia = math.ceil(
+    area_calculada * COEFICIENTES["Placa Cimentícia 12mm"]
+)
+
+qtd_la_pet = math.ceil(
+    area_calculada * COEFICIENTES["Lã PET"]
+)
+
+qtd_parafusos = math.ceil(
+    area_calculada * COEFICIENTES["Parafusos"]
+)
+
+qtd_cola_pu = math.ceil(
+    area_calculada * COEFICIENTES["Cola PU 40"]
+)
+
+qtd_manta = math.ceil(
+    area_calculada * COEFICIENTES["Manta Hidrófuga"]
+)
+
+itens_parciais = [
     {
-        "nome": "Perfil 90x0,80",
-        "qtd": qtd_perfil,
-        "preco": PRECOS_BASE["perfil"]
+        "Item": "Perfil 90x0,80",
+        "Qtd_Sugerida": qtd_perfil,
+        "Preco_Base": PRECOS_BASE["Perfil 90x0,80"],
     },
-
     {
-        "nome": "Guia Perimetral",
-        "qtd": qtd_guia,
-        "preco": PRECOS_BASE["guia"]
+        "Item": "Guia Perimetral",
+        "Qtd_Sugerida": qtd_guia,
+        "Preco_Base": PRECOS_BASE["Guia Perimetral"],
     },
-
     {
-        "nome": "Plywood 8mm",
-        "qtd": qtd_plywood,
-        "preco": PRECOS_BASE["plywood"]
+        "Item": "Plywood 8mm",
+        "Qtd_Sugerida": qtd_plywood,
+        "Preco_Base": PRECOS_BASE["Plywood 8mm"],
     },
-
     {
-        "nome": "Placa ST 12.5mm",
-        "qtd": qtd_placa_st,
-        "preco": PRECOS_BASE["placa_st"]
+        "Item": "Placa ST 12.5mm",
+        "Qtd_Sugerida": qtd_placa_st,
+        "Preco_Base": PRECOS_BASE["Placa ST 12.5mm"],
     },
-
     {
-        "nome": "Placa Cimentícia 12mm",
-        "qtd": qtd_cimenticia,
-        "preco": PRECOS_BASE["placa_cimenticia"]
+        "Item": "Placa Cimentícia 12mm",
+        "Qtd_Sugerida": qtd_placa_cimenticia,
+        "Preco_Base": PRECOS_BASE["Placa Cimentícia 12mm"],
     },
-
     {
-        "nome": "Lã PET",
-        "qtd": qtd_la,
-        "preco": PRECOS_BASE["la_pet"]
+        "Item": "Lã PET",
+        "Qtd_Sugerida": qtd_la_pet,
+        "Preco_Base": PRECOS_BASE["Lã PET"],
     },
-
     {
-        "nome": "Parafusos (Cento)",
-        "qtd": qtd_parafuso,
-        "preco": PRECOS_BASE["parafusos"]
+        "Item": "Parafusos",
+        "Qtd_Sugerida": qtd_parafusos,
+        "Preco_Base": PRECOS_BASE["Parafusos"],
     },
-
     {
-        "nome": "Massas (Balde/Saco)",
-        "qtd": qtd_massa,
-        "preco": PRECOS_BASE["massas"]
+        "Item": "Cola PU 40",
+        "Qtd_Sugerida": qtd_cola_pu,
+        "Preco_Base": PRECOS_BASE["Cola PU 40"],
     },
-
     {
-        "nome": "Telas (Rolo)",
-        "qtd": qtd_tela,
-        "preco": PRECOS_BASE["telas"]
+        "Item": "Manta Hidrófuga",
+        "Qtd_Sugerida": qtd_manta,
+        "Preco_Base": PRECOS_BASE["Manta Hidrófuga"],
     },
-
-    {
-        "nome": "Adesivo PU (Cx)",
-        "qtd": qtd_adesivo,
-        "preco": PRECOS_BASE["adesivo"]
-    },
-
-    {
-        "nome": "Telha Sanduíche",
-        "qtd": qtd_telha,
-        "preco": PRECOS_BASE["telha"]
-    },
-
-    {
-        "nome": "Manta Hidrófuga",
-        "qtd": qtd_manta,
-        "preco": PRECOS_BASE["manta"]
-    },
-
 ]
-
 
 # ============================================================
 # INSUMOS
@@ -488,237 +249,281 @@ lista_materiais = [
 st.header("📋 Insumos Calculados Automaticamente")
 
 st.markdown(
-    "Ajuste refinado de quantidades e valores unitários:"
+    "As quantidades e os preços podem ser ajustados manualmente."
 )
-
 
 dados_atualizados = []
 
-total_materiais = 0.0
+id_metragem = f"{comp_linear}_{altura_parede}"
 
+col1, col2 = st.columns(2)
 
-col_grid1, col_grid2 = st.columns(2)
+for i, item in enumerate(itens_parciais):
 
+    target_col = col1 if i % 2 == 0 else col2
 
-for idx, mat in enumerate(lista_materiais):
+    with target_col:
 
-    coluna_painel = (
-        col_grid1
-        if idx % 2 == 0
-        else col_grid2
-    )
-
-
-    with coluna_painel:
-
-        # ----------------------------------------------------
-        # NOME DO INSUMO
-        # ----------------------------------------------------
-
-        st.subheader(
-            f"🔹 {mat['nome']}"
+        st.markdown(
+            f"""
+            <div class="card-item">
+                <b style="color:#ff9f1c; font-size:18px;">
+                    {item["Item"]}
+                </b>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
+        sub_c1, sub_c2 = st.columns(2)
 
-        c_qtd, c_prc = st.columns(2)
-
-
-        # ----------------------------------------------------
-        # QUANTIDADE
-        # ----------------------------------------------------
-
-        with c_qtd:
+        with sub_c1:
 
             nova_qtd = st.number_input(
-                f"{mat['nome']} (Qtd)",
+                f'{item["Item"]} (Qtd)',
                 min_value=0.0,
-                value=float(
-                    round(
-                        mat["qtd"],
-                        1
-                    )
-                ),
-                key=f"q_{idx}"
+                value=float(item["Qtd_Sugerida"]),
+                step=1.0,
+                key=f"qtd_{i}_{id_metragem}",
             )
 
+        with sub_c2:
 
-        # ----------------------------------------------------
-        # PREÇO
-        # ----------------------------------------------------
-
-        with c_prc:
-
-            novo_prc = st.number_input(
-                f"{mat['nome']} (Preço R$)",
+            novo_preco = st.number_input(
+                f'{item["Item"]} (Preço R$)',
                 min_value=0.0,
-                value=float(
-                    mat["preco"]
-                ),
-                key=f"p_{idx}"
+                value=float(item["Preco_Base"]),
+                step=1.0 if item["Preco_Base"] >= 1 else 0.01,
+                key=f"prc_{i}_{id_metragem}",
             )
 
+        total_item = nova_qtd * novo_preco
 
-        # ----------------------------------------------------
-        # SUBTOTAL
-        # ----------------------------------------------------
-
-        subtotal_calculado = (
-            nova_qtd * novo_prc
+        st.write(
+            f"**Subtotal do Item:** R$ {total_item:,.2f}"
         )
-
-
-        total_materiais += (
-            subtotal_calculado
-        )
-
 
         dados_atualizados.append(
             {
-                "Item": mat["nome"],
-
+                "Item": item["Item"],
                 "Quantidade": nova_qtd,
-
-                "Preço Unitário": novo_prc,
-
-                "Total Item": subtotal_calculado,
+                "Preço Unitário (R$)": novo_preco,
+                "Total (R$)": total_item,
             }
         )
 
+# ============================================================
+# MASSAS E TELAS
+# ============================================================
 
-        st.write(
-            f"**Subtotal do Item:** "
-            f"R$ {subtotal_calculado:,.2f}"
+subtotal_acumulado = sum(
+    item["Total (R$)"] for item in dados_atualizados
+)
+
+preco_sugerido_massas_telas = subtotal_acumulado * 0.05
+
+st.markdown("---")
+
+st.header("🎨 Acabamento e Perdas")
+
+col_m1, col_m2 = st.columns(2)
+
+with col_m1:
+
+    st.markdown(
+        """
+        <div class="card-item">
+            <b style="color:#ff9f1c; font-size:18px;">
+                Massas e Telas
+            </b>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    sub_cm1, sub_cm2 = st.columns(2)
+
+    with sub_cm1:
+
+        qtd_massas = st.number_input(
+            "Massas e Telas (Qtd)",
+            min_value=0.0,
+            value=1.0,
+            step=1.0,
+            key=f"qtd_massas_{id_metragem}",
         )
 
+    with sub_cm2:
 
-        st.write("---")
+        preco_massas = st.number_input(
+            "Massas e Telas (Preço R$)",
+            min_value=0.0,
+            value=float(preco_sugerido_massas_telas),
+            step=10.0,
+            key=f"prc_massas_{id_metragem}",
+        )
 
+    total_massas = qtd_massas * preco_massas
+
+    st.write(
+        f"**Subtotal do Item:** R$ {total_massas:,.2f}"
+    )
+
+dados_atualizados.append(
+    {
+        "Item": "Massas e Telas",
+        "Quantidade": qtd_massas,
+        "Preço Unitário (R$)": preco_massas,
+        "Total (R$)": total_massas,
+    }
+)
+
+# ============================================================
+# TOTAL DOS MATERIAIS
+# ============================================================
+
+df = pd.DataFrame(dados_atualizados)
+
+total_materiais = df["Total (R$)"].sum()
+
+# ============================================================
+# MÃO DE OBRA
+# ============================================================
+
+dias_sugeridos = max(
+    1,
+    math.ceil((area_calculada / 90.0) * 30)
+)
+
+st.markdown("---")
+
+st.header("🛠️ Custos Adicionais (Mão de Obra)")
+
+col_mo1, col_mo2 = st.columns(2)
+
+with col_mo1:
+
+    dias_trabalho = st.number_input(
+        "Dias de Execução",
+        min_value=0,
+        value=int(dias_sugeridos),
+        step=1,
+        key=f"dias_exec_{id_metragem}",
+    )
+
+with col_mo2:
+
+    valor_diaria = st.number_input(
+        "Valor da Diária (R$)",
+        min_value=0.0,
+        value=755.0,
+        step=5.0,
+        key=f"v_diaria_{id_metragem}",
+    )
+
+mao_de_obra = dias_trabalho * valor_diaria
+
+# ============================================================
+# TOTAL GERAL
+# ============================================================
+
+total_geral = total_materiais + mao_de_obra
 
 # ============================================================
 # RESUMO
 # ============================================================
 
-st.header(
-    "📊 Resumo Consolidado do Orçamento"
+st.markdown("---")
+
+st.header("📊 Resumo e Fechamento")
+
+tipo_total_selecionado = st.selectbox(
+    "Selecione o tipo de total que deseja visualizar no painel:",
+    [
+        "Material Total",
+        "Mão de Obra Total",
+        "Custo Geral da Obra (Global)",
+    ],
 )
 
+if tipo_total_selecionado == "Material Total":
 
-df_resumo = pd.DataFrame(
-    dados_atualizados
+    rotulo_card = "Material Total"
+    valor_card = total_materiais
+
+elif tipo_total_selecionado == "Mão de Obra Total":
+
+    rotulo_card = "Mão de Obra Total"
+    valor_card = mao_de_obra
+
+else:
+
+    rotulo_card = "Custo Geral da Obra"
+    valor_card = total_geral
+
+# ============================================================
+# CARD FINAL
+# ============================================================
+
+st.markdown(
+    f"""
+    <div class="card-total">
+        <h4>{rotulo_card}</h4>
+        <p>R$ {valor_card:,.2f}</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
+# ============================================================
+# TABELA RESUMIDA
+# ============================================================
+
+st.subheader("📋 Tabela Consolidada")
 
 st.dataframe(
-    df_resumo.style.format(
-        {
-            "Preço Unitário": "R$ {:.2f}",
-
-            "Total Item": "R$ {:.2f}",
-        }
-    ),
-
-    use_container_width=True,
+    df,
+    width="stretch",
+    hide_index=True,
 )
 
-
 # ============================================================
-# CUSTOS DE INSTALAÇÃO
+# EXPORTAÇÃO CSV
 # ============================================================
 
-st.sidebar.header(
-    "💰 Custos de Instalação"
+csv_data = df.to_csv(index=False).encode("utf-8-sig")
+
+st.download_button(
+    label="📥 Exportar Orçamento",
+    data=csv_data,
+    file_name="orcamento_steel_framing.csv",
+    mime="text/csv",
+    width="stretch",
 )
 
-
-mao_de_obra = st.sidebar.number_input(
-    "Mão de Obra Geral (R$)",
-    min_value=0.0,
-    value=11635.0,
-    step=100.0
-)
-
-
 # ============================================================
-# TOTAL
+# PAINEL LATERAL
 # ============================================================
 
-total_geral = (
-    total_materiais
-    +
-    mao_de_obra
+st.sidebar.header("💰 Resumo Financeiro")
+
+st.sidebar.metric(
+    "Material Total",
+    f"R$ {total_materiais:,.2f}",
 )
 
+st.sidebar.metric(
+    "Mão de Obra",
+    f"R$ {mao_de_obra:,.2f}",
+)
+
+st.sidebar.metric(
+    "Custo Geral",
+    f"R$ {total_geral:,.2f}",
+)
 
 st.sidebar.markdown("---")
 
-
-st.sidebar.metric(
-    label="Total Materiais",
-
-    value=(
-        f"R$ "
-        f"{total_materiais:,.2f}"
-    )
-)
-
-
-st.sidebar.metric(
-    label="Total Mão de Obra",
-
-    value=(
-        f"R$ "
-        f"{mao_de_obra:,.2f}"
-    )
-)
-
-
-st.sidebar.subheader(
-    f"Total Geral: R$ {total_geral:,.2f}"
-)
-
-
-# ============================================================
-# EXPORTAÇÃO
-# ============================================================
-
-st.markdown("---")
-
-st.subheader(
-    "📥 Exportação do Orçamento"
-)
-
-
-csv_data = (
-    df_resumo
-    .to_csv(index=False)
-    .encode("utf-8")
-)
-
-
-nome_cliente = (
-    cliente
-    .strip()
-    .replace(" ", "_")
-    .replace("/", "_")
-    .replace("\\", "_")
-)
-
-
-st.download_button(
-
-    label=(
-        "📥 Exportar Orçamento Completo (CSV)"
-    ),
-
-    data=csv_data,
-
-    file_name=(
-        f"orcamento_steel_"
-        f"{nome_cliente}_"
-        f"{data_projeto}.csv"
-    ),
-
-    mime="text/csv",
-
-    use_container_width=True,
+st.sidebar.caption(
+    "Calculadora Steel Framing"
 )
