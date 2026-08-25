@@ -2,10 +2,11 @@ import streamlit as st
 import pandas as pd
 from datetime import date
 from io import BytesIO
+import os
 
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
-from openpyxl.worksheet.page import PageMargins
+from openpyxl.drawing.image import Image as ExcelImage
 
 
 # ============================================================
@@ -158,7 +159,7 @@ area_total = (
 
 
 # ============================================================
-# EXIBIÇÃO DA ÁREA CALCULADA
+# EXIBIÇÃO DA ÁREA
 # ============================================================
 
 st.info(
@@ -174,25 +175,15 @@ st.info(
 PRECOS_BASE = {
 
     "perfil": 50.0,
-
     "guia": 50.0,
-
     "plywood": 80.0,
-
     "placa_st": 40.0,
-
     "placa_cimenticia": 140.0,
-
     "la_pet": 200.0,
-
     "parafusos": 35.0,
-
     "massas": 500.0,
-
     "telas": 500.0,
-
     "adesivo": 150.0,
-
     "manta": 1000.0
 }
 
@@ -202,29 +193,17 @@ PRECOS_BASE = {
 # ============================================================
 
 qtd_perfil = area_total * 1.25
-
 qtd_guia = area_total * 0.55
-
 qtd_plywood = area_total / 2.2
-
 qtd_placa_st = area_total / 2.4
-
 qtd_cimenticia = area_total / 2.4
-
 qtd_la = area_total / 10.0
-
 qtd_parafuso = area_total * 0.5
-
 qtd_massa = area_total / 30.0
-
 qtd_tela = area_total / 40.0
-
 qtd_adesivo = area_total / 15.0
 
-# ============================================================
-# MANTA HIDRÓFUGA — SOMENTE PAREDES
-# ============================================================
-
+# Manta hidrófuga das paredes
 qtd_manta = area_total / 50.0
 
 
@@ -325,7 +304,7 @@ calcular_projeto = st.button(
 
 
 # ============================================================
-# CÁLCULO E GRAVAÇÃO DO PROJETO
+# CÁLCULO E GRAVAÇÃO
 # ============================================================
 
 if calcular_projeto:
@@ -344,10 +323,7 @@ if calcular_projeto:
             mat["preco"]
         )
 
-        subtotal = (
-            quantidade *
-            preco
-        )
+        subtotal = quantidade * preco
 
         total_materiais_calculado += subtotal
 
@@ -370,78 +346,45 @@ if calcular_projeto:
     st.session_state["projeto_calculado"] = {
 
         "cliente": cliente,
-
         "data_projeto": data_projeto,
-
         "comprimento_paredes": comprimento_paredes,
-
         "pe_direito": pe_direito,
-
         "area_total": area_total,
-
         "dados_atualizados": dados_calculados,
-
         "lista_materiais": dados_calculados,
-
         "total_materiais": total_materiais_calculado,
-
         "mao_de_obra": mao_de_obra_calculada,
-
         "total_geral": total_geral_calculado,
 
         "dimensoes": {
-
             "comprimento_paredes": comprimento_paredes,
-
             "pe_direito": pe_direito,
-
             "area_paredes": area_total
-
         },
 
         "calculado": True
-
     }
 
     st.session_state["area_total"] = area_total
-
-    st.session_state["comprimento_paredes"] = (
-        comprimento_paredes
-    )
-
+    st.session_state["comprimento_paredes"] = comprimento_paredes
     st.session_state["pe_direito"] = pe_direito
-
-    st.session_state["dados_atualizados"] = (
-        dados_calculados
-    )
-
-    st.session_state["total_materiais"] = (
-        total_materiais_calculado
-    )
-
-    st.session_state["mao_de_obra"] = (
-        mao_de_obra_calculada
-    )
-
-    st.session_state["total_geral"] = (
-        total_geral_calculado
-    )
-
+    st.session_state["dados_atualizados"] = dados_calculados
+    st.session_state["total_materiais"] = total_materiais_calculado
+    st.session_state["mao_de_obra"] = mao_de_obra_calculada
+    st.session_state["total_geral"] = total_geral_calculado
     st.session_state["cliente"] = cliente
-
     st.session_state["data_projeto"] = data_projeto
 
     st.success(
         "✅ PROJETO CALCULADO COM SUCESSO! "
-        "Os dados já estão disponíveis para a página "
-        "📊 Análise."
+        "Os dados já estão disponíveis para a página 📊 Análise."
     )
 
     st.balloons()
 
 
 # ============================================================
-# STATUS DO PROJETO
+# STATUS
 # ============================================================
 
 if "projeto_calculado" in st.session_state:
@@ -457,7 +400,7 @@ if "projeto_calculado" in st.session_state:
 
 
 # ============================================================
-# SEÇÃO 3 — INSUMOS E AJUSTES
+# SEÇÃO 3 — INSUMOS
 # ============================================================
 
 st.header("📋 Insumos Calculados Automaticamente")
@@ -494,9 +437,7 @@ for idx, mat in enumerate(lista_materiais):
             nova_qtd = st.number_input(
                 f"{mat['nome']} (Qtd)",
                 min_value=0.0,
-                value=float(
-                    round(mat["qtd"], 1)
-                ),
+                value=float(round(mat["qtd"], 1)),
                 key=f"q_{idx}"
             )
 
@@ -505,20 +446,13 @@ for idx, mat in enumerate(lista_materiais):
             novo_prc = st.number_input(
                 f"{mat['nome']} (Preço R$)",
                 min_value=0.0,
-                value=float(
-                    mat["preco"]
-                ),
+                value=float(mat["preco"]),
                 key=f"p_{idx}"
             )
 
-        subtotal_calculado = (
-            nova_qtd *
-            novo_prc
-        )
+        subtotal_calculado = nova_qtd * novo_prc
 
-        total_materiais += (
-            subtotal_calculado
-        )
+        total_materiais += subtotal_calculado
 
         dados_atualizados.append(
             {
@@ -553,14 +487,11 @@ mao_de_obra = st.sidebar.number_input(
 # TOTAL GERAL
 # ============================================================
 
-total_geral = (
-    total_materiais +
-    mao_de_obra
-)
+total_geral = total_materiais + mao_de_obra
 
 
 # ============================================================
-# BOTÃO ATUALIZAR
+# ATUALIZAR CÁLCULO
 # ============================================================
 
 st.markdown("---")
@@ -573,72 +504,29 @@ if st.button(
     st.session_state["projeto_calculado"] = {
 
         "cliente": cliente,
-
         "data_projeto": data_projeto,
-
-        "comprimento_paredes": (
-            comprimento_paredes
-        ),
-
+        "comprimento_paredes": comprimento_paredes,
         "pe_direito": pe_direito,
-
         "area_total": area_total,
-
-        "dados_atualizados": (
-            dados_atualizados
-        ),
-
-        "lista_materiais": (
-            dados_atualizados
-        ),
-
-        "total_materiais": (
-            total_materiais
-        ),
-
-        "mao_de_obra": (
-            mao_de_obra
-        ),
-
-        "total_geral": (
-            total_geral
-        ),
+        "dados_atualizados": dados_atualizados,
+        "lista_materiais": dados_atualizados,
+        "total_materiais": total_materiais,
+        "mao_de_obra": mao_de_obra,
+        "total_geral": total_geral,
 
         "dimensoes": {
-
-            "comprimento_paredes": (
-                comprimento_paredes
-            ),
-
-            "pe_direito": (
-                pe_direito
-            ),
-
-            "area_paredes": (
-                area_total
-            )
-
+            "comprimento_paredes": comprimento_paredes,
+            "pe_direito": pe_direito,
+            "area_paredes": area_total
         },
 
         "calculado": True
-
     }
 
-    st.session_state["dados_atualizados"] = (
-        dados_atualizados
-    )
-
-    st.session_state["total_materiais"] = (
-        total_materiais
-    )
-
-    st.session_state["mao_de_obra"] = (
-        mao_de_obra
-    )
-
-    st.session_state["total_geral"] = (
-        total_geral
-    )
+    st.session_state["dados_atualizados"] = dados_atualizados
+    st.session_state["total_materiais"] = total_materiais
+    st.session_state["mao_de_obra"] = mao_de_obra
+    st.session_state["total_geral"] = total_geral
 
     st.success(
         "✅ Cálculo atualizado. "
@@ -647,16 +535,12 @@ if st.button(
 
 
 # ============================================================
-# RESUMO CONSOLIDADO
+# RESUMO
 # ============================================================
 
-st.header(
-    "📊 Resumo Consolidado do Orçamento"
-)
+st.header("📊 Resumo Consolidado do Orçamento")
 
-df_resumo = pd.DataFrame(
-    dados_atualizados
-)
+df_resumo = pd.DataFrame(dados_atualizados)
 
 st.dataframe(
     df_resumo.style.format(
@@ -670,12 +554,10 @@ st.dataframe(
 
 
 # ============================================================
-# SIDEBAR — CUSTOS
+# SIDEBAR
 # ============================================================
 
-st.sidebar.header(
-    "💰 Custos de Instalação"
-)
+st.sidebar.header("💰 Custos de Instalação")
 
 st.sidebar.markdown("---")
 
@@ -702,39 +584,24 @@ def gerar_excel():
 
     wb = Workbook()
 
-    # ========================================================
-    # ABA ORÇAMENTO
-    # ========================================================
-
     ws = wb.active
-
     ws.title = "Orçamento"
 
-    # --------------------------------------------------------
-    # LARGURAS DAS COLUNAS
-    # --------------------------------------------------------
+    # ========================================================
+    # LARGURAS
+    # ========================================================
 
     larguras = {
-
-        "A": 30,
-
-        "B": 16,
-
-        "C": 14,
-
+        "A": 28,
+        "B": 18,
+        "C": 20,
         "D": 20,
-
-        "E": 20,
-
-        "F": 34,
-
+        "E": 22,
+        "F": 30,
     }
 
     for coluna, largura in larguras.items():
-
-        ws.column_dimensions[
-            coluna
-        ].width = largura
+        ws.column_dimensions[coluna].width = largura
 
 
     # ========================================================
@@ -795,27 +662,10 @@ def gerar_excel():
     )
 
     borda_fina = Border(
-
-        left=Side(
-            style="thin",
-            color="B7B7B7"
-        ),
-
-        right=Side(
-            style="thin",
-            color="B7B7B7"
-        ),
-
-        top=Side(
-            style="thin",
-            color="B7B7B7"
-        ),
-
-        bottom=Side(
-            style="thin",
-            color="B7B7B7"
-        ),
-
+        left=Side(style="thin", color="B7B7B7"),
+        right=Side(style="thin", color="B7B7B7"),
+        top=Side(style="thin", color="B7B7B7"),
+        bottom=Side(style="thin", color="B7B7B7"),
     )
 
 
@@ -825,12 +675,9 @@ def gerar_excel():
 
     ws.merge_cells("A1:F2")
 
-    ws["A1"] = (
-        "ORÇAMENTO STEEL FRAMING"
-    )
+    ws["A1"] = "ORÇAMENTO STEEL FRAMING"
 
     ws["A1"].font = fonte_titulo
-
     ws["A1"].fill = fundo_titulo
 
     ws["A1"].alignment = Alignment(
@@ -839,37 +686,21 @@ def gerar_excel():
     )
 
     for row in ws["A1:F2"]:
-
         for cell in row:
-
             cell.fill = fundo_titulo
 
 
-    ws.row_dimensions[1].height = 25
-    ws.row_dimensions[2].height = 25
-
-
     # ========================================================
-    # LOGO
+    # ÁREA DO LOGO
     # ========================================================
 
     ws.merge_cells("A4:B8")
 
-    ws["A4"] = (
-        "INSIRA AQUI\n"
-        "O LOGO DA SUA EMPRESA"
-    )
+    ws["A4"] = ""
 
     ws["A4"].alignment = Alignment(
         horizontal="center",
-        vertical="center",
-        wrap_text=True
-    )
-
-    ws["A4"].font = Font(
-        size=12,
-        bold=True,
-        color="666666"
+        vertical="center"
     )
 
     ws["A4"].fill = PatternFill(
@@ -878,10 +709,102 @@ def gerar_excel():
     )
 
     for row in ws["A4:B8"]:
-
         for cell in row:
-
             cell.border = borda_fina
+            cell.fill = PatternFill(
+                "solid",
+                fgColor="F2F2F2"
+            )
+
+
+    # ========================================================
+    # CARREGAMENTO AUTOMÁTICO DO LOGO
+    # ========================================================
+
+    # O arquivo deve estar na mesma pasta deste .py.
+    # Nome esperado: logo.png
+
+    caminho_logo = os.path.join(
+        os.path.dirname(
+            os.path.abspath(__file__)
+        ),
+        "logo.png"
+    )
+
+    if os.path.exists(caminho_logo):
+
+        try:
+
+            logo = ExcelImage(
+                caminho_logo
+            )
+
+            # Mantém proporção visual adequada
+            # para a área A4:B8.
+
+            largura_original = logo.width
+            altura_original = logo.height
+
+            largura_maxima = 190
+            altura_maxima = 100
+
+            fator_largura = (
+                largura_maxima /
+                largura_original
+            )
+
+            fator_altura = (
+                altura_maxima /
+                altura_original
+            )
+
+            fator = min(
+                fator_largura,
+                fator_altura
+            )
+
+            logo.width = int(
+                largura_original * fator
+            )
+
+            logo.height = int(
+                altura_original * fator
+            )
+
+            ws.add_image(
+                logo,
+                "A4"
+            )
+
+        except Exception:
+            ws["A4"] = (
+                "LOGO NÃO FOI CARREGADO"
+            )
+
+            ws["A4"].font = Font(
+                size=10,
+                bold=True,
+                color="999999"
+            )
+
+    else:
+
+        ws["A4"] = (
+            "INSIRA AQUI\n"
+            "O LOGO DA SUA EMPRESA"
+        )
+
+        ws["A4"].alignment = Alignment(
+            horizontal="center",
+            vertical="center",
+            wrap_text=True
+        )
+
+        ws["A4"].font = Font(
+            size=12,
+            bold=True,
+            color="666666"
+        )
 
 
     # ========================================================
@@ -893,36 +816,20 @@ def gerar_excel():
     ws["C4"] = "DADOS DA EMPRESA"
 
     ws["C4"].fill = fundo_secao
-
     ws["C4"].font = fonte_secao
 
     ws["C4"].alignment = Alignment(
         horizontal="center"
     )
 
+
     dados_empresa = [
-
-        (
-            "Empresa",
-            "Digite o nome da sua empresa"
-        ),
-
-        (
-            "CNPJ",
-            "Digite o CNPJ"
-        ),
-
-        (
-            "Telefone / WhatsApp",
-            "Digite o telefone"
-        ),
-
-        (
-            "E-mail",
-            "Digite o e-mail"
-        ),
-
+        ("Empresa", "Digite o nome da sua empresa"),
+        ("CNPJ", "Digite o CNPJ"),
+        ("Telefone / WhatsApp", "Digite o telefone"),
+        ("E-mail", "Digite o e-mail"),
     ]
+
 
     linha = 5
 
@@ -930,9 +837,7 @@ def gerar_excel():
 
         ws[f"C{linha}"] = campo
 
-        ws[f"C{linha}"].font = (
-            fonte_cabecalho
-        )
+        ws[f"C{linha}"].font = fonte_cabecalho
 
         ws.merge_cells(
             start_row=linha,
@@ -943,9 +848,7 @@ def gerar_excel():
 
         ws[f"D{linha}"] = valor
 
-        ws[f"D{linha}"].font = (
-            fonte_normal
-        )
+        ws[f"D{linha}"].font = fonte_normal
 
         linha += 1
 
@@ -956,48 +859,36 @@ def gerar_excel():
 
     ws.merge_cells("A10:F10")
 
-    ws["A10"] = (
-        "IDENTIFICAÇÃO DO PROJETO"
-    )
+    ws["A10"] = "IDENTIFICAÇÃO DO PROJETO"
 
     ws["A10"].fill = fundo_secao
-
     ws["A10"].font = fonte_secao
 
     ws["A10"].alignment = Alignment(
         horizontal="center"
     )
 
+
     dados_projeto = [
-
-        (
-            "Cliente",
-            cliente
-        ),
-
+        ("Cliente", cliente),
         (
             "Data do Orçamento",
-            data_projeto.strftime(
-                "%d/%m/%Y"
-            )
+            data_projeto.strftime("%d/%m/%Y")
         ),
-
         (
             "Comprimento das Paredes",
             f"{comprimento_paredes:.2f} m linear"
         ),
-
         (
             "Pé Direito",
             f"{pe_direito:.2f} m"
         ),
-
         (
             "Área das Paredes",
             f"{area_total:.2f} m²"
         ),
-
     ]
+
 
     linha = 11
 
@@ -1005,9 +896,7 @@ def gerar_excel():
 
         ws[f"A{linha}"] = campo
 
-        ws[f"A{linha}"].font = (
-            fonte_cabecalho
-        )
+        ws[f"A{linha}"].font = fonte_cabecalho
 
         ws.merge_cells(
             start_row=linha,
@@ -1037,9 +926,7 @@ def gerar_excel():
     ws.cell(
         linha_inicio_materiais,
         1
-    ).value = (
-        "QUANTITATIVO DE MATERIAIS"
-    )
+    ).value = "QUANTITATIVO DE MATERIAIS"
 
     ws.cell(
         linha_inicio_materiais,
@@ -1060,15 +947,14 @@ def gerar_excel():
 
 
     cabecalhos = [
-
         "Material",
         "Quantidade",
         "Unidade",
         "Preço Unitário",
         "Total",
         "Observação",
-
     ]
+
 
     linha_cabecalho = (
         linha_inicio_materiais + 1
@@ -1085,25 +971,16 @@ def gerar_excel():
         )
 
         cell.value = texto
-
         cell.fill = fundo_cabecalho
-
         cell.font = fonte_cabecalho
-
         cell.border = borda_fina
 
         cell.alignment = Alignment(
-            horizontal="center",
-            vertical="center",
-            wrap_text=True
+            horizontal="center"
         )
 
 
-    linha = (
-        linha_cabecalho + 1
-    )
-
-    primeira_linha_materiais = linha
+    linha = linha_cabecalho + 1
 
     for item in dados_atualizados:
 
@@ -1125,23 +1002,17 @@ def gerar_excel():
         ws.cell(
             linha,
             4
-        ).value = item[
-            "Preço Unitário"
-        ]
+        ).value = item["Preço Unitário"]
 
         ws.cell(
             linha,
             5
-        ).value = (
-            f"=B{linha}*D{linha}"
-        )
+        ).value = f"=B{linha}*D{linha}"
 
         ws.cell(
             linha,
             6
-        ).value = (
-            "Quantidade e preço editáveis"
-        )
+        ).value = "Quantidade e preço editáveis"
 
         for col in range(1, 7):
 
@@ -1151,7 +1022,6 @@ def gerar_excel():
             )
 
             cell.border = borda_fina
-
             cell.font = fonte_normal
 
             cell.alignment = Alignment(
@@ -1167,32 +1037,21 @@ def gerar_excel():
         ws.cell(
             linha,
             4
-        ).number_format = (
-            'R$ #,##0.00'
-        )
+        ).number_format = 'R$ #,##0.00'
 
         ws.cell(
             linha,
             5
-        ).number_format = (
-            'R$ #,##0.00'
-        )
-
-        ws.row_dimensions[linha].height = 22
+        ).number_format = 'R$ #,##0.00'
 
         linha += 1
 
 
-    ultima_linha_materiais = linha - 1
-
-
     # ========================================================
-    # TOTAL DE MATERIAIS
+    # TOTAL MATERIAIS
     # ========================================================
 
-    linha_total_materiais = (
-        linha + 1
-    )
+    linha_total_materiais = linha + 1
 
     ws.merge_cells(
         start_row=linha_total_materiais,
@@ -1204,9 +1063,7 @@ def gerar_excel():
     ws.cell(
         linha_total_materiais,
         1
-    ).value = (
-        "TOTAL DE MATERIAIS"
-    )
+    ).value = "TOTAL DE MATERIAIS"
 
     ws.cell(
         linha_total_materiais,
@@ -1218,19 +1075,15 @@ def gerar_excel():
         1
     ).fill = fundo_total
 
-    ws.cell(
-        linha_total_materiais,
-        1
-    ).alignment = Alignment(
-        horizontal="right"
-    )
+
+    primeira_linha = linha_cabecalho + 1
+    ultima_linha = linha - 1
 
     ws.cell(
         linha_total_materiais,
         5
     ).value = (
-        f"=SUM(E{primeira_linha_materiais}:"
-        f"E{ultima_linha_materiais})"
+        f"=SUM(E{primeira_linha}:E{ultima_linha})"
     )
 
     ws.cell(
@@ -1246,18 +1099,14 @@ def gerar_excel():
     ws.cell(
         linha_total_materiais,
         5
-    ).number_format = (
-        'R$ #,##0.00'
-    )
+    ).number_format = 'R$ #,##0.00'
 
 
     # ========================================================
     # MÃO DE OBRA
     # ========================================================
 
-    linha_mao_obra = (
-        linha_total_materiais + 1
-    )
+    linha_mao_obra = linha_total_materiais + 1
 
     ws.merge_cells(
         start_row=linha_mao_obra,
@@ -1283,13 +1132,6 @@ def gerar_excel():
 
     ws.cell(
         linha_mao_obra,
-        1
-    ).alignment = Alignment(
-        horizontal="right"
-    )
-
-    ws.cell(
-        linha_mao_obra,
         5
     ).value = mao_de_obra
 
@@ -1306,18 +1148,14 @@ def gerar_excel():
     ws.cell(
         linha_mao_obra,
         5
-    ).number_format = (
-        'R$ #,##0.00'
-    )
+    ).number_format = 'R$ #,##0.00'
 
 
     # ========================================================
     # TOTAL GERAL
     # ========================================================
 
-    linha_total_geral = (
-        linha_mao_obra + 1
-    )
+    linha_total_geral = linha_mao_obra + 1
 
     ws.merge_cells(
         start_row=linha_total_geral,
@@ -1341,13 +1179,6 @@ def gerar_excel():
 
     ws.cell(
         linha_total_geral,
-        1
-    ).alignment = Alignment(
-        horizontal="right"
-    )
-
-    ws.cell(
-        linha_total_geral,
         5
     ).value = (
         f"=E{linha_total_materiais}"
@@ -1365,9 +1196,7 @@ def gerar_excel():
     ws.cell(
         linha_total_geral,
         5
-    ).number_format = (
-        'R$ #,##0.00'
-    )
+    ).number_format = 'R$ #,##0.00'
 
     for col in range(1, 6):
 
@@ -1379,19 +1208,12 @@ def gerar_excel():
             fgColor="C6E0B4"
         )
 
-        ws.cell(
-            linha_total_geral,
-            col
-        ).border = borda_fina
-
 
     # ========================================================
     # CONDIÇÕES COMERCIAIS
     # ========================================================
 
-    linha_condicoes = (
-        linha_total_geral + 3
-    )
+    linha_condicoes = linha_total_geral + 3
 
     ws.merge_cells(
         start_row=linha_condicoes,
@@ -1417,18 +1239,10 @@ def gerar_excel():
         1
     ).font = fonte_secao
 
-    ws.cell(
-        linha_condicoes,
-        1
-    ).alignment = Alignment(
-        horizontal="center"
-    )
 
     for i in range(1, 4):
 
-        linha_obs = (
-            linha_condicoes + i
-        )
+        linha_obs = linha_condicoes + i
 
         ws.merge_cells(
             start_row=linha_obs,
@@ -1453,85 +1267,65 @@ def gerar_excel():
             wrap_text=True
         )
 
-        ws.cell(
-            linha_obs,
-            1
-        ).border = borda_fina
-
-        ws.row_dimensions[
-            linha_obs
-        ].height = 28
-
 
     # ========================================================
     # CONFIGURAÇÃO PROFISSIONAL DE IMPRESSÃO
     # ========================================================
 
-    # Papel A4
-    ws.page_setup.paperSize = ws.PAPERSIZE_A4
-
-    # Paisagem
-    ws.page_setup.orientation = (
-        ws.ORIENTATION_LANDSCAPE
+    ultima_linha_impressao = (
+        linha_condicoes + 3
     )
-
-    # Uma única página de largura
-    ws.page_setup.fitToWidth = 1
-
-    # Altura livre: pode ocupar várias páginas
-    ws.page_setup.fitToHeight = 0
-
-    # Ativa o ajuste de página
-    ws.sheet_properties.pageSetUpPr.fitToPage = True
-
-    # Margens profissionais
-    ws.page_margins = PageMargins(
-        left=0.25,
-        right=0.25,
-        top=0.45,
-        bottom=0.45,
-        header=0.20,
-        footer=0.20
-    )
-
-    # Centralização horizontal
-    ws.print_options.horizontalCentered = True
-
-    # Não imprimir linhas de grade
-    ws.sheet_view.showGridLines = False
-
-    # Congelar visualização
-    ws.freeze_panes = "A20"
 
     # Área exata que será impressa
     ws.print_area = (
-        f"A1:F{linha_condicoes + 3}"
+        f"A1:F{ultima_linha_impressao}"
     )
 
-    # Repetir linhas superiores em páginas adicionais
-    ws.print_title_rows = "1:19"
+    # Papel A4
+    ws.page_setup.paperSize = (
+        ws.PAPERSIZE_A4
+    )
 
-    # Orientação e escala
+    # Paisagem
+    ws.page_setup.orientation = (
+        "landscape"
+    )
+
+    # Ajustar para uma página de largura
     ws.sheet_properties.pageSetUpPr.fitToPage = True
 
-    # Configuração de página
+    ws.page_setup.fitToWidth = 1
+
+    # Altura automática — permite mais de uma página
+    # somente se realmente necessário.
+    ws.page_setup.fitToHeight = 0
+
+    # Margens
+    ws.page_margins.left = 0.25
+    ws.page_margins.right = 0.25
+    ws.page_margins.top = 0.40
+    ws.page_margins.bottom = 0.40
+    ws.page_margins.header = 0.20
+    ws.page_margins.footer = 0.20
+
+    # Centralizar horizontalmente na folha
+    ws.print_options.horizontalCentered = True
+
+    # Sem linhas de grade
+    ws.sheet_view.showGridLines = False
+
+    # Congelar cabeçalho
+    ws.freeze_panes = "A20"
+
+    # Configuração de impressão
+    ws.print_options.gridLines = False
+
     ws.page_setup.horizontalDpi = 300
     ws.page_setup.verticalDpi = 300
 
-    # Visualização normal
-    ws.sheet_view.view = "normal"
-
-    # Rodapé
-    ws.oddFooter.center.text = (
-        "Orçamento Steel Framing"
-    )
-
-    ws.oddFooter.right.text = (
-        "Página &P de &N"
-    )
-
-    ws.oddFooter.center.size = 9
-    ws.oddFooter.right.size = 9
+    # Repetir cabeçalho dos materiais caso
+    # o orçamento ocupe mais de uma página.
+    ws.print_title_rows = "18:19"
 
 
     # ========================================================
@@ -1542,35 +1336,17 @@ def gerar_excel():
         "Memória de Cálculo"
     )
 
-    memoria.column_dimensions[
-        "A"
-    ].width = 35
-
-    memoria.column_dimensions[
-        "B"
-    ].width = 20
-
-    memoria.column_dimensions[
-        "C"
-    ].width = 45
-
-    memoria.column_dimensions[
-        "D"
-    ].width = 20
+    memoria.column_dimensions["A"].width = 35
+    memoria.column_dimensions["B"].width = 20
+    memoria.column_dimensions["C"].width = 45
+    memoria.column_dimensions["D"].width = 20
 
     memoria.merge_cells("A1:D2")
 
-    memoria["A1"] = (
-        "MEMÓRIA DE CÁLCULO"
-    )
+    memoria["A1"] = "MEMÓRIA DE CÁLCULO"
 
-    memoria["A1"].font = (
-        fonte_titulo
-    )
-
-    memoria["A1"].fill = (
-        fundo_titulo
-    )
+    memoria["A1"].font = fonte_titulo
+    memoria["A1"].fill = fundo_titulo
 
     memoria["A1"].alignment = Alignment(
         horizontal="center",
@@ -1578,9 +1354,7 @@ def gerar_excel():
     )
 
     for row in memoria["A1:D2"]:
-
         for cell in row:
-
             cell.fill = fundo_titulo
 
 
@@ -1597,14 +1371,8 @@ def gerar_excel():
         )
 
         cell.fill = fundo_cabecalho
-
         cell.font = fonte_cabecalho
-
         cell.border = borda_fina
-
-        cell.alignment = Alignment(
-            horizontal="center"
-        )
 
 
     parametros = [
@@ -1709,6 +1477,7 @@ def gerar_excel():
 
     ]
 
+
     linha = 5
 
     for parametro, valor, criterio, unidade in parametros:
@@ -1740,46 +1509,20 @@ def gerar_excel():
                 col
             ).border = borda_fina
 
-            memoria.cell(
-                linha,
-                col
-            ).alignment = Alignment(
-                vertical="center",
-                wrap_text=True
-            )
-
         linha += 1
 
 
-    memoria["A22"] = (
-        "TOTAL MATERIAIS"
-    )
+    memoria["A22"] = "TOTAL MATERIAIS"
+    memoria["B22"] = total_materiais
 
-    memoria["B22"] = (
-        total_materiais
-    )
+    memoria["A23"] = "MÃO DE OBRA"
+    memoria["B23"] = mao_de_obra
 
-    memoria["A23"] = (
-        "MÃO DE OBRA"
-    )
+    memoria["A24"] = "TOTAL GERAL"
+    memoria["B24"] = total_geral
 
-    memoria["B23"] = (
-        mao_de_obra
-    )
 
-    memoria["A24"] = (
-        "TOTAL GERAL"
-    )
-
-    memoria["B24"] = (
-        total_geral
-    )
-
-    for linha_total in [
-        22,
-        23,
-        24
-    ]:
+    for linha_total in [22, 23, 24]:
 
         memoria.cell(
             linha_total,
@@ -1794,73 +1537,10 @@ def gerar_excel():
         memoria.cell(
             linha_total,
             2
-        ).number_format = (
-            'R$ #,##0.00'
-        )
+        ).number_format = 'R$ #,##0.00'
 
-
-    # ========================================================
-    # IMPRESSÃO DA MEMÓRIA DE CÁLCULO
-    # ========================================================
-
-    memoria.page_setup.paperSize = (
-        memoria.PAPERSIZE_A4
-    )
-
-    memoria.page_setup.orientation = (
-        memoria.ORIENTATION_LANDSCAPE
-    )
-
-    memoria.page_setup.fitToWidth = 1
-
-    memoria.page_setup.fitToHeight = 0
-
-    memoria.sheet_properties.pageSetUpPr.fitToPage = True
-
-    memoria.page_margins = PageMargins(
-        left=0.35,
-        right=0.35,
-        top=0.50,
-        bottom=0.50,
-        header=0.20,
-        footer=0.20
-    )
-
-    memoria.print_options.horizontalCentered = True
 
     memoria.sheet_view.showGridLines = False
-
-    memoria.print_area = "A1:D24"
-
-    memoria.print_title_rows = "1:4"
-
-    memoria.oddFooter.center.text = (
-        "Memória de Cálculo — Orçamento Steel Framing"
-    )
-
-    memoria.oddFooter.right.text = (
-        "Página &P de &N"
-    )
-
-    memoria.oddFooter.center.size = 9
-    memoria.oddFooter.right.size = 9
-
-
-    # ========================================================
-    # PROPRIEDADES DO ARQUIVO
-    # ========================================================
-
-    wb.properties.title = (
-        "Orçamento Steel Framing"
-    )
-
-    wb.properties.subject = (
-        "Orçamento profissional de Steel Framing"
-    )
-
-    wb.properties.creator = (
-        "Calculadora Steel Framing"
-    )
 
 
     # ========================================================
@@ -1887,38 +1567,32 @@ st.subheader(
 )
 
 st.info(
-    "O Excel será gerado em formato A4 paisagem, "
-    "com ajuste automático de largura para impressão, "
-    "área de impressão definida e cabeçalho repetido "
-    "nas páginas seguintes."
+    "O Excel será gerado com o logo da empresa, "
+    "quando o arquivo logo.png estiver na mesma pasta "
+    "do aplicativo."
 )
+
 
 excel_data = gerar_excel()
 
 
 nome_cliente = (
-
     cliente
     .strip()
     .replace(" ", "_")
     .replace("/", "_")
     .replace("\\", "_")
-
 )
 
+
 nome_arquivo = (
-
     f"orcamento_steel_framing_"
-
     f"{nome_cliente}_"
-
     f"{data_projeto.strftime('%Y-%m-%d')}.xlsx"
-
 )
 
 
 st.download_button(
-
     label=(
         "📊 Baixar Orçamento Profissional "
         "em Excel (.xlsx)"
@@ -1934,7 +1608,6 @@ st.download_button(
     ),
 
     use_container_width=True,
-
 )
 
 
