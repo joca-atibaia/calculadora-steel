@@ -199,6 +199,7 @@ st.markdown(
 
     /* ========================================================
        NOMES DOS MATERIAIS
+       CORREÇÃO: GARANTIR VISIBILIDADE TOTAL
        ======================================================== */
 
     .nome-material {
@@ -209,14 +210,37 @@ st.markdown(
         font-weight: 800 !important;
 
         margin: 10px 0 12px 0 !important;
-        padding: 8px 12px !important;
+        padding: 10px 12px !important;
 
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
 
+        width: 100% !important;
+        min-height: 45px !important;
+
+        overflow: visible !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+
+        box-sizing: border-box !important;
+
         border-radius: 8px !important;
         border-left: 5px solid #6fa8c9 !important;
+
+        line-height: 1.4 !important;
+    }
+
+
+    /* ========================================================
+       GARANTE VISIBILIDADE DO CONTAINER DO MATERIAL
+       ======================================================== */
+
+    .nome-material,
+    .nome-material * {
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 
 
@@ -586,7 +610,6 @@ qtd_parafuso = area_total * 0.5
 qtd_massa = area_total / 30.0
 qtd_tela = area_total / 40.0
 qtd_adesivo = area_total / 15.0
-
 qtd_manta = area_total / 50.0
 
 
