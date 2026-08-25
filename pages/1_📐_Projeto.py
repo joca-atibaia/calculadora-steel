@@ -28,12 +28,16 @@ st.markdown(
     """
     <style>
 
+    /* ========================================================
+       CONFIGURAÇÃO GERAL
+       ======================================================== */
+
     html, body, [data-testid="stAppViewContainer"], .stApp {
         font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
     }
 
     .stApp {
-        background: #f5f7fa;
+        background: #f5f7fa !important;
     }
 
     .block-container {
@@ -42,13 +46,19 @@ st.markdown(
         padding-bottom: 4rem;
     }
 
+
+    /* ========================================================
+       CABEÇALHO PRINCIPAL
+       ======================================================== */
+
     div[data-testid="stVerticalBlock"] > div:has(h1) {
         background: linear-gradient(
             135deg,
             #17202a 0%,
             #263746 55%,
             #34495e 100%
-        );
+        ) !important;
+
         border-radius: 18px;
         padding: 35px 38px 30px 38px;
         margin-bottom: 25px;
@@ -72,43 +82,393 @@ st.markdown(
         font-weight: 500 !important;
     }
 
-    div.stButton > button[kind="primary"] {
-        height: 60px;
-        font-size: 1.25rem;
-        font-weight: 800;
-        border-radius: 12px;
-        width: 100%;
-    }
 
     /* ========================================================
-       NOMES DOS MATERIAIS — SEMPRE VISÍVEIS
+       TÍTULOS E TEXTOS
        ======================================================== */
 
-    div[data-testid="stMarkdownContainer"] p {
-        color: #17202A;
+    h2,
+    h3,
+    h4 {
+        color: #17202a !important;
     }
 
-    div[data-testid="stMarkdownContainer"] strong {
-        color: #17202A;
+    p {
+        color: #17202a !important;
     }
 
-    label[data-testid="stWidgetLabel"] p {
-        color: #17202A !important;
+    label {
+        color: #17202a !important;
+    }
+
+    label p {
+        color: #17202a !important;
+        font-weight: 600 !important;
+    }
+
+    [data-testid="stMarkdownContainer"] {
+        color: #17202a !important;
+    }
+
+    [data-testid="stMarkdownContainer"] p {
+        color: #17202a !important;
+    }
+
+    [data-testid="stMarkdownContainer"] strong {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       NUMBER INPUT
+       ======================================================== */
+
+    div[data-testid="stNumberInput"] {
+        background: #ffffff !important;
+        border-radius: 10px !important;
+    }
+
+    div[data-testid="stNumberInput"] label {
+        color: #17202a !important;
     }
 
     div[data-testid="stNumberInput"] label p {
-        color: #17202A !important;
+        color: #17202a !important;
+        font-weight: 600 !important;
     }
 
-    /* Títulos dos materiais */
+    div[data-testid="stNumberInput"] input {
+        color: #17202a !important;
+        background-color: #ffffff !important;
+        caret-color: #17202a !important;
+    }
+
+    div[data-testid="stNumberInput"] input::placeholder {
+        color: #7f8c8d !important;
+    }
+
+    div[data-testid="stNumberInput"] button {
+        color: #17202a !important;
+        background-color: #ffffff !important;
+    }
+
+    div[data-testid="stNumberInput"] button:hover {
+        color: #17202a !important;
+        background-color: #e9eef2 !important;
+    }
+
+
+    /* ========================================================
+       TEXT INPUT
+       ======================================================== */
+
+    div[data-testid="stTextInput"] {
+        background: #ffffff !important;
+    }
+
+    div[data-testid="stTextInput"] label p {
+        color: #17202a !important;
+        font-weight: 600 !important;
+    }
+
+    div[data-testid="stTextInput"] input {
+        color: #17202a !important;
+        background-color: #ffffff !important;
+        caret-color: #17202a !important;
+    }
+
+    div[data-testid="stTextInput"] input::placeholder {
+        color: #7f8c8d !important;
+    }
+
+
+    /* ========================================================
+       DATE INPUT
+       ======================================================== */
+
+    div[data-testid="stDateInput"] label p {
+        color: #17202a !important;
+        font-weight: 600 !important;
+    }
+
+    div[data-testid="stDateInput"] input {
+        color: #17202a !important;
+        background-color: #ffffff !important;
+    }
+
+
+    /* ========================================================
+       NOMES DOS MATERIAIS
+       ======================================================== */
+
     .nome-material {
         color: #17202A !important;
+        background-color: #ffffff !important;
+
         font-size: 1.25rem !important;
         font-weight: 800 !important;
+
         margin: 10px 0 12px 0 !important;
+        padding: 8px 12px !important;
+
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
+
+        border-radius: 8px !important;
+        border-left: 5px solid #6fa8c9 !important;
+    }
+
+
+    /* ========================================================
+       SUBTOTAIS
+       ======================================================== */
+
+    .stWrite {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       BOTÕES NORMAIS
+       ======================================================== */
+
+    div.stButton > button {
+        color: #17202a !important;
+        background-color: #ffffff !important;
+
+        border: 1px solid #b7c3cc !important;
+
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+    }
+
+    div.stButton > button:hover {
+        color: #17202a !important;
+        background-color: #e9eef2 !important;
+        border-color: #6fa8c9 !important;
+    }
+
+
+    /* ========================================================
+       BOTÃO CALCULAR
+       ======================================================== */
+
+    div.stButton > button[kind="primary"] {
+        height: 60px;
+
+        color: #ffffff !important;
+
+        background: linear-gradient(
+            135deg,
+            #34495e,
+            #17202a
+        ) !important;
+
+        font-size: 1.25rem;
+        font-weight: 800;
+
+        border-radius: 12px;
+        width: 100%;
+
+        border: none !important;
+    }
+
+    div.stButton > button[kind="primary"]:hover {
+        color: #ffffff !important;
+
+        background: linear-gradient(
+            135deg,
+            #45627a,
+            #263746
+        ) !important;
+    }
+
+
+    /* ========================================================
+       BOTÃO EXCEL
+       ======================================================== */
+
+    div[data-testid="stDownloadButton"] button {
+        color: #ffffff !important;
+
+        background: linear-gradient(
+            135deg,
+            #217346,
+            #185c37
+        ) !important;
+
+        border: none !important;
+
+        min-height: 55px;
+
+        font-size: 1.1rem !important;
+        font-weight: 800 !important;
+
+        border-radius: 10px !important;
+    }
+
+    div[data-testid="stDownloadButton"] button:hover {
+        color: #ffffff !important;
+
+        background: linear-gradient(
+            135deg,
+            #2e8b57,
+            #217346
+        ) !important;
+    }
+
+
+    /* ========================================================
+       EXPANDER
+       ======================================================== */
+
+    details,
+    [data-testid="stExpander"] {
+        background-color: #ffffff !important;
+        border-radius: 10px !important;
+    }
+
+    [data-testid="stExpander"] summary {
+        color: #17202a !important;
+        background-color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+
+    [data-testid="stExpander"] summary p {
+        color: #17202a !important;
+        font-weight: 700 !important;
+    }
+
+    [data-testid="stExpander"] summary span {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       TABS
+       ======================================================== */
+
+    button[data-baseweb="tab"] {
+        color: #17202a !important;
+        font-weight: 700 !important;
+    }
+
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #17202a !important;
+        font-weight: 800 !important;
+    }
+
+
+    /* ========================================================
+       SIDEBAR
+       ======================================================== */
+
+    section[data-testid="stSidebar"] {
+        background-color: #ffffff !important;
+    }
+
+    section[data-testid="stSidebar"] * {
+        color: #17202a !important;
+    }
+
+    section[data-testid="stSidebar"] label p {
+        color: #17202a !important;
+    }
+
+    section[data-testid="stSidebar"] input {
+        color: #17202a !important;
+        background-color: #ffffff !important;
+    }
+
+
+    /* ========================================================
+       MÉTRICAS
+       ======================================================== */
+
+    [data-testid="stMetricLabel"] {
+        color: #17202a !important;
+    }
+
+    [data-testid="stMetricLabel"] p {
+        color: #17202a !important;
+    }
+
+    [data-testid="stMetricValue"] {
+        color: #17202a !important;
+    }
+
+    [data-testid="stMetricDelta"] {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       ALERTAS
+       ======================================================== */
+
+    [data-testid="stAlert"] {
+        color: #17202a !important;
+    }
+
+    [data-testid="stAlert"] p {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       TABELA
+       ======================================================== */
+
+    [data-testid="stDataFrame"] {
+        background-color: #ffffff !important;
+        border-radius: 10px !important;
+    }
+
+
+    /* ========================================================
+       SELECTBOX
+       ======================================================== */
+
+    div[data-baseweb="select"] {
+        background-color: #ffffff !important;
+    }
+
+    div[data-baseweb="select"] * {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       RADIO / CHECKBOX
+       ======================================================== */
+
+    [data-testid="stRadio"] label p,
+    [data-testid="stCheckbox"] label p {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       FILE UPLOADER
+       ======================================================== */
+
+    [data-testid="stFileUploader"] {
+        background-color: #ffffff !important;
+        color: #17202a !important;
+    }
+
+    [data-testid="stFileUploader"] * {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       LINKS
+       ======================================================== */
+
+    a {
+        color: #1f5f8b !important;
     }
 
     </style>
@@ -227,7 +587,6 @@ qtd_massa = area_total / 30.0
 qtd_tela = area_total / 40.0
 qtd_adesivo = area_total / 15.0
 
-# Manta somente para paredes
 qtd_manta = area_total / 50.0
 
 
@@ -307,7 +666,7 @@ lista_materiais = [
 
 
 # ============================================================
-# CÁLCULO
+# CÁLCULO DO PROJETO
 # ============================================================
 
 st.markdown("---")
@@ -356,24 +715,34 @@ if calcular_projeto:
 
         "cliente": cliente,
         "data_projeto": data_projeto,
+
         "comprimento_paredes": comprimento_paredes,
         "pe_direito": pe_direito,
+
         "area_total": area_total,
 
         "dados_atualizados": dados_calculados,
+
         "lista_materiais": dados_calculados,
 
         "total_materiais": total_materiais_calculado,
+
         "mao_de_obra": mao_de_obra_calculada,
+
         "total_geral": total_geral_calculado,
 
         "dimensoes": {
+
             "comprimento_paredes": comprimento_paredes,
+
             "pe_direito": pe_direito,
+
             "area_paredes": area_total
+
         },
 
         "calculado": True
+
     }
 
     st.success(
@@ -409,7 +778,7 @@ for idx, mat in enumerate(lista_materiais):
     with coluna_painel:
 
         # ====================================================
-        # NOME DO MATERIAL — CORRIGIDO
+        # NOME DO MATERIAL
         # ====================================================
 
         st.markdown(
@@ -420,6 +789,10 @@ for idx, mat in enumerate(lista_materiais):
             """,
             unsafe_allow_html=True
         )
+
+        # ====================================================
+        # QUANTIDADE / PREÇO
+        # ====================================================
 
         c_qtd, c_prc = st.columns(2)
 
@@ -441,7 +814,13 @@ for idx, mat in enumerate(lista_materiais):
                 key=f"p_{idx}"
             )
 
-        subtotal_calculado = nova_qtd * novo_prc
+        # ====================================================
+        # SUBTOTAL
+        # ====================================================
+
+        subtotal_calculado = (
+            nova_qtd * novo_prc
+        )
 
         total_materiais += subtotal_calculado
 
@@ -454,12 +833,22 @@ for idx, mat in enumerate(lista_materiais):
             }
         )
 
-        st.write(
-            f"**Subtotal do Item:** "
-            f"R$ {subtotal_calculado:,.2f}"
+        st.markdown(
+            f"""
+            <div style="
+                background:#eef3f7;
+                padding:10px 14px;
+                border-radius:8px;
+                margin:6px 0 12px 0;
+                color:#17202a;
+                font-weight:700;
+            ">
+                Subtotal do Item:
+                R$ {subtotal_calculado:,.2f}
+            </div>
+            """,
+            unsafe_allow_html=True
         )
-
-        st.write("---")
 
 
 # ============================================================
@@ -478,11 +867,14 @@ mao_de_obra = st.sidebar.number_input(
 # TOTAL
 # ============================================================
 
-total_geral = total_materiais + mao_de_obra
+total_geral = (
+    total_materiais +
+    mao_de_obra
+)
 
 
 # ============================================================
-# ATUALIZAR
+# ATUALIZAR CÁLCULO
 # ============================================================
 
 st.markdown("---")
@@ -495,24 +887,35 @@ if st.button(
     st.session_state["projeto_calculado"] = {
 
         "cliente": cliente,
+
         "data_projeto": data_projeto,
 
         "comprimento_paredes": comprimento_paredes,
+
         "pe_direito": pe_direito,
+
         "area_total": area_total,
 
         "dados_atualizados": dados_atualizados,
+
         "lista_materiais": dados_atualizados,
 
         "total_materiais": total_materiais,
+
         "mao_de_obra": mao_de_obra,
+
         "total_geral": total_geral,
 
         "dimensoes": {
 
-            "comprimento_paredes": comprimento_paredes,
-            "pe_direito": pe_direito,
-            "area_paredes": area_total
+            "comprimento_paredes":
+                comprimento_paredes,
+
+            "pe_direito":
+                pe_direito,
+
+            "area_paredes":
+                area_total
 
         },
 
@@ -574,7 +977,7 @@ st.sidebar.subheader(
 
 
 # ============================================================
-# FUNÇÃO — LOCALIZAR LOGO AUTOMATICAMENTE
+# FUNÇÃO — LOCALIZAR LOGO
 # ============================================================
 
 def localizar_logo():
@@ -681,18 +1084,21 @@ def gerar_excel():
     fonte_cabecalho = Font(
         name="Calibri",
         size=11,
-        bold=True
+        bold=True,
+        color="17202A"
     )
 
     fonte_normal = Font(
         name="Calibri",
-        size=11
+        size=11,
+        color="17202A"
     )
 
     fonte_total = Font(
         name="Calibri",
         size=13,
-        bold=True
+        bold=True,
+        color="17202A"
     )
 
 
@@ -746,7 +1152,7 @@ def gerar_excel():
 
 
     # ========================================================
-    # LOGO — A4:B8
+    # LOGO
     # ========================================================
 
     ws.merge_cells("A4:B8")
@@ -954,6 +1360,8 @@ def gerar_excel():
 
         ws[f"B{linha}"] = valor
 
+        ws[f"B{linha}"].font = fonte_normal
+
         linha += 1
 
 
@@ -963,7 +1371,6 @@ def gerar_excel():
 
     linha_inicio_materiais = 18
 
-
     ws.merge_cells(
 
         start_row=linha_inicio_materiais,
@@ -972,7 +1379,6 @@ def gerar_excel():
         end_column=6
 
     )
-
 
     ws.cell(
         linha_inicio_materiais,
@@ -997,6 +1403,10 @@ def gerar_excel():
     )
 
 
+    # ========================================================
+    # CABEÇALHOS
+    # ========================================================
+
     cabecalhos = [
 
         "Material",
@@ -1007,7 +1417,6 @@ def gerar_excel():
         "Observação",
 
     ]
-
 
     linha_cabecalho = (
         linha_inicio_materiais + 1
@@ -1036,6 +1445,10 @@ def gerar_excel():
             horizontal="center"
         )
 
+
+    # ========================================================
+    # ITENS
+    # ========================================================
 
     linha = linha_cabecalho + 1
 
@@ -1137,7 +1550,10 @@ def gerar_excel():
     ).fill = fundo_total
 
 
-    primeira_linha = linha_cabecalho + 1
+    primeira_linha = (
+        linha_cabecalho + 1
+    )
+
     ultima_linha = linha - 1
 
 
@@ -1168,7 +1584,9 @@ def gerar_excel():
     # MÃO DE OBRA
     # ========================================================
 
-    linha_mao_obra = linha_total_materiais + 1
+    linha_mao_obra = (
+        linha_total_materiais + 1
+    )
 
 
     ws.merge_cells(
@@ -1222,7 +1640,9 @@ def gerar_excel():
     # TOTAL GERAL
     # ========================================================
 
-    linha_total_geral = linha_mao_obra + 1
+    linha_total_geral = (
+        linha_mao_obra + 1
+    )
 
 
     ws.merge_cells(
@@ -1245,7 +1665,8 @@ def gerar_excel():
         1
     ).font = Font(
         size=15,
-        bold=True
+        bold=True,
+        color="17202A"
     )
 
 
@@ -1262,7 +1683,8 @@ def gerar_excel():
         5
     ).font = Font(
         size=15,
-        bold=True
+        bold=True,
+        color="17202A"
     )
 
     ws.cell(
@@ -1286,7 +1708,9 @@ def gerar_excel():
     # CONDIÇÕES COMERCIAIS
     # ========================================================
 
-    linha_condicoes = linha_total_geral + 3
+    linha_condicoes = (
+        linha_total_geral + 3
+    )
 
 
     ws.merge_cells(
@@ -1319,7 +1743,9 @@ def gerar_excel():
 
     for i in range(1, 4):
 
-        linha_obs = linha_condicoes + i
+        linha_obs = (
+            linha_condicoes + i
+        )
 
 
         ws.merge_cells(
@@ -1339,6 +1765,11 @@ def gerar_excel():
             "Digite aqui suas condições "
             "comerciais e observações."
         )
+
+        ws.cell(
+            linha_obs,
+            1
+        ).font = fonte_normal
 
         ws.cell(
             linha_obs,
@@ -1392,16 +1823,31 @@ def gerar_excel():
     )
 
 
-    memoria.column_dimensions["A"].width = 35
-    memoria.column_dimensions["B"].width = 20
-    memoria.column_dimensions["C"].width = 45
-    memoria.column_dimensions["D"].width = 20
+    memoria.column_dimensions[
+        "A"
+    ].width = 35
+
+    memoria.column_dimensions[
+        "B"
+    ].width = 20
+
+    memoria.column_dimensions[
+        "C"
+    ].width = 45
+
+    memoria.column_dimensions[
+        "D"
+    ].width = 20
 
 
-    memoria.merge_cells("A1:D2")
+    memoria.merge_cells(
+        "A1:D2"
+    )
 
 
-    memoria["A1"] = "MEMÓRIA DE CÁLCULO"
+    memoria["A1"] = (
+        "MEMÓRIA DE CÁLCULO"
+    )
 
     memoria["A1"].font = fonte_titulo
 
@@ -1419,6 +1865,10 @@ def gerar_excel():
 
             cell.fill = fundo_titulo
 
+
+    # ========================================================
+    # CABEÇALHO MEMÓRIA
+    # ========================================================
 
     memoria["A4"] = "Parâmetro"
     memoria["B4"] = "Valor"
@@ -1439,6 +1889,10 @@ def gerar_excel():
 
         cell.border = borda_fina
 
+
+    # ========================================================
+    # PARÂMETROS
+    # ========================================================
 
     parametros = [
 
@@ -1576,17 +2030,31 @@ def gerar_excel():
                 col
             ).border = borda_fina
 
+            memoria.cell(
+                linha,
+                col
+            ).font = fonte_normal
+
 
         linha += 1
 
 
+    # ========================================================
+    # TOTAIS MEMÓRIA
+    # ========================================================
+
     memoria["A22"] = "TOTAL MATERIAIS"
+
     memoria["B22"] = total_materiais
 
+
     memoria["A23"] = "MÃO DE OBRA"
+
     memoria["B23"] = mao_de_obra
 
+
     memoria["A24"] = "TOTAL GERAL"
+
     memoria["B24"] = total_geral
 
 
@@ -1605,19 +2073,23 @@ def gerar_excel():
         memoria.cell(
             linha_total,
             2
-        ).number_format = 'R$ #,##0.00'
+        ).number_format = (
+            'R$ #,##0.00'
+        )
 
 
     memoria.sheet_view.showGridLines = False
 
 
     # ========================================================
-    # ARQUIVO
+    # ARQUIVO EXCEL
     # ========================================================
 
     output = BytesIO()
 
-    wb.save(output)
+    wb.save(
+        output
+    )
 
     output.seek(0)
 
@@ -1635,7 +2107,9 @@ st.subheader(
 )
 
 
-caminho_logo_teste = localizar_logo()
+caminho_logo_teste = (
+    localizar_logo()
+)
 
 
 if caminho_logo_teste:
@@ -1653,8 +2127,16 @@ else:
     )
 
 
+# ============================================================
+# GERAR EXCEL
+# ============================================================
+
 excel_data = gerar_excel()
 
+
+# ============================================================
+# NOME DO ARQUIVO
+# ============================================================
 
 nome_cliente = (
     cliente
@@ -1665,12 +2147,21 @@ nome_cliente = (
 )
 
 
+if not nome_cliente:
+
+    nome_cliente = "cliente"
+
+
 nome_arquivo = (
     f"orcamento_steel_framing_"
     f"{nome_cliente}_"
     f"{data_projeto.strftime('%Y-%m-%d')}.xlsx"
 )
 
+
+# ============================================================
+# BOTÃO DOWNLOAD
+# ============================================================
 
 st.download_button(
 
