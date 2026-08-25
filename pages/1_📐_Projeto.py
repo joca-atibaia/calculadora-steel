@@ -89,7 +89,7 @@ st.markdown(
 
 
 # ============================================================
-# SEÇÃO 1: INFORMAÇÕES DO CLIENTE E DIMENSÕES
+# SEÇÃO 1: INFORMAÇÕES DO CLIENTE
 # ============================================================
 
 st.header("📋 Informações Gerais")
@@ -109,16 +109,20 @@ with col_cli2:
     )
 
 
+# ============================================================
+# DIMENSÕES DA ESTRUTURA
+# ============================================================
+
 st.header("🏠 Dimensões da Estrutura")
 
-col_dim1, col_dim2, col_dim3 = st.columns(3)
+col_dim1, col_dim2 = st.columns(2)
 
 with col_dim1:
-    area_total = st.number_input(
-        "Área Total de Paredes (m²)",
+    comprimento_paredes = st.number_input(
+        "Comprimento Total das Paredes (m linear)",
         min_value=1.0,
-        value=90.0,
-        step=5.0
+        value=30.0,
+        step=1.0
     )
 
 with col_dim2:
@@ -129,13 +133,25 @@ with col_dim2:
         step=0.1
     )
 
-with col_dim3:
-    area_cobertura = st.number_input(
-        "Área de Cobertura/Telhado (m²)",
-        min_value=0.0,
-        value=80.0,
-        step=5.0
-    )
+
+# ============================================================
+# ÁREA DAS PAREDES
+# ============================================================
+
+# A área das paredes é calculada automaticamente
+# a partir do comprimento linear e do pé-direito.
+
+area_total = comprimento_paredes * pe_direito
+
+
+# ============================================================
+# EXIBIÇÃO DA ÁREA CALCULADA
+# ============================================================
+
+st.info(
+    f"📐 Área total calculada das paredes: "
+    f"**{area_total:.2f} m²**"
+)
 
 
 # ============================================================
@@ -153,7 +169,6 @@ PRECOS_BASE = {
     "massas": 500.0,
     "telas": 500.0,
     "adesivo": 150.0,
-    "telha": 400.0,
     "manta": 1000.0
 }
 
@@ -172,9 +187,14 @@ qtd_parafuso = area_total * 0.5
 qtd_massa = area_total / 30.0
 qtd_tela = area_total / 40.0
 qtd_adesivo = area_total / 15.0
-qtd_telha = area_cobertura * 1.15
-qtd_manta = area_cobertura / 50.0
 
+# Manta hidrófuga acompanha a área das paredes.
+qtd_manta = area_total / 50.0
+
+
+# ============================================================
+# LISTA DE MATERIAIS
+# ============================================================
 
 lista_materiais = [
     {
@@ -226,11 +246,6 @@ lista_materiais = [
         "nome": "Adesivo PU (Cx)",
         "qtd": qtd_adesivo,
         "preco": PRECOS_BASE["adesivo"]
-    },
-    {
-        "nome": "Telha Sanduíche",
-        "qtd": qtd_telha,
-        "preco": PRECOS_BASE["telha"]
     },
     {
         "nome": "Manta Hidrófuga",
@@ -383,7 +398,6 @@ def gerar_excel():
     ws = wb.active
     ws.title = "Orçamento"
 
-    # Larguras das colunas
     larguras = {
         "A": 28,
         "B": 18,
@@ -579,16 +593,16 @@ def gerar_excel():
             data_projeto.strftime("%d/%m/%Y")
         ),
         (
-            "Área das Paredes",
-            f"{area_total:.2f} m²"
+            "Comprimento das Paredes",
+            f"{comprimento_paredes:.2f} m linear"
         ),
         (
             "Pé Direito",
             f"{pe_direito:.2f} m"
         ),
         (
-            "Área da Cobertura",
-            f"{area_cobertura:.2f} m²"
+            "Área das Paredes",
+            f"{area_total:.2f} m²"
         ),
     ]
 
@@ -995,10 +1009,10 @@ def gerar_excel():
 
     parametros = [
         (
-            "Área Total de Paredes",
-            area_total,
+            "Comprimento das Paredes",
+            comprimento_paredes,
             "Informado pelo usuário",
-            "m²"
+            "m linear"
         ),
         (
             "Pé Direito",
@@ -1007,9 +1021,9 @@ def gerar_excel():
             "m"
         ),
         (
-            "Área de Cobertura",
-            area_cobertura,
-            "Informado pelo usuário",
+            "Área das Paredes",
+            area_total,
+            "Comprimento × Pé Direito",
             "m²"
         ),
         (
@@ -1073,15 +1087,9 @@ def gerar_excel():
             "caixas"
         ),
         (
-            "Telha Sanduíche",
-            qtd_telha,
-            "Cobertura × 1,15",
-            "m²"
-        ),
-        (
             "Manta Hidrófuga",
             qtd_manta,
-            "Cobertura ÷ 50",
+            "Área das Paredes ÷ 50",
             "un."
         ),
     ]
