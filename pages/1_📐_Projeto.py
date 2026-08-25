@@ -1,18 +1,6 @@
 import streamlit as st
 import pandas as pd
 from datetime import date
-from io import BytesIO
-
-from openpyxl import Workbook
-from openpyxl.styles import (
-    Font,
-    PatternFill,
-    Border,
-    Side,
-    Alignment
-)
-from openpyxl.drawing.image import Image as XLImage
-
 
 # ============================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -24,16 +12,22 @@ st.set_page_config(
     layout="wide",
 )
 
-
 # ============================================================
-# CSS
+# CSS CUSTOMIZADO
 # ============================================================
 
 st.markdown(
     """
     <style>
 
-    html, body, [data-testid="stAppViewContainer"], .stApp {
+    /* ======================================================
+       CONFIGURAÇÃO GERAL
+       ====================================================== */
+
+    html,
+    body,
+    [data-testid="stAppViewContainer"],
+    .stApp {
         font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
     }
 
@@ -47,6 +41,11 @@ st.markdown(
         padding-bottom: 4rem;
     }
 
+
+    /* ======================================================
+       CABEÇALHO PRINCIPAL
+       ====================================================== */
+
     div[data-testid="stVerticalBlock"] > div:has(h1) {
         background: linear-gradient(
             135deg,
@@ -54,35 +53,208 @@ st.markdown(
             #263746 55%,
             #34495e 100%
         );
+
         border-radius: 18px;
+
         padding: 35px 38px 30px 38px;
+
         margin-bottom: 25px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.12);
     }
+
 
     div[data-testid="stVerticalBlock"] h1 {
         color: #6fa8c9 !important;
+
         font-size: 3.5rem !important;
+
         line-height: 1.2 !important;
+
         font-weight: 900 !important;
+
         letter-spacing: -1px !important;
+
         margin: 0 0 10px 0 !important;
+
         border: none !important;
     }
 
+
     div[data-testid="stVerticalBlock"] h1 + p {
         color: #ffffff !important;
+
         font-size: 1.2rem !important;
+
         line-height: 1.6 !important;
+
         font-weight: 500 !important;
     }
 
-    div.stButton > button[kind="primary"] {
-        height: 60px;
-        font-size: 1.25rem;
+
+    /* ======================================================
+       TÍTULOS DAS SEÇÕES
+       ====================================================== */
+
+    .stApp h2,
+    .stApp h3,
+    .stApp h4 {
+        color: #17202a !important;
+
+        visibility: visible !important;
+
+        opacity: 1 !important;
+    }
+
+
+    /* ======================================================
+       NOME DOS INSUMOS
+       ====================================================== */
+
+    .stApp h3 {
+        color: #17202a !important;
+
+        font-weight: 800 !important;
+
+        visibility: visible !important;
+
+        opacity: 1 !important;
+    }
+
+
+    /* ======================================================
+       LABELS DOS CAMPOS
+       ====================================================== */
+
+    [data-testid="stNumberInput"] label,
+    [data-testid="stNumberInput"] label p,
+
+    [data-testid="stTextInput"] label,
+    [data-testid="stTextInput"] label p,
+
+    [data-testid="stDateInput"] label,
+    [data-testid="stDateInput"] label p {
+
+        color: #17202a !important;
+
+        font-weight: 600 !important;
+
+        visibility: visible !important;
+
+        opacity: 1 !important;
+    }
+
+
+    /* ======================================================
+       VALORES DOS CAMPOS
+       ====================================================== */
+
+    [data-testid="stNumberInput"] input,
+    [data-testid="stTextInput"] input {
+
+        color: #17202a !important;
+
+        background-color: #ffffff !important;
+
+        visibility: visible !important;
+
+        opacity: 1 !important;
+    }
+
+
+    /* ======================================================
+       SUBTOTAL
+       ====================================================== */
+
+    .stApp p {
+        visibility: visible !important;
+    }
+
+
+    /* ======================================================
+       BOTÃO
+       ====================================================== */
+
+    div.stButton > button {
+
+        min-height: 55px;
+
+        font-size: 1.10rem;
+
         font-weight: 800;
+
         border-radius: 12px;
+
         width: 100%;
+    }
+
+
+    /* ======================================================
+       TABELA
+       ====================================================== */
+
+    [data-testid="stDataFrame"] {
+
+        color: #17202a !important;
+
+        visibility: visible !important;
+
+        opacity: 1 !important;
+    }
+
+
+    /* ======================================================
+       CELULAR
+       ====================================================== */
+
+    @media (max-width: 768px) {
+
+        .block-container {
+
+            padding-left: 1rem;
+
+            padding-right: 1rem;
+
+            padding-top: 1rem;
+        }
+
+
+        div[data-testid="stVerticalBlock"] > div:has(h1) {
+
+            padding: 25px 20px 22px 20px;
+
+            border-radius: 14px;
+        }
+
+
+        div[data-testid="stVerticalBlock"] h1 {
+
+            font-size: 2.1rem !important;
+        }
+
+
+        div[data-testid="stVerticalBlock"] h1 + p {
+
+            font-size: 1rem !important;
+        }
+
+
+        .stApp h3 {
+
+            font-size: 1.15rem !important;
+
+            color: #17202a !important;
+        }
+
+
+        [data-testid="stNumberInput"] label p {
+
+            font-size: 0.85rem !important;
+
+            color: #17202a !important;
+        }
+
     }
 
     </style>
@@ -92,19 +264,19 @@ st.markdown(
 
 
 # ============================================================
-# TÍTULO
+# TÍTULO PRINCIPAL
 # ============================================================
 
 st.title("📐 Detalhamento do Projeto")
 
 st.markdown(
-    "Preencha as dimensões da estrutura e clique em "
-    "**CALCULAR PROJETO** para gerar os quantitativos."
+    "Preencha as dimensões da estrutura para gerar "
+    "automaticamente a lista de materiais necessários."
 )
 
 
 # ============================================================
-# INFORMAÇÕES DO CLIENTE
+# SEÇÃO 1 — INFORMAÇÕES DO CLIENTE
 # ============================================================
 
 st.header("📋 Informações Gerais")
@@ -118,6 +290,7 @@ with col_cli1:
         value="João Silva"
     )
 
+
 with col_cli2:
 
     data_projeto = st.date_input(
@@ -127,62 +300,23 @@ with col_cli2:
 
 
 # ============================================================
-# LOGO DA EMPRESA
-# ============================================================
-
-st.header("🏢 Identidade da Empresa")
-
-st.markdown(
-    "Envie o logo da sua empresa. "
-    "Ele será inserido automaticamente no orçamento Excel "
-    "e aparecerá na área de impressão."
-)
-
-logo_upload = st.file_uploader(
-    "Logo da empresa",
-    type=["png", "jpg", "jpeg"],
-    help=(
-        "Envie o logo que deseja utilizar no orçamento. "
-        "O arquivo não precisa estar no projeto nem na pasta assets."
-    )
-)
-
-if logo_upload is not None:
-
-    st.success(
-        f"✅ Logo carregado: **{logo_upload.name}**"
-    )
-
-    st.image(
-        logo_upload,
-        caption="Pré-visualização do logo",
-        width=220
-    )
-
-else:
-
-    st.info(
-        "ℹ️ Nenhum logo foi enviado. "
-        "O orçamento continuará funcionando normalmente."
-    )
-
-
-# ============================================================
 # DIMENSÕES
 # ============================================================
 
 st.header("🏠 Dimensões da Estrutura")
 
-col_dim1, col_dim2 = st.columns(2)
+col_dim1, col_dim2, col_dim3 = st.columns(3)
+
 
 with col_dim1:
 
-    comprimento_paredes = st.number_input(
-        "Comprimento Total das Paredes (m linear)",
+    area_total = st.number_input(
+        "Área Total de Paredes (m²)",
         min_value=1.0,
-        value=30.0,
-        step=1.0
+        value=90.0,
+        step=5.0
     )
+
 
 with col_dim2:
 
@@ -194,54 +328,76 @@ with col_dim2:
     )
 
 
-# ============================================================
-# ÁREA
-# ============================================================
+with col_dim3:
 
-area_total = comprimento_paredes * pe_direito
-
-st.info(
-    f"📐 Área total calculada das paredes: "
-    f"**{area_total:.2f} m²**"
-)
+    area_cobertura = st.number_input(
+        "Área de Cobertura/Telhado (m²)",
+        min_value=0.0,
+        value=80.0,
+        step=5.0
+    )
 
 
 # ============================================================
-# PREÇOS
+# PREÇOS BASE
 # ============================================================
 
 PRECOS_BASE = {
 
     "perfil": 50.0,
+
     "guia": 50.0,
+
     "plywood": 80.0,
+
     "placa_st": 40.0,
+
     "placa_cimenticia": 140.0,
+
     "la_pet": 200.0,
+
     "parafusos": 35.0,
+
     "massas": 500.0,
+
     "telas": 500.0,
+
     "adesivo": 150.0,
-    "manta": 1000.0
+
+    "telha": 400.0,
+
+    "manta": 1000.0,
 
 }
 
 
 # ============================================================
-# QUANTIDADES
+# CÁLCULOS
 # ============================================================
 
 qtd_perfil = area_total * 1.25
+
 qtd_guia = area_total * 0.55
+
 qtd_plywood = area_total / 2.2
+
 qtd_placa_st = area_total / 2.4
+
 qtd_cimenticia = area_total / 2.4
+
 qtd_la = area_total / 10.0
+
 qtd_parafuso = area_total * 0.5
+
 qtd_massa = area_total / 30.0
+
 qtd_tela = area_total / 40.0
+
 qtd_adesivo = area_total / 15.0
-qtd_manta = area_total / 50.0
+
+qtd_telha = area_cobertura * 1.15
+
+qtd_manta = area_cobertura / 50.0
 
 
 # ============================================================
@@ -311,6 +467,12 @@ lista_materiais = [
     },
 
     {
+        "nome": "Telha Sanduíche",
+        "qtd": qtd_telha,
+        "preco": PRECOS_BASE["telha"]
+    },
+
+    {
         "nome": "Manta Hidrófuga",
         "qtd": qtd_manta,
         "preco": PRECOS_BASE["manta"]
@@ -320,93 +482,20 @@ lista_materiais = [
 
 
 # ============================================================
-# CÁLCULO
-# ============================================================
-
-st.markdown("---")
-
-st.subheader("🧮 Cálculo do Projeto")
-
-calcular_projeto = st.button(
-    "🧮 CALCULAR PROJETO",
-    type="primary",
-    use_container_width=True
-)
-
-
-if calcular_projeto:
-
-    dados_calculados = []
-
-    total_materiais_calculado = 0.0
-
-    for mat in lista_materiais:
-
-        quantidade = float(round(mat["qtd"], 1))
-        preco = float(mat["preco"])
-
-        subtotal = quantidade * preco
-
-        total_materiais_calculado += subtotal
-
-        dados_calculados.append(
-            {
-                "Item": mat["nome"],
-                "Quantidade": quantidade,
-                "Preço Unitário": preco,
-                "Total Item": subtotal
-            }
-        )
-
-    mao_de_obra_calculada = 11635.0
-
-    total_geral_calculado = (
-        total_materiais_calculado +
-        mao_de_obra_calculada
-    )
-
-    st.session_state["projeto_calculado"] = {
-
-        "cliente": cliente,
-        "data_projeto": data_projeto,
-        "comprimento_paredes": comprimento_paredes,
-        "pe_direito": pe_direito,
-        "area_total": area_total,
-
-        "dados_atualizados": dados_calculados,
-        "lista_materiais": dados_calculados,
-
-        "total_materiais": total_materiais_calculado,
-        "mao_de_obra": mao_de_obra_calculada,
-        "total_geral": total_geral_calculado,
-
-        "dimensoes": {
-            "comprimento_paredes": comprimento_paredes,
-            "pe_direito": pe_direito,
-            "area_paredes": area_total
-        },
-
-        "calculado": True
-    }
-
-    st.success(
-        "✅ PROJETO CALCULADO COM SUCESSO!"
-    )
-
-
-# ============================================================
 # INSUMOS
 # ============================================================
 
 st.header("📋 Insumos Calculados Automaticamente")
 
 st.markdown(
-    "As quantidades e os valores unitários podem ser ajustados."
+    "Ajuste refinado de quantidades e valores unitários:"
 )
+
 
 dados_atualizados = []
 
 total_materiais = 0.0
+
 
 col_grid1, col_grid2 = st.columns(2)
 
@@ -419,56 +508,127 @@ for idx, mat in enumerate(lista_materiais):
         else col_grid2
     )
 
+
     with coluna_painel:
+
+        # ----------------------------------------------------
+        # NOME DO INSUMO
+        # ----------------------------------------------------
 
         st.subheader(
             f"🔹 {mat['nome']}"
         )
 
+
         c_qtd, c_prc = st.columns(2)
+
+
+        # ----------------------------------------------------
+        # QUANTIDADE
+        # ----------------------------------------------------
 
         with c_qtd:
 
             nova_qtd = st.number_input(
                 f"{mat['nome']} (Qtd)",
                 min_value=0.0,
-                value=float(round(mat["qtd"], 1)),
+                value=float(
+                    round(
+                        mat["qtd"],
+                        1
+                    )
+                ),
                 key=f"q_{idx}"
             )
+
+
+        # ----------------------------------------------------
+        # PREÇO
+        # ----------------------------------------------------
 
         with c_prc:
 
             novo_prc = st.number_input(
                 f"{mat['nome']} (Preço R$)",
                 min_value=0.0,
-                value=float(mat["preco"]),
+                value=float(
+                    mat["preco"]
+                ),
                 key=f"p_{idx}"
             )
 
-        subtotal_calculado = nova_qtd * novo_prc
 
-        total_materiais += subtotal_calculado
+        # ----------------------------------------------------
+        # SUBTOTAL
+        # ----------------------------------------------------
+
+        subtotal_calculado = (
+            nova_qtd * novo_prc
+        )
+
+
+        total_materiais += (
+            subtotal_calculado
+        )
+
 
         dados_atualizados.append(
             {
                 "Item": mat["nome"],
+
                 "Quantidade": nova_qtd,
+
                 "Preço Unitário": novo_prc,
-                "Total Item": subtotal_calculado
+
+                "Total Item": subtotal_calculado,
             }
         )
+
 
         st.write(
             f"**Subtotal do Item:** "
             f"R$ {subtotal_calculado:,.2f}"
         )
 
+
         st.write("---")
 
 
 # ============================================================
-# MÃO DE OBRA
+# RESUMO
 # ============================================================
+
+st.header(
+    "📊 Resumo Consolidado do Orçamento"
+)
+
+
+df_resumo = pd.DataFrame(
+    dados_atualizados
+)
+
+
+st.dataframe(
+    df_resumo.style.format(
+        {
+            "Preço Unitário": "R$ {:.2f}",
+
+            "Total Item": "R$ {:.2f}",
+        }
+    ),
+
+    use_container_width=True,
+)
+
+
+# ============================================================
+# CUSTOS DE INSTALAÇÃO
+# ============================================================
+
+st.sidebar.header(
+    "💰 Custos de Instalação"
+)
+
 
 mao_de_obra = st.sidebar.number_input(
     "Mão de Obra Geral (R$)",
@@ -482,1175 +642,39 @@ mao_de_obra = st.sidebar.number_input(
 # TOTAL
 # ============================================================
 
-total_geral = total_materiais + mao_de_obra
-
-
-# ============================================================
-# ATUALIZAR
-# ============================================================
-
-st.markdown("---")
-
-if st.button(
-    "🔄 ATUALIZAR CÁLCULO",
-    use_container_width=True
-):
-
-    st.session_state["projeto_calculado"] = {
-
-        "cliente": cliente,
-        "data_projeto": data_projeto,
-
-        "comprimento_paredes": comprimento_paredes,
-        "pe_direito": pe_direito,
-        "area_total": area_total,
-
-        "dados_atualizados": dados_atualizados,
-        "lista_materiais": dados_atualizados,
-
-        "total_materiais": total_materiais,
-        "mao_de_obra": mao_de_obra,
-        "total_geral": total_geral,
-
-        "dimensoes": {
-
-            "comprimento_paredes": comprimento_paredes,
-            "pe_direito": pe_direito,
-            "area_paredes": area_total
-
-        },
-
-        "calculado": True
-
-    }
-
-    st.success(
-        "✅ Cálculo atualizado."
-    )
-
-
-# ============================================================
-# RESUMO
-# ============================================================
-
-st.header(
-    "📊 Resumo Consolidado do Orçamento"
+total_geral = (
+    total_materiais
+    +
+    mao_de_obra
 )
 
-df_resumo = pd.DataFrame(
-    dados_atualizados
-)
-
-st.dataframe(
-    df_resumo.style.format(
-        {
-            "Preço Unitário": "R$ {:.2f}",
-            "Total Item": "R$ {:.2f}"
-        }
-    ),
-    use_container_width=True
-)
-
-
-# ============================================================
-# SIDEBAR
-# ============================================================
-
-st.sidebar.header(
-    "💰 Custos de Instalação"
-)
 
 st.sidebar.markdown("---")
 
+
 st.sidebar.metric(
     label="Total Materiais",
-    value=f"R$ {total_materiais:,.2f}"
+
+    value=(
+        f"R$ "
+        f"{total_materiais:,.2f}"
+    )
 )
+
 
 st.sidebar.metric(
     label="Total Mão de Obra",
-    value=f"R$ {mao_de_obra:,.2f}"
+
+    value=(
+        f"R$ "
+        f"{mao_de_obra:,.2f}"
+    )
 )
+
 
 st.sidebar.subheader(
     f"Total Geral: R$ {total_geral:,.2f}"
 )
-
-
-# ============================================================
-# FUNÇÃO — PREPARAR LOGO PARA O EXCEL
-# ============================================================
-
-def preparar_logo(logo_upload):
-    """
-    Converte o arquivo enviado pelo usuário para BytesIO.
-
-    Não depende de assets, caminhos locais ou arquivos
-    existentes no servidor.
-    """
-
-    if logo_upload is None:
-        return None
-
-    try:
-
-        logo_bytes = logo_upload.getvalue()
-
-        if not logo_bytes:
-            return None
-
-        logo_stream = BytesIO(logo_bytes)
-
-        logo_stream.seek(0)
-
-        return logo_stream
-
-    except Exception:
-
-        return None
-
-
-# ============================================================
-# FUNÇÃO PARA GERAR EXCEL
-# ============================================================
-
-def gerar_excel(logo_upload=None):
-
-    wb = Workbook()
-
-    ws = wb.active
-
-    ws.title = "Orçamento"
-
-
-    # ========================================================
-    # LARGURAS
-    # ========================================================
-
-    larguras = {
-
-        "A": 28,
-        "B": 18,
-        "C": 20,
-        "D": 20,
-        "E": 22,
-        "F": 22,
-
-    }
-
-    for coluna, largura in larguras.items():
-
-        ws.column_dimensions[
-            coluna
-        ].width = largura
-
-
-    # ========================================================
-    # ESTILOS
-    # ========================================================
-
-    fundo_titulo = PatternFill(
-        "solid",
-        fgColor="17202A"
-    )
-
-    fundo_secao = PatternFill(
-        "solid",
-        fgColor="34495E"
-    )
-
-    fundo_cabecalho = PatternFill(
-        "solid",
-        fgColor="D9E2F3"
-    )
-
-    fundo_total = PatternFill(
-        "solid",
-        fgColor="E2F0D9"
-    )
-
-    branco = "FFFFFF"
-
-
-    fonte_titulo = Font(
-        name="Calibri",
-        size=20,
-        bold=True,
-        color=branco
-    )
-
-    fonte_secao = Font(
-        name="Calibri",
-        size=12,
-        bold=True,
-        color=branco
-    )
-
-    fonte_cabecalho = Font(
-        name="Calibri",
-        size=11,
-        bold=True
-    )
-
-    fonte_normal = Font(
-        name="Calibri",
-        size=11
-    )
-
-    fonte_total = Font(
-        name="Calibri",
-        size=13,
-        bold=True
-    )
-
-
-    borda_fina = Border(
-
-        left=Side(
-            style="thin",
-            color="B7B7B7"
-        ),
-
-        right=Side(
-            style="thin",
-            color="B7B7B7"
-        ),
-
-        top=Side(
-            style="thin",
-            color="B7B7B7"
-        ),
-
-        bottom=Side(
-            style="thin",
-            color="B7B7B7"
-        ),
-
-    )
-
-
-    # ========================================================
-    # TÍTULO
-    # ========================================================
-
-    ws.merge_cells("A1:F2")
-
-    ws["A1"] = "ORÇAMENTO STEEL FRAMING"
-
-    ws["A1"].font = fonte_titulo
-
-    ws["A1"].fill = fundo_titulo
-
-    ws["A1"].alignment = Alignment(
-        horizontal="center",
-        vertical="center"
-    )
-
-    for row in ws["A1:F2"]:
-
-        for cell in row:
-
-            cell.fill = fundo_titulo
-
-
-    # ========================================================
-    # LOGO — A4:B8
-    # ========================================================
-
-    ws.merge_cells("A4:B8")
-
-    for row in ws["A4:B8"]:
-
-        for cell in row:
-
-            cell.border = borda_fina
-
-            cell.alignment = Alignment(
-                horizontal="center",
-                vertical="center"
-            )
-
-
-    # ========================================================
-    # INSERIR LOGO ENVIADO PELO USUÁRIO
-    # ========================================================
-
-    logo_stream = preparar_logo(
-        logo_upload
-    )
-
-
-    if logo_stream is not None:
-
-        try:
-
-            logo = XLImage(
-                logo_stream
-            )
-
-            # ------------------------------------------------
-            # TAMANHO DO LOGO
-            # ------------------------------------------------
-
-            logo.width = 230
-            logo.height = 125
-
-            # ------------------------------------------------
-            # POSIÇÃO
-            # ------------------------------------------------
-
-            logo.anchor = "A4"
-
-            ws.add_image(
-                logo
-            )
-
-        except Exception as erro_logo:
-
-            ws["A4"] = (
-                "Não foi possível inserir o logo."
-            )
-
-            ws["A4"].font = Font(
-                size=10,
-                color="CC0000"
-            )
-
-            ws["A4"].alignment = Alignment(
-                horizontal="center",
-                vertical="center",
-                wrap_text=True
-            )
-
-    else:
-
-        ws["A4"] = (
-            "LOGO DA EMPRESA\n\n"
-            "Nenhum logo foi enviado.\n"
-            "O usuário poderá enviar um logo "
-            "no aplicativo."
-        )
-
-        ws["A4"].alignment = Alignment(
-            horizontal="center",
-            vertical="center",
-            wrap_text=True
-        )
-
-        ws["A4"].font = Font(
-            size=10,
-            bold=True,
-            color="666666"
-        )
-
-        ws["A4"].fill = PatternFill(
-            "solid",
-            fgColor="F2F2F2"
-        )
-
-
-    # ========================================================
-    # DADOS DA EMPRESA
-    # ========================================================
-
-    ws.merge_cells("C4:F4")
-
-    ws["C4"] = "DADOS DA EMPRESA"
-
-    ws["C4"].fill = fundo_secao
-
-    ws["C4"].font = fonte_secao
-
-    ws["C4"].alignment = Alignment(
-        horizontal="center"
-    )
-
-
-    dados_empresa = [
-
-        (
-            "Empresa",
-            "Digite o nome da sua empresa"
-        ),
-
-        (
-            "CNPJ",
-            "Digite o CNPJ"
-        ),
-
-        (
-            "Telefone / WhatsApp",
-            "Digite o telefone"
-        ),
-
-        (
-            "E-mail",
-            "Digite o e-mail"
-        ),
-
-    ]
-
-
-    linha = 5
-
-
-    for campo, valor in dados_empresa:
-
-        ws[f"C{linha}"] = campo
-
-        ws[f"C{linha}"].font = fonte_cabecalho
-
-        ws.merge_cells(
-
-            start_row=linha,
-            start_column=4,
-            end_row=linha,
-            end_column=6
-
-        )
-
-        ws[f"D{linha}"] = valor
-
-        ws[f"D{linha}"].font = fonte_normal
-
-        linha += 1
-
-
-    # ========================================================
-    # IDENTIFICAÇÃO DO PROJETO
-    # ========================================================
-
-    ws.merge_cells("A10:F10")
-
-    ws["A10"] = "IDENTIFICAÇÃO DO PROJETO"
-
-    ws["A10"].fill = fundo_secao
-
-    ws["A10"].font = fonte_secao
-
-    ws["A10"].alignment = Alignment(
-        horizontal="center"
-    )
-
-
-    dados_projeto = [
-
-        (
-            "Cliente",
-            cliente
-        ),
-
-        (
-            "Data do Orçamento",
-            data_projeto.strftime("%d/%m/%Y")
-        ),
-
-        (
-            "Comprimento das Paredes",
-            f"{comprimento_paredes:.2f} m linear"
-        ),
-
-        (
-            "Pé Direito",
-            f"{pe_direito:.2f} m"
-        ),
-
-        (
-            "Área das Paredes",
-            f"{area_total:.2f} m²"
-        ),
-
-    ]
-
-
-    linha = 11
-
-
-    for campo, valor in dados_projeto:
-
-        ws[f"A{linha}"] = campo
-
-        ws[f"A{linha}"].font = fonte_cabecalho
-
-        ws.merge_cells(
-
-            start_row=linha,
-            start_column=2,
-            end_row=linha,
-            end_column=6
-
-        )
-
-        ws[f"B{linha}"] = valor
-
-        linha += 1
-
-
-    # ========================================================
-    # MATERIAIS
-    # ========================================================
-
-    linha_inicio_materiais = 18
-
-
-    ws.merge_cells(
-
-        start_row=linha_inicio_materiais,
-        start_column=1,
-        end_row=linha_inicio_materiais,
-        end_column=6
-
-    )
-
-
-    ws.cell(
-        linha_inicio_materiais,
-        1
-    ).value = "QUANTITATIVO DE MATERIAIS"
-
-    ws.cell(
-        linha_inicio_materiais,
-        1
-    ).fill = fundo_secao
-
-    ws.cell(
-        linha_inicio_materiais,
-        1
-    ).font = fonte_secao
-
-    ws.cell(
-        linha_inicio_materiais,
-        1
-    ).alignment = Alignment(
-        horizontal="center"
-    )
-
-
-    cabecalhos = [
-
-        "Material",
-        "Quantidade",
-        "Unidade",
-        "Preço Unitário",
-        "Total",
-        "Observação",
-
-    ]
-
-
-    linha_cabecalho = (
-        linha_inicio_materiais + 1
-    )
-
-
-    for col, texto in enumerate(
-        cabecalhos,
-        start=1
-    ):
-
-        cell = ws.cell(
-            linha_cabecalho,
-            col
-        )
-
-        cell.value = texto
-
-        cell.fill = fundo_cabecalho
-
-        cell.font = fonte_cabecalho
-
-        cell.border = borda_fina
-
-        cell.alignment = Alignment(
-            horizontal="center"
-        )
-
-
-    linha = linha_cabecalho + 1
-
-
-    for item in dados_atualizados:
-
-        ws.cell(
-            linha,
-            1
-        ).value = item["Item"]
-
-        ws.cell(
-            linha,
-            2
-        ).value = item["Quantidade"]
-
-        ws.cell(
-            linha,
-            3
-        ).value = "un."
-
-        ws.cell(
-            linha,
-            4
-        ).value = item["Preço Unitário"]
-
-        ws.cell(
-            linha,
-            5
-        ).value = f"=B{linha}*D{linha}"
-
-        ws.cell(
-            linha,
-            6
-        ).value = "Quantidade e preço editáveis"
-
-
-        for col in range(1, 7):
-
-            cell = ws.cell(
-                linha,
-                col
-            )
-
-            cell.border = borda_fina
-
-            cell.font = fonte_normal
-
-
-        ws.cell(
-            linha,
-            2
-        ).number_format = "0.00"
-
-        ws.cell(
-            linha,
-            4
-        ).number_format = 'R$ #,##0.00'
-
-        ws.cell(
-            linha,
-            5
-        ).number_format = 'R$ #,##0.00'
-
-
-        linha += 1
-
-
-    # ========================================================
-    # TOTAL MATERIAIS
-    # ========================================================
-
-    linha_total_materiais = linha + 1
-
-
-    ws.merge_cells(
-
-        start_row=linha_total_materiais,
-        start_column=1,
-        end_row=linha_total_materiais,
-        end_column=4
-
-    )
-
-
-    ws.cell(
-        linha_total_materiais,
-        1
-    ).value = "TOTAL DE MATERIAIS"
-
-    ws.cell(
-        linha_total_materiais,
-        1
-    ).font = fonte_total
-
-    ws.cell(
-        linha_total_materiais,
-        1
-    ).fill = fundo_total
-
-
-    primeira_linha = linha_cabecalho + 1
-    ultima_linha = linha - 1
-
-
-    ws.cell(
-        linha_total_materiais,
-        5
-    ).value = (
-        f"=SUM(E{primeira_linha}:E{ultima_linha})"
-    )
-
-    ws.cell(
-        linha_total_materiais,
-        5
-    ).font = fonte_total
-
-    ws.cell(
-        linha_total_materiais,
-        5
-    ).fill = fundo_total
-
-    ws.cell(
-        linha_total_materiais,
-        5
-    ).number_format = 'R$ #,##0.00'
-
-
-    # ========================================================
-    # MÃO DE OBRA
-    # ========================================================
-
-    linha_mao_obra = linha_total_materiais + 1
-
-
-    ws.merge_cells(
-
-        start_row=linha_mao_obra,
-        start_column=1,
-        end_row=linha_mao_obra,
-        end_column=4
-
-    )
-
-
-    ws.cell(
-        linha_mao_obra,
-        1
-    ).value = "MÃO DE OBRA"
-
-    ws.cell(
-        linha_mao_obra,
-        1
-    ).font = fonte_total
-
-    ws.cell(
-        linha_mao_obra,
-        1
-    ).fill = fundo_total
-
-
-    ws.cell(
-        linha_mao_obra,
-        5
-    ).value = mao_de_obra
-
-    ws.cell(
-        linha_mao_obra,
-        5
-    ).font = fonte_total
-
-    ws.cell(
-        linha_mao_obra,
-        5
-    ).fill = fundo_total
-
-    ws.cell(
-        linha_mao_obra,
-        5
-    ).number_format = 'R$ #,##0.00'
-
-
-    # ========================================================
-    # TOTAL GERAL
-    # ========================================================
-
-    linha_total_geral = linha_mao_obra + 1
-
-
-    ws.merge_cells(
-
-        start_row=linha_total_geral,
-        start_column=1,
-        end_row=linha_total_geral,
-        end_column=4
-
-    )
-
-
-    ws.cell(
-        linha_total_geral,
-        1
-    ).value = "TOTAL GERAL"
-
-    ws.cell(
-        linha_total_geral,
-        1
-    ).font = Font(
-        size=15,
-        bold=True
-    )
-
-
-    ws.cell(
-        linha_total_geral,
-        5
-    ).value = (
-        f"=E{linha_total_materiais}"
-        f"+E{linha_mao_obra}"
-    )
-
-    ws.cell(
-        linha_total_geral,
-        5
-    ).font = Font(
-        size=15,
-        bold=True
-    )
-
-    ws.cell(
-        linha_total_geral,
-        5
-    ).number_format = 'R$ #,##0.00'
-
-
-    for col in range(1, 6):
-
-        ws.cell(
-            linha_total_geral,
-            col
-        ).fill = PatternFill(
-            "solid",
-            fgColor="C6E0B4"
-        )
-
-
-    # ========================================================
-    # CONDIÇÕES COMERCIAIS
-    # ========================================================
-
-    linha_condicoes = linha_total_geral + 3
-
-
-    ws.merge_cells(
-
-        start_row=linha_condicoes,
-        start_column=1,
-        end_row=linha_condicoes,
-        end_column=6
-
-    )
-
-
-    ws.cell(
-        linha_condicoes,
-        1
-    ).value = (
-        "CONDIÇÕES COMERCIAIS / OBSERVAÇÕES"
-    )
-
-    ws.cell(
-        linha_condicoes,
-        1
-    ).fill = fundo_secao
-
-    ws.cell(
-        linha_condicoes,
-        1
-    ).font = fonte_secao
-
-
-    for i in range(1, 4):
-
-        linha_obs = linha_condicoes + i
-
-
-        ws.merge_cells(
-
-            start_row=linha_obs,
-            start_column=1,
-            end_row=linha_obs,
-            end_column=6
-
-        )
-
-
-        ws.cell(
-            linha_obs,
-            1
-        ).value = (
-            "Digite aqui suas condições "
-            "comerciais e observações."
-        )
-
-        ws.cell(
-            linha_obs,
-            1
-        ).alignment = Alignment(
-            vertical="top",
-            wrap_text=True
-        )
-
-
-    # ========================================================
-    # CONFIGURAÇÃO DE IMPRESSÃO
-    # ========================================================
-
-    ws.freeze_panes = "A20"
-
-    ws.sheet_view.showGridLines = False
-
-    ws.page_setup.orientation = "landscape"
-
-    ws.page_setup.paperSize = (
-        ws.PAPERSIZE_A4
-    )
-
-    ws.page_setup.fitToWidth = 1
-
-    ws.page_setup.fitToHeight = 0
-
-    ws.sheet_properties.pageSetUpPr.fitToPage = True
-
-    ws.print_options.horizontalCentered = True
-
-    ws.page_margins.left = 0.25
-    ws.page_margins.right = 0.25
-    ws.page_margins.top = 0.40
-    ws.page_margins.bottom = 0.40
-    ws.page_margins.header = 0.20
-    ws.page_margins.footer = 0.20
-
-    ws.print_area = (
-        f"A1:F{linha_condicoes + 3}"
-    )
-
-
-    # ========================================================
-    # ABA MEMÓRIA DE CÁLCULO
-    # ========================================================
-
-    memoria = wb.create_sheet(
-        "Memória de Cálculo"
-    )
-
-
-    memoria.column_dimensions["A"].width = 35
-    memoria.column_dimensions["B"].width = 20
-    memoria.column_dimensions["C"].width = 45
-    memoria.column_dimensions["D"].width = 20
-
-
-    memoria.merge_cells("A1:D2")
-
-
-    memoria["A1"] = "MEMÓRIA DE CÁLCULO"
-
-    memoria["A1"].font = fonte_titulo
-
-    memoria["A1"].fill = fundo_titulo
-
-    memoria["A1"].alignment = Alignment(
-        horizontal="center",
-        vertical="center"
-    )
-
-
-    for row in memoria["A1:D2"]:
-
-        for cell in row:
-
-            cell.fill = fundo_titulo
-
-
-    memoria["A4"] = "Parâmetro"
-    memoria["B4"] = "Valor"
-    memoria["C4"] = "Critério"
-    memoria["D4"] = "Unidade"
-
-
-    for col in range(1, 5):
-
-        cell = memoria.cell(
-            4,
-            col
-        )
-
-        cell.fill = fundo_cabecalho
-
-        cell.font = fonte_cabecalho
-
-        cell.border = borda_fina
-
-
-    parametros = [
-
-        (
-            "Comprimento das Paredes",
-            comprimento_paredes,
-            "Informado pelo usuário",
-            "m linear"
-        ),
-
-        (
-            "Pé Direito",
-            pe_direito,
-            "Informado pelo usuário",
-            "m"
-        ),
-
-        (
-            "Área das Paredes",
-            area_total,
-            "Comprimento × Pé Direito",
-            "m²"
-        ),
-
-        (
-            "Perfil 90x0,80",
-            qtd_perfil,
-            "Área × 1,25",
-            "un."
-        ),
-
-        (
-            "Guia Perimetral",
-            qtd_guia,
-            "Área × 0,55",
-            "un."
-        ),
-
-        (
-            "Plywood 8mm",
-            qtd_plywood,
-            "Área ÷ 2,20",
-            "un."
-        ),
-
-        (
-            "Placa ST 12.5mm",
-            qtd_placa_st,
-            "Área ÷ 2,40",
-            "un."
-        ),
-
-        (
-            "Placa Cimentícia 12mm",
-            qtd_cimenticia,
-            "Área ÷ 2,40",
-            "un."
-        ),
-
-        (
-            "Lã PET",
-            qtd_la,
-            "Área ÷ 10",
-            "un."
-        ),
-
-        (
-            "Parafusos",
-            qtd_parafuso,
-            "Área × 0,50",
-            "centos"
-        ),
-
-        (
-            "Massas",
-            qtd_massa,
-            "Área ÷ 30",
-            "un."
-        ),
-
-        (
-            "Telas",
-            qtd_tela,
-            "Área ÷ 40",
-            "rolos"
-        ),
-
-        (
-            "Adesivo PU",
-            qtd_adesivo,
-            "Área ÷ 15",
-            "caixas"
-        ),
-
-        (
-            "Manta Hidrófuga",
-            qtd_manta,
-            "Área das Paredes ÷ 50",
-            "un."
-        ),
-
-    ]
-
-
-    linha = 5
-
-
-    for parametro, valor, criterio, unidade in parametros:
-
-        memoria.cell(
-            linha,
-            1
-        ).value = parametro
-
-        memoria.cell(
-            linha,
-            2
-        ).value = valor
-
-        memoria.cell(
-            linha,
-            3
-        ).value = criterio
-
-        memoria.cell(
-            linha,
-            4
-        ).value = unidade
-
-
-        for col in range(1, 5):
-
-            memoria.cell(
-                linha,
-                col
-            ).border = borda_fina
-
-
-        linha += 1
-
-
-    memoria["A22"] = "TOTAL MATERIAIS"
-    memoria["B22"] = total_materiais
-
-    memoria["A23"] = "MÃO DE OBRA"
-    memoria["B23"] = mao_de_obra
-
-    memoria["A24"] = "TOTAL GERAL"
-    memoria["B24"] = total_geral
-
-
-    for linha_total in [22, 23, 24]:
-
-        memoria.cell(
-            linha_total,
-            1
-        ).font = fonte_total
-
-        memoria.cell(
-            linha_total,
-            2
-        ).font = fonte_total
-
-        memoria.cell(
-            linha_total,
-            2
-        ).number_format = 'R$ #,##0.00'
-
-
-    memoria.sheet_view.showGridLines = False
-
-
-    # ========================================================
-    # ARQUIVO
-    # ========================================================
-
-    output = BytesIO()
-
-    wb.save(output)
-
-    output.seek(0)
-
-    return output.getvalue()
 
 
 # ============================================================
@@ -1664,18 +688,12 @@ st.subheader(
 )
 
 
-# ============================================================
-# GERAR EXCEL COM O LOGO DO USUÁRIO
-# ============================================================
-
-excel_data = gerar_excel(
-    logo_upload=logo_upload
+csv_data = (
+    df_resumo
+    .to_csv(index=False)
+    .encode("utf-8")
 )
 
-
-# ============================================================
-# NOME DO ARQUIVO
-# ============================================================
 
 nome_cliente = (
     cliente
@@ -1686,57 +704,21 @@ nome_cliente = (
 )
 
 
-if not nome_cliente:
-
-    nome_cliente = "cliente"
-
-
-nome_arquivo = (
-    f"orcamento_steel_framing_"
-    f"{nome_cliente}_"
-    f"{data_projeto.strftime('%Y-%m-%d')}.xlsx"
-)
-
-
-# ============================================================
-# DOWNLOAD
-# ============================================================
-
 st.download_button(
 
     label=(
-        "📊 Baixar Orçamento Profissional "
-        "em Excel (.xlsx)"
+        "📥 Exportar Orçamento Completo (CSV)"
     ),
 
-    data=excel_data,
+    data=csv_data,
 
-    file_name=nome_arquivo,
-
-    mime=(
-        "application/vnd.openxmlformats-officedocument."
-        "spreadsheetml.sheet"
+    file_name=(
+        f"orcamento_steel_"
+        f"{nome_cliente}_"
+        f"{data_projeto}.csv"
     ),
+
+    mime="text/csv",
 
     use_container_width=True,
-
 )
-
-
-# ============================================================
-# INFORMAÇÃO SOBRE O LOGO
-# ============================================================
-
-if logo_upload is not None:
-
-    st.success(
-        "✅ O logo enviado será incorporado automaticamente "
-        "na área A4:B8 do Excel e acompanhará a impressão."
-    )
-
-else:
-
-    st.caption(
-        "💡 Envie o logo da empresa acima para que ele seja "
-        "incorporado automaticamente na área A4:B8 do orçamento."
-    )
