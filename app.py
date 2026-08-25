@@ -28,12 +28,19 @@ st.markdown(
     """
     <style>
 
-    html, body, [data-testid="stAppViewContainer"], .stApp {
+    /* ========================================================
+       CONFIGURAÇÃO GERAL
+       ======================================================== */
+
+    html,
+    body,
+    [data-testid="stAppViewContainer"],
+    .stApp {
         font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
     }
 
     .stApp {
-        background: #f5f7fa;
+        background: #f5f7fa !important;
     }
 
     .block-container {
@@ -42,8 +49,9 @@ st.markdown(
         padding-bottom: 4rem;
     }
 
+
     /* ========================================================
-       CABEÇALHO
+       CABEÇALHO PRINCIPAL
        ======================================================== */
 
     div[data-testid="stVerticalBlock"] > div:has(h1) {
@@ -52,12 +60,11 @@ st.markdown(
             #17202a 0%,
             #263746 55%,
             #34495e 100%
-        );
+        ) !important;
 
         border-radius: 18px;
         padding: 35px 38px 30px 38px;
         margin-bottom: 25px;
-
         box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     }
 
@@ -78,73 +85,427 @@ st.markdown(
         font-weight: 500 !important;
     }
 
+
     /* ========================================================
-       BOTÃO PRINCIPAL
-       CORREÇÃO PARA TABLET / CELULAR
+       TÍTULOS E TEXTOS
        ======================================================== */
 
-    div.stButton > button[kind="primary"] {
-        height: 60px !important;
-        font-size: 1.25rem !important;
-        font-weight: 800 !important;
-        border-radius: 12px !important;
-        width: 100% !important;
-
-        background-color: #17202a !important;
-        color: #ffffff !important;
-
-        border: 2px solid #17202a !important;
-
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+    h2,
+    h3,
+    h4 {
+        color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
-    /* Texto interno do botão */
-
-    div.stButton > button[kind="primary"] p {
-        color: #ffffff !important;
-        font-weight: 800 !important;
+    p {
+        color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
-    div.stButton > button[kind="primary"] span {
-        color: #ffffff !important;
+    [data-testid="stMarkdownContainer"] {
+        color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
-    /* Hover */
-
-    div.stButton > button[kind="primary"]:hover {
-        background-color: #34495e !important;
-        color: #ffffff !important;
-        border-color: #34495e !important;
+    [data-testid="stMarkdownContainer"] p {
+        color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
-    div.stButton > button[kind="primary"]:hover p {
-        color: #ffffff !important;
+    [data-testid="stMarkdownContainer"] strong {
+        color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
-    div.stButton > button[kind="primary"]:hover span {
-        color: #ffffff !important;
-    }
 
     /* ========================================================
-       BOTÕES NORMAIS
+       LABELS - CORREÇÃO PRINCIPAL
+       ======================================================== */
+
+    label,
+    label p,
+    label span {
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    div[data-testid="stTextInput"] label,
+    div[data-testid="stNumberInput"] label,
+    div[data-testid="stDateInput"] label,
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stTextArea"] label,
+    div[data-testid="stRadio"] label,
+    div[data-testid="stCheckbox"] label {
+
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+
+    div[data-testid="stTextInput"] label p,
+    div[data-testid="stNumberInput"] label p,
+    div[data-testid="stDateInput"] label p,
+    div[data-testid="stSelectbox"] label p,
+    div[data-testid="stTextArea"] label p,
+    div[data-testid="stRadio"] label p,
+    div[data-testid="stCheckbox"] label p {
+
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+        font-weight: 600 !important;
+    }
+
+
+    /* ========================================================
+       INPUTS
+       ======================================================== */
+
+    div[data-baseweb="input"] {
+        background-color: #ffffff !important;
+        border-radius: 8px !important;
+    }
+
+    div[data-baseweb="input"] input,
+    input,
+    textarea,
+    select {
+
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        background-color: #ffffff !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        caret-color: #17202a !important;
+        font-weight: 500 !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+
+        color: #7f8c8d !important;
+        -webkit-text-fill-color: #7f8c8d !important;
+        opacity: 1 !important;
+    }
+
+
+    /* ========================================================
+       NUMBER INPUT
+       ======================================================== */
+
+    div[data-testid="stNumberInput"] {
+        background: #ffffff !important;
+        border-radius: 10px !important;
+    }
+
+    div[data-testid="stNumberInput"] input {
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        background-color: #ffffff !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    div[data-testid="stNumberInput"] button {
+        color: #17202a !important;
+        background-color: #ffffff !important;
+    }
+
+    div[data-testid="stNumberInput"] button:hover {
+        color: #17202a !important;
+        background-color: #e9eef2 !important;
+    }
+
+
+    /* ========================================================
+       SELECTBOX
+       ======================================================== */
+
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stSelectbox"] label p {
+
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        opacity: 1 !important;
+    }
+
+    div[data-baseweb="select"] {
+        background-color: #ffffff !important;
+        color: #17202a !important;
+    }
+
+    div[data-baseweb="select"] * {
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        opacity: 1 !important;
+    }
+
+
+    /* ========================================================
+       TEXTAREA
+       ======================================================== */
+
+    div[data-testid="stTextArea"] textarea {
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        background-color: #ffffff !important;
+        opacity: 1 !important;
+    }
+
+
+    /* ========================================================
+       RADIO / CHECKBOX
+       ======================================================== */
+
+    div[data-testid="stRadio"] label,
+    div[data-testid="stRadio"] label p,
+    div[data-testid="stCheckbox"] label,
+    div[data-testid="stCheckbox"] label p {
+
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+
+    /* ========================================================
+       NOMES DOS MATERIAIS
+       ======================================================== */
+
+    .nome-material {
+
+        color: #17202A !important;
+        background-color: #ffffff !important;
+        font-size: 1.25rem !important;
+        font-weight: 800 !important;
+
+        margin: 10px 0 12px 0 !important;
+        padding: 8px 12px !important;
+
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        border-radius: 8px !important;
+        border-left: 5px solid #6fa8c9 !important;
+    }
+
+
+    /* ========================================================
+       BOTÕES
        ======================================================== */
 
     div.stButton > button {
+
+        color: #17202a !important;
+        background-color: #ffffff !important;
+
+        border: 1px solid #b7c3cc !important;
+
         font-weight: 700 !important;
         border-radius: 10px !important;
     }
 
-    div.stButton > button p {
+    div.stButton > button:hover {
+
+        color: #17202a !important;
+        background-color: #e9eef2 !important;
+        border-color: #6fa8c9 !important;
+    }
+
+
+    /* ========================================================
+       BOTÃO CALCULAR
+       ======================================================== */
+
+    div.stButton > button[kind="primary"] {
+
+        height: 60px;
+
+        color: #ffffff !important;
+
+        background: linear-gradient(
+            135deg,
+            #34495e,
+            #17202a
+        ) !important;
+
+        font-size: 1.25rem;
+        font-weight: 800;
+
+        border-radius: 12px;
+
+        width: 100%;
+
+        border: none !important;
+    }
+
+    div.stButton > button[kind="primary"] p,
+    div.stButton > button[kind="primary"] span {
+
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+
+
+    /* ========================================================
+       BOTÃO EXCEL
+       ======================================================== */
+
+    div[data-testid="stDownloadButton"] button {
+
+        color: #ffffff !important;
+
+        background: linear-gradient(
+            135deg,
+            #217346,
+            #185c37
+        ) !important;
+
+        border: none !important;
+
+        min-height: 55px;
+
+        font-size: 1.1rem !important;
+        font-weight: 800 !important;
+
+        border-radius: 10px !important;
+    }
+
+    div[data-testid="stDownloadButton"] button p,
+    div[data-testid="stDownloadButton"] button span {
+
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+
+
+    /* ========================================================
+       EXPANDER
+       ======================================================== */
+
+    details,
+    [data-testid="stExpander"] {
+
+        background-color: #ffffff !important;
+        border-radius: 10px !important;
+    }
+
+    [data-testid="stExpander"] summary {
+        color: #17202a !important;
+        background-color: #ffffff !important;
         font-weight: 700 !important;
     }
 
+    [data-testid="stExpander"] summary p,
+    [data-testid="stExpander"] summary span {
+        color: #17202a !important;
+    }
+
+
     /* ========================================================
-       CAMPOS
+       TABS
        ======================================================== */
 
-    div[data-baseweb="input"] input {
-        font-weight: 500 !important;
+    button[data-baseweb="tab"] {
+        color: #17202a !important;
+        font-weight: 700 !important;
     }
+
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #17202a !important;
+        font-weight: 800 !important;
+    }
+
+
+    /* ========================================================
+       SIDEBAR
+       ======================================================== */
+
+    section[data-testid="stSidebar"] {
+        background-color: #ffffff !important;
+    }
+
+    section[data-testid="stSidebar"] * {
+        color: #17202a !important;
+    }
+
+    section[data-testid="stSidebar"] input {
+
+        color: #17202a !important;
+        background-color: #ffffff !important;
+        -webkit-text-fill-color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       MÉTRICAS
+       ======================================================== */
+
+    [data-testid="stMetricLabel"],
+    [data-testid="stMetricLabel"] p,
+    [data-testid="stMetricValue"],
+    [data-testid="stMetricDelta"] {
+
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       ALERTAS
+       ======================================================== */
+
+    [data-testid="stAlert"],
+    [data-testid="stAlert"] p {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       TABELA
+       ======================================================== */
+
+    [data-testid="stDataFrame"] {
+        background-color: #ffffff !important;
+        border-radius: 10px !important;
+    }
+
+
+    /* ========================================================
+       FILE UPLOADER
+       ======================================================== */
+
+    [data-testid="stFileUploader"] {
+        background-color: #ffffff !important;
+        color: #17202a !important;
+    }
+
+    [data-testid="stFileUploader"] * {
+        color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       LINKS
+       ======================================================== */
+
+    a {
+        color: #1f5f8b !important;
+    }
+
 
     /* ========================================================
        MOBILE / TABLET
@@ -175,6 +536,39 @@ st.markdown(
             height: 58px !important;
             font-size: 1.05rem !important;
         }
+
+        div[data-testid="stTextInput"] label,
+        div[data-testid="stNumberInput"] label,
+        div[data-testid="stDateInput"] label,
+        div[data-testid="stSelectbox"] label,
+        div[data-testid="stTextArea"] label {
+
+            color: #17202a !important;
+            -webkit-text-fill-color: #17202a !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        div[data-testid="stTextInput"] label p,
+        div[data-testid="stNumberInput"] label p,
+        div[data-testid="stDateInput"] label p,
+        div[data-testid="stSelectbox"] label p,
+        div[data-testid="stTextArea"] label p {
+
+            color: #17202a !important;
+            -webkit-text-fill-color: #17202a !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        div[data-testid="stTextInput"] input,
+        div[data-testid="stNumberInput"] input,
+        div[data-testid="stDateInput"] input {
+
+            color: #17202a !important;
+            -webkit-text-fill-color: #17202a !important;
+            background-color: #ffffff !important;
+        }
     }
 
     </style>
@@ -204,14 +598,12 @@ st.header("📋 Informações Gerais")
 col_cli1, col_cli2 = st.columns(2)
 
 with col_cli1:
-
     cliente = st.text_input(
         "Nome do Cliente",
         value="João Silva"
     )
 
 with col_cli2:
-
     data_projeto = st.date_input(
         "Data do Orçamento",
         date.today()
@@ -227,7 +619,6 @@ st.header("🏠 Dimensões da Estrutura")
 col_dim1, col_dim2 = st.columns(2)
 
 with col_dim1:
-
     comprimento_paredes = st.number_input(
         "Comprimento Total das Paredes (m linear)",
         min_value=1.0,
@@ -236,7 +627,6 @@ with col_dim1:
     )
 
 with col_dim2:
-
     pe_direito = st.number_input(
         "Pé Direito (m)",
         min_value=1.0,
@@ -258,11 +648,10 @@ st.info(
 
 
 # ============================================================
-# PREÇOS
+# PREÇOS BASE
 # ============================================================
 
 PRECOS_BASE = {
-
     "perfil": 50.0,
     "guia": 50.0,
     "plywood": 80.0,
@@ -274,7 +663,6 @@ PRECOS_BASE = {
     "telas": 500.0,
     "adesivo": 150.0,
     "manta": 1000.0
-
 }
 
 
@@ -292,9 +680,6 @@ qtd_parafuso = area_total * 0.5
 qtd_massa = area_total / 30.0
 qtd_tela = area_total / 40.0
 qtd_adesivo = area_total / 15.0
-
-# Manta somente para paredes
-
 qtd_manta = area_total / 50.0
 
 
@@ -303,263 +688,62 @@ qtd_manta = area_total / 50.0
 # ============================================================
 
 lista_materiais = [
-
     {
         "nome": "Perfil 90x0,80",
         "qtd": qtd_perfil,
         "preco": PRECOS_BASE["perfil"]
     },
-
     {
         "nome": "Guia Perimetral",
         "qtd": qtd_guia,
         "preco": PRECOS_BASE["guia"]
     },
-
     {
         "nome": "Plywood 8mm",
         "qtd": qtd_plywood,
         "preco": PRECOS_BASE["plywood"]
     },
-
     {
         "nome": "Placa ST 12.5mm",
         "qtd": qtd_placa_st,
         "preco": PRECOS_BASE["placa_st"]
     },
-
     {
         "nome": "Placa Cimentícia 12mm",
         "qtd": qtd_cimenticia,
         "preco": PRECOS_BASE["placa_cimenticia"]
     },
-
     {
         "nome": "Lã PET",
         "qtd": qtd_la,
         "preco": PRECOS_BASE["la_pet"]
     },
-
     {
         "nome": "Parafusos (Cento)",
         "qtd": qtd_parafuso,
         "preco": PRECOS_BASE["parafusos"]
     },
-
     {
         "nome": "Massas (Balde/Saco)",
         "qtd": qtd_massa,
         "preco": PRECOS_BASE["massas"]
     },
-
     {
         "nome": "Telas (Rolo)",
         "qtd": qtd_tela,
         "preco": PRECOS_BASE["telas"]
     },
-
     {
         "nome": "Adesivo PU (Cx)",
         "qtd": qtd_adesivo,
         "preco": PRECOS_BASE["adesivo"]
     },
-
     {
         "nome": "Manta Hidrófuga",
         "qtd": qtd_manta,
         "preco": PRECOS_BASE["manta"]
     },
-
 ]
-
-
-# ============================================================
-# CÁLCULO
-# ============================================================
-
-st.markdown("---")
-
-st.subheader("🧮 Cálculo do Projeto")
-
-calcular_projeto = st.button(
-    "🧮 CALCULAR PROJETO",
-    type="primary",
-    use_container_width=True
-)
-
-
-if calcular_projeto:
-
-    dados_calculados = []
-
-    total_materiais_calculado = 0.0
-
-    for mat in lista_materiais:
-
-        quantidade = float(
-            round(mat["qtd"], 1)
-        )
-
-        preco = float(
-            mat["preco"]
-        )
-
-        subtotal = (
-            quantidade * preco
-        )
-
-        total_materiais_calculado += (
-            subtotal
-        )
-
-        dados_calculados.append(
-            {
-                "Item": mat["nome"],
-                "Quantidade": quantidade,
-                "Preço Unitário": preco,
-                "Total Item": subtotal
-            }
-        )
-
-    mao_de_obra_calculada = 11635.0
-
-    total_geral_calculado = (
-        total_materiais_calculado
-        +
-        mao_de_obra_calculada
-    )
-
-    st.session_state["projeto_calculado"] = {
-
-        "cliente": cliente,
-
-        "data_projeto": data_projeto,
-
-        "comprimento_paredes":
-            comprimento_paredes,
-
-        "pe_direito":
-            pe_direito,
-
-        "area_total":
-            area_total,
-
-        "dados_atualizados":
-            dados_calculados,
-
-        "lista_materiais":
-            dados_calculados,
-
-        "total_materiais":
-            total_materiais_calculado,
-
-        "mao_de_obra":
-            mao_de_obra_calculada,
-
-        "total_geral":
-            total_geral_calculado,
-
-        "dimensoes": {
-
-            "comprimento_paredes":
-                comprimento_paredes,
-
-            "pe_direito":
-                pe_direito,
-
-            "area_paredes":
-                area_total
-
-        },
-
-        "calculado": True
-    }
-
-    st.success(
-        "✅ PROJETO CALCULADO COM SUCESSO!"
-    )
-
-
-# ============================================================
-# INSUMOS
-# ============================================================
-
-st.header(
-    "📋 Insumos Calculados Automaticamente"
-)
-
-st.markdown(
-    "As quantidades e os valores unitários podem ser ajustados."
-)
-
-dados_atualizados = []
-
-total_materiais = 0.0
-
-col_grid1, col_grid2 = st.columns(2)
-
-
-for idx, mat in enumerate(lista_materiais):
-
-    coluna_painel = (
-        col_grid1
-        if idx % 2 == 0
-        else col_grid2
-    )
-
-    with coluna_painel:
-
-        st.subheader(
-            f"🔹 {mat['nome']}"
-        )
-
-        c_qtd, c_prc = st.columns(2)
-
-        with c_qtd:
-
-            nova_qtd = st.number_input(
-                f"{mat['nome']} (Qtd)",
-                min_value=0.0,
-                value=float(
-                    round(mat["qtd"], 1)
-                ),
-                key=f"q_{idx}"
-            )
-
-        with c_prc:
-
-            novo_prc = st.number_input(
-                f"{mat['nome']} (Preço R$)",
-                min_value=0.0,
-                value=float(
-                    mat["preco"]
-                ),
-                key=f"p_{idx}"
-            )
-
-        subtotal_calculado = (
-            nova_qtd * novo_prc
-        )
-
-        total_materiais += (
-            subtotal_calculado
-        )
-
-        dados_atualizados.append(
-            {
-                "Item": mat["nome"],
-                "Quantidade": nova_qtd,
-                "Preço Unitário": novo_prc,
-                "Total Item": subtotal_calculado
-            }
-        )
-
-        st.write(
-            f"**Subtotal do Item:** "
-            f"R$ {subtotal_calculado:,.2f}"
-        )
-
-        st.write("---")
 
 
 # ============================================================
@@ -575,18 +759,167 @@ mao_de_obra = st.sidebar.number_input(
 
 
 # ============================================================
+# CÁLCULO INICIAL
+# ============================================================
+
+st.markdown("---")
+st.subheader("🧮 Cálculo do Projeto")
+
+calcular_projeto = st.button(
+    "🧮 CALCULAR PROJETO",
+    type="primary",
+    use_container_width=True
+)
+
+if calcular_projeto:
+
+    dados_calculados = []
+    total_materiais_calculado = 0.0
+
+    for mat in lista_materiais:
+
+        quantidade = float(round(mat["qtd"], 1))
+        preco = float(mat["preco"])
+        subtotal = quantidade * preco
+
+        total_materiais_calculado += subtotal
+
+        dados_calculados.append(
+            {
+                "Item": mat["nome"],
+                "Quantidade": quantidade,
+                "Preço Unitário": preco,
+                "Total Item": subtotal
+            }
+        )
+
+    total_geral_calculado = (
+        total_materiais_calculado +
+        mao_de_obra
+    )
+
+    st.session_state["projeto_calculado"] = {
+        "cliente": cliente,
+        "data_projeto": data_projeto,
+        "comprimento_paredes": comprimento_paredes,
+        "pe_direito": pe_direito,
+        "area_total": area_total,
+        "dados_atualizados": dados_calculados,
+        "lista_materiais": dados_calculados,
+        "total_materiais": total_materiais_calculado,
+        "mao_de_obra": mao_de_obra,
+        "total_geral": total_geral_calculado,
+        "dimensoes": {
+            "comprimento_paredes": comprimento_paredes,
+            "pe_direito": pe_direito,
+            "area_paredes": area_total
+        },
+        "calculado": True
+    }
+
+    st.success("✅ PROJETO CALCULADO COM SUCESSO!")
+
+
+# ============================================================
+# INSUMOS
+# ============================================================
+
+st.header("📋 Insumos Calculados Automaticamente")
+
+st.markdown(
+    "As quantidades e os valores unitários podem ser ajustados."
+)
+
+dados_atualizados = []
+total_materiais = 0.0
+
+col_grid1, col_grid2 = st.columns(2)
+
+
+for idx, mat in enumerate(lista_materiais):
+
+    coluna_painel = (
+        col_grid1
+        if idx % 2 == 0
+        else col_grid2
+    )
+
+    with coluna_painel:
+
+        st.markdown(
+            f"""
+            <div class="nome-material">
+                🔹 {mat["nome"]}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        c_qtd, c_prc = st.columns(2)
+
+        with c_qtd:
+
+            nova_qtd = st.number_input(
+                f"{mat['nome']} (Qtd)",
+                min_value=0.0,
+                value=float(round(mat["qtd"], 1)),
+                step=0.1,
+                key=f"q_{idx}"
+            )
+
+        with c_prc:
+
+            novo_prc = st.number_input(
+                f"{mat['nome']} (Preço R$)",
+                min_value=0.0,
+                value=float(mat["preco"]),
+                step=1.0,
+                key=f"p_{idx}"
+            )
+
+        subtotal_calculado = nova_qtd * novo_prc
+
+        total_materiais += subtotal_calculado
+
+        dados_atualizados.append(
+            {
+                "Item": mat["nome"],
+                "Quantidade": nova_qtd,
+                "Preço Unitário": novo_prc,
+                "Total Item": subtotal_calculado
+            }
+        )
+
+        st.markdown(
+            f"""
+            <div style="
+                background:#eef3f7;
+                padding:10px 14px;
+                border-radius:8px;
+                margin:6px 0 12px 0;
+                color:#17202a;
+                font-weight:700;
+            ">
+                Subtotal do Item:
+                R$ {subtotal_calculado:,.2f}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+# ============================================================
 # TOTAL
 # ============================================================
 
 total_geral = (
-    total_materiais
-    +
+    total_materiais +
     mao_de_obra
 )
 
 
 # ============================================================
-# ATUALIZAR
+# ATUALIZAR CÁLCULO
 # ============================================================
 
 st.markdown("---")
@@ -597,80 +930,41 @@ if st.button(
 ):
 
     st.session_state["projeto_calculado"] = {
-
-        "cliente":
-            cliente,
-
-        "data_projeto":
-            data_projeto,
-
-        "comprimento_paredes":
-            comprimento_paredes,
-
-        "pe_direito":
-            pe_direito,
-
-        "area_total":
-            area_total,
-
-        "dados_atualizados":
-            dados_atualizados,
-
-        "lista_materiais":
-            dados_atualizados,
-
-        "total_materiais":
-            total_materiais,
-
-        "mao_de_obra":
-            mao_de_obra,
-
-        "total_geral":
-            total_geral,
-
+        "cliente": cliente,
+        "data_projeto": data_projeto,
+        "comprimento_paredes": comprimento_paredes,
+        "pe_direito": pe_direito,
+        "area_total": area_total,
+        "dados_atualizados": dados_atualizados,
+        "lista_materiais": dados_atualizados,
+        "total_materiais": total_materiais,
+        "mao_de_obra": mao_de_obra,
+        "total_geral": total_geral,
         "dimensoes": {
-
-            "comprimento_paredes":
-                comprimento_paredes,
-
-            "pe_direito":
-                pe_direito,
-
-            "area_paredes":
-                area_total
-
+            "comprimento_paredes": comprimento_paredes,
+            "pe_direito": pe_direito,
+            "area_paredes": area_total
         },
-
-        "calculado":
-            True
-
+        "calculado": True
     }
 
-    st.success(
-        "✅ Cálculo atualizado."
-    )
+    st.success("✅ Cálculo atualizado.")
 
 
 # ============================================================
 # RESUMO
 # ============================================================
 
-st.header(
-    "📊 Resumo Consolidado do Orçamento"
-)
+st.header("📊 Resumo Consolidado do Orçamento")
 
-df_resumo = pd.DataFrame(
-    dados_atualizados
-)
+df_resumo = pd.DataFrame(dados_atualizados)
 
 st.dataframe(
     df_resumo.style.format(
         {
-            "Preço Unitário":
-                "R$ {:.2f}",
-
-            "Total Item":
-                "R$ {:.2f}"
+            "Quantidade": "{:.2f}",
+            "Preço Unitário": "R$ {:.2f}",
+            "Total Item": "R$ {:.2f}"
         }
     ),
     use_container_width=True
@@ -681,9 +975,7 @@ st.dataframe(
 # SIDEBAR
 # ============================================================
 
-st.sidebar.header(
-    "💰 Custos de Instalação"
-)
+st.sidebar.header("💰 Custos de Instalação")
 
 st.sidebar.markdown("---")
 
@@ -703,29 +995,25 @@ st.sidebar.subheader(
 
 
 # ============================================================
-# FUNÇÃO — LOCALIZAR LOGO AUTOMATICAMENTE
+# FUNÇÃO — LOCALIZAR LOGO
 # ============================================================
 
 def localizar_logo():
 
     caminhos = [
-
         Path("assets/logo.png"),
         Path("assets/logo.jpg"),
         Path("assets/logo.jpeg"),
         Path("assets/logo.webp"),
-
         Path("logo.png"),
         Path("logo.jpg"),
         Path("logo.jpeg"),
         Path("logo.webp"),
-
     ]
 
     for caminho in caminhos:
 
         if caminho.exists():
-
             return caminho
 
     return None
@@ -740,7 +1028,6 @@ def gerar_excel():
     wb = Workbook()
 
     ws = wb.active
-
     ws.title = "Orçamento"
 
 
@@ -749,21 +1036,16 @@ def gerar_excel():
     # ========================================================
 
     larguras = {
-
         "A": 28,
         "B": 18,
         "C": 20,
         "D": 20,
         "E": 22,
         "F": 22,
-
     }
 
     for coluna, largura in larguras.items():
-
-        ws.column_dimensions[
-            coluna
-        ].width = largura
+        ws.column_dimensions[coluna].width = largura
 
 
     # ========================================================
@@ -810,43 +1092,41 @@ def gerar_excel():
     fonte_cabecalho = Font(
         name="Calibri",
         size=11,
-        bold=True
+        bold=True,
+        color="17202A"
     )
 
     fonte_normal = Font(
         name="Calibri",
-        size=11
+        size=11,
+        color="17202A"
     )
 
     fonte_total = Font(
         name="Calibri",
         size=13,
-        bold=True
+        bold=True,
+        color="17202A"
     )
 
 
     borda_fina = Border(
-
         left=Side(
             style="thin",
             color="B7B7B7"
         ),
-
         right=Side(
             style="thin",
             color="B7B7B7"
         ),
-
         top=Side(
             style="thin",
             color="B7B7B7"
         ),
-
         bottom=Side(
             style="thin",
             color="B7B7B7"
         ),
-
     )
 
 
@@ -859,7 +1139,6 @@ def gerar_excel():
     ws["A1"] = "ORÇAMENTO STEEL FRAMING"
 
     ws["A1"].font = fonte_titulo
-
     ws["A1"].fill = fundo_titulo
 
     ws["A1"].alignment = Alignment(
@@ -870,12 +1149,11 @@ def gerar_excel():
     for row in ws["A1:F2"]:
 
         for cell in row:
-
             cell.fill = fundo_titulo
 
 
     # ========================================================
-    # LOGO — A4:B8
+    # LOGO
     # ========================================================
 
     ws.merge_cells("A4:B8")
@@ -905,12 +1183,9 @@ def gerar_excel():
 
             logo.width = 230
             logo.height = 125
-
             logo.anchor = "A4"
 
-            ws.add_image(
-                logo
-            )
+            ws.add_image(logo)
 
         except Exception:
 
@@ -958,7 +1233,6 @@ def gerar_excel():
     ws["C4"] = "DADOS DA EMPRESA"
 
     ws["C4"].fill = fundo_secao
-
     ws["C4"].font = fonte_secao
 
     ws["C4"].alignment = Alignment(
@@ -967,27 +1241,22 @@ def gerar_excel():
 
 
     dados_empresa = [
-
         (
             "Empresa",
             "Digite o nome da sua empresa"
         ),
-
         (
             "CNPJ",
             "Digite o CNPJ"
         ),
-
         (
             "Telefone / WhatsApp",
             "Digite o telefone"
         ),
-
         (
             "E-mail",
             "Digite o e-mail"
         ),
-
     ]
 
 
@@ -997,20 +1266,16 @@ def gerar_excel():
     for campo, valor in dados_empresa:
 
         ws[f"C{linha}"] = campo
-
         ws[f"C{linha}"].font = fonte_cabecalho
 
         ws.merge_cells(
-
             start_row=linha,
             start_column=4,
             end_row=linha,
             end_column=6
-
         )
 
         ws[f"D{linha}"] = valor
-
         ws[f"D{linha}"].font = fonte_normal
 
         linha += 1
@@ -1025,7 +1290,6 @@ def gerar_excel():
     ws["A10"] = "IDENTIFICAÇÃO DO PROJETO"
 
     ws["A10"].fill = fundo_secao
-
     ws["A10"].font = fonte_secao
 
     ws["A10"].alignment = Alignment(
@@ -1034,34 +1298,26 @@ def gerar_excel():
 
 
     dados_projeto = [
-
         (
             "Cliente",
             cliente
         ),
-
         (
             "Data do Orçamento",
-            data_projeto.strftime(
-                "%d/%m/%Y"
-            )
+            data_projeto.strftime("%d/%m/%Y")
         ),
-
         (
             "Comprimento das Paredes",
             f"{comprimento_paredes:.2f} m linear"
         ),
-
         (
             "Pé Direito",
             f"{pe_direito:.2f} m"
         ),
-
         (
             "Área das Paredes",
             f"{area_total:.2f} m²"
         ),
-
     ]
 
 
@@ -1071,19 +1327,17 @@ def gerar_excel():
     for campo, valor in dados_projeto:
 
         ws[f"A{linha}"] = campo
-
         ws[f"A{linha}"].font = fonte_cabecalho
 
         ws.merge_cells(
-
             start_row=linha,
             start_column=2,
             end_row=linha,
             end_column=6
-
         )
 
         ws[f"B{linha}"] = valor
+        ws[f"B{linha}"].font = fonte_normal
 
         linha += 1
 
@@ -1094,16 +1348,12 @@ def gerar_excel():
 
     linha_inicio_materiais = 18
 
-
     ws.merge_cells(
-
         start_row=linha_inicio_materiais,
         start_column=1,
         end_row=linha_inicio_materiais,
         end_column=6
-
     )
-
 
     ws.cell(
         linha_inicio_materiais,
@@ -1128,17 +1378,18 @@ def gerar_excel():
     )
 
 
-    cabecalhos = [
+    # ========================================================
+    # CABEÇALHOS
+    # ========================================================
 
+    cabecalhos = [
         "Material",
         "Quantidade",
         "Unidade",
         "Preço Unitário",
         "Total",
         "Observação",
-
     ]
-
 
     linha_cabecalho = (
         linha_inicio_materiais + 1
@@ -1156,17 +1407,18 @@ def gerar_excel():
         )
 
         cell.value = texto
-
         cell.fill = fundo_cabecalho
-
         cell.font = fonte_cabecalho
-
         cell.border = borda_fina
 
         cell.alignment = Alignment(
             horizontal="center"
         )
 
+
+    # ========================================================
+    # ITENS
+    # ========================================================
 
     linha = linha_cabecalho + 1
 
@@ -1201,9 +1453,7 @@ def gerar_excel():
         ws.cell(
             linha,
             6
-        ).value = (
-            "Quantidade e preço editáveis"
-        )
+        ).value = "Quantidade e preço editáveis"
 
 
         for col in range(1, 7):
@@ -1214,7 +1464,6 @@ def gerar_excel():
             )
 
             cell.border = borda_fina
-
             cell.font = fonte_normal
 
 
@@ -1226,16 +1475,12 @@ def gerar_excel():
         ws.cell(
             linha,
             4
-        ).number_format = (
-            'R$ #,##0.00'
-        )
+        ).number_format = 'R$ #,##0.00'
 
         ws.cell(
             linha,
             5
-        ).number_format = (
-            'R$ #,##0.00'
-        )
+        ).number_format = 'R$ #,##0.00'
 
 
         linha += 1
@@ -1249,12 +1494,10 @@ def gerar_excel():
 
 
     ws.merge_cells(
-
         start_row=linha_total_materiais,
         start_column=1,
         end_row=linha_total_materiais,
         end_column=4
-
     )
 
 
@@ -1285,8 +1528,7 @@ def gerar_excel():
         linha_total_materiais,
         5
     ).value = (
-        f"=SUM(E{primeira_linha}:"
-        f"E{ultima_linha})"
+        f"=SUM(E{primeira_linha}:E{ultima_linha})"
     )
 
     ws.cell(
@@ -1302,9 +1544,7 @@ def gerar_excel():
     ws.cell(
         linha_total_materiais,
         5
-    ).number_format = (
-        'R$ #,##0.00'
-    )
+    ).number_format = 'R$ #,##0.00'
 
 
     # ========================================================
@@ -1317,12 +1557,10 @@ def gerar_excel():
 
 
     ws.merge_cells(
-
         start_row=linha_mao_obra,
         start_column=1,
         end_row=linha_mao_obra,
         end_column=4
-
     )
 
 
@@ -1360,9 +1598,7 @@ def gerar_excel():
     ws.cell(
         linha_mao_obra,
         5
-    ).number_format = (
-        'R$ #,##0.00'
-    )
+    ).number_format = 'R$ #,##0.00'
 
 
     # ========================================================
@@ -1375,12 +1611,10 @@ def gerar_excel():
 
 
     ws.merge_cells(
-
         start_row=linha_total_geral,
         start_column=1,
         end_row=linha_total_geral,
         end_column=4
-
     )
 
 
@@ -1394,7 +1628,8 @@ def gerar_excel():
         1
     ).font = Font(
         size=15,
-        bold=True
+        bold=True,
+        color="17202A"
     )
 
 
@@ -1411,15 +1646,14 @@ def gerar_excel():
         5
     ).font = Font(
         size=15,
-        bold=True
+        bold=True,
+        color="17202A"
     )
 
     ws.cell(
         linha_total_geral,
         5
-    ).number_format = (
-        'R$ #,##0.00'
-    )
+    ).number_format = 'R$ #,##0.00'
 
 
     for col in range(1, 6):
@@ -1443,12 +1677,10 @@ def gerar_excel():
 
 
     ws.merge_cells(
-
         start_row=linha_condicoes,
         start_column=1,
         end_row=linha_condicoes,
         end_column=6
-
     )
 
 
@@ -1478,12 +1710,10 @@ def gerar_excel():
 
 
         ws.merge_cells(
-
             start_row=linha_obs,
             start_column=1,
             end_row=linha_obs,
             end_column=6
-
         )
 
 
@@ -1494,6 +1724,11 @@ def gerar_excel():
             "Digite aqui suas condições "
             "comerciais e observações."
         )
+
+        ws.cell(
+            linha_obs,
+            1
+        ).font = fonte_normal
 
         ws.cell(
             linha_obs,
@@ -1519,7 +1754,6 @@ def gerar_excel():
     )
 
     ws.page_setup.fitToWidth = 1
-
     ws.page_setup.fitToHeight = 0
 
     ws.sheet_properties.pageSetUpPr.fitToPage = True
@@ -1574,7 +1808,6 @@ def gerar_excel():
     )
 
     memoria["A1"].font = fonte_titulo
-
     memoria["A1"].fill = fundo_titulo
 
     memoria["A1"].alignment = Alignment(
@@ -1586,9 +1819,12 @@ def gerar_excel():
     for row in memoria["A1:D2"]:
 
         for cell in row:
-
             cell.fill = fundo_titulo
 
+
+    # ========================================================
+    # CABEÇALHO MEMÓRIA
+    # ========================================================
 
     memoria["A4"] = "Parâmetro"
     memoria["B4"] = "Valor"
@@ -1604,11 +1840,13 @@ def gerar_excel():
         )
 
         cell.fill = fundo_cabecalho
-
         cell.font = fonte_cabecalho
-
         cell.border = borda_fina
 
+
+    # ========================================================
+    # PARÂMETROS
+    # ========================================================
 
     parametros = [
 
@@ -1709,7 +1947,6 @@ def gerar_excel():
             "Área das Paredes ÷ 50",
             "un."
         ),
-
     ]
 
 
@@ -1746,26 +1983,26 @@ def gerar_excel():
                 col
             ).border = borda_fina
 
+            memoria.cell(
+                linha,
+                col
+            ).font = fonte_normal
+
 
         linha += 1
 
 
-    memoria["A22"] = (
-        "TOTAL MATERIAIS"
-    )
+    # ========================================================
+    # TOTAIS MEMÓRIA
+    # ========================================================
 
+    memoria["A22"] = "TOTAL MATERIAIS"
     memoria["B22"] = total_materiais
 
-    memoria["A23"] = (
-        "MÃO DE OBRA"
-    )
-
+    memoria["A23"] = "MÃO DE OBRA"
     memoria["B23"] = mao_de_obra
 
-    memoria["A24"] = (
-        "TOTAL GERAL"
-    )
-
+    memoria["A24"] = "TOTAL GERAL"
     memoria["B24"] = total_geral
 
 
@@ -1793,7 +2030,7 @@ def gerar_excel():
 
 
     # ========================================================
-    # ARQUIVO
+    # ARQUIVO EXCEL
     # ========================================================
 
     output = BytesIO()
@@ -1816,7 +2053,9 @@ st.subheader(
 )
 
 
-caminho_logo_teste = localizar_logo()
+caminho_logo_teste = (
+    localizar_logo()
+)
 
 
 if caminho_logo_teste:
@@ -1834,8 +2073,16 @@ else:
     )
 
 
+# ============================================================
+# GERAR EXCEL
+# ============================================================
+
 excel_data = gerar_excel()
 
+
+# ============================================================
+# NOME DO ARQUIVO
+# ============================================================
 
 nome_cliente = (
     cliente
@@ -1846,6 +2093,10 @@ nome_cliente = (
 )
 
 
+if not nome_cliente:
+    nome_cliente = "cliente"
+
+
 nome_arquivo = (
     f"orcamento_steel_framing_"
     f"{nome_cliente}_"
@@ -1853,8 +2104,11 @@ nome_arquivo = (
 )
 
 
-st.download_button(
+# ============================================================
+# BOTÃO DOWNLOAD
+# ============================================================
 
+st.download_button(
     label=(
         "📊 Baixar Orçamento Profissional "
         "em Excel (.xlsx)"
@@ -1870,7 +2124,6 @@ st.download_button(
     ),
 
     use_container_width=True,
-
 )
 
 
