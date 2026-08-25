@@ -80,6 +80,37 @@ st.markdown(
         width: 100%;
     }
 
+    /* ========================================================
+       NOMES DOS MATERIAIS — SEMPRE VISÍVEIS
+       ======================================================== */
+
+    div[data-testid="stMarkdownContainer"] p {
+        color: #17202A;
+    }
+
+    div[data-testid="stMarkdownContainer"] strong {
+        color: #17202A;
+    }
+
+    label[data-testid="stWidgetLabel"] p {
+        color: #17202A !important;
+    }
+
+    div[data-testid="stNumberInput"] label p {
+        color: #17202A !important;
+    }
+
+    /* Títulos dos materiais */
+    .nome-material {
+        color: #17202A !important;
+        font-size: 1.25rem !important;
+        font-weight: 800 !important;
+        margin: 10px 0 12px 0 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
     </style>
     """,
     unsafe_allow_html=True
@@ -377,8 +408,17 @@ for idx, mat in enumerate(lista_materiais):
 
     with coluna_painel:
 
-        st.subheader(
-            f"🔹 {mat['nome']}"
+        # ====================================================
+        # NOME DO MATERIAL — CORRIGIDO
+        # ====================================================
+
+        st.markdown(
+            f"""
+            <div class="nome-material">
+                🔹 {mat["nome"]}
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
         c_qtd, c_prc = st.columns(2)
@@ -734,16 +774,8 @@ def gerar_excel():
                 str(caminho_logo)
             )
 
-            # ----------------------------------------------
-            # TAMANHO DA ÁREA A4:B8
-            # ----------------------------------------------
-
             logo.width = 230
             logo.height = 125
-
-            # ----------------------------------------------
-            # POSIÇÃO
-            # ----------------------------------------------
 
             logo.anchor = "A4"
 
