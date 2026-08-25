@@ -71,3 +71,55 @@ def calcular_projeto(area_total, pe_direito, area_cobertura):
     resultado.update(acabamento)
     resultado.update(telhado)
     return resultado
+def calcular_indicadores_projeto(projeto):
+    """Calcula os indicadores usados pela página de Análise."""
+    area = _numero(projeto.get("area", 0.0))
+    subtotal_materiais = _numero(
+        projeto.get("subtotal_materiais", 0.0)
+    )
+    massas_telas = _numero(
+        projeto.get("massas_telas", 0.0)
+    )
+
+    mao_de_obra = projeto.get("mao_de_obra", {})
+
+    if not isinstance(mao_de_obra, dict):
+        mao_de_obra = {}
+
+    custo_mao_de_obra = _numero(
+        mao_de_obra.get("custo", 0.0)
+    )
+
+    custo_geral = _numero(
+        projeto.get("custo_geral", 0.0)
+    )
+
+    custo_por_m2 = (
+        custo_geral / area
+        if area > 0
+        else 0.0
+    )
+
+    if custo_geral > 0:
+        percentual_materiais = (
+            subtotal_materiais / custo_geral
+        ) * 100
+
+        percentual_massas_telas = (
+            massas_telas / custo_geral
+        ) * 100
+
+        percentual_mao_de_obra = (
+            custo_mao_de_obra / custo_geral
+        ) * 100
+    else:
+        percentual_materiais = 0.0
+        percentual_massas_telas = 0.0
+        percentual_mao_de_obra = 0.0
+
+    return {
+        "custo_por_m2": custo_por_m2,
+        "percentual_materiais": percentual_materiais,
+        "percentual_massas_telas": percentual_massas_telas,
+        "percentual_mao_de_obra": percentual_mao_de_obra,
+    }
