@@ -15,12 +15,6 @@ st.set_page_config(
 # PWA - MANIFESTO DA CALCULADORA STEEL FRAMING
 # ============================================================
 
-st.markdown(
-    """
-    <link rel="manifest" href="/app/static/manifest.json">
-    """,
-    unsafe_allow_html=True
-)
 # ============================================================
 # 2. ESTILO VISUAL - DRYARTE
 # ============================================================
