@@ -42,6 +42,10 @@ st.markdown(
         padding-bottom: 4rem;
     }
 
+    /* ========================================================
+       CABEÇALHO
+       ======================================================== */
+
     div[data-testid="stVerticalBlock"] > div:has(h1) {
         background: linear-gradient(
             135deg,
@@ -49,9 +53,11 @@ st.markdown(
             #263746 55%,
             #34495e 100%
         );
+
         border-radius: 18px;
         padding: 35px 38px 30px 38px;
         margin-bottom: 25px;
+
         box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     }
 
@@ -72,12 +78,103 @@ st.markdown(
         font-weight: 500 !important;
     }
 
+    /* ========================================================
+       BOTÃO PRINCIPAL
+       CORREÇÃO PARA TABLET / CELULAR
+       ======================================================== */
+
     div.stButton > button[kind="primary"] {
-        height: 60px;
-        font-size: 1.25rem;
-        font-weight: 800;
-        border-radius: 12px;
-        width: 100%;
+        height: 60px !important;
+        font-size: 1.25rem !important;
+        font-weight: 800 !important;
+        border-radius: 12px !important;
+        width: 100% !important;
+
+        background-color: #17202a !important;
+        color: #ffffff !important;
+
+        border: 2px solid #17202a !important;
+
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+    }
+
+    /* Texto interno do botão */
+
+    div.stButton > button[kind="primary"] p {
+        color: #ffffff !important;
+        font-weight: 800 !important;
+    }
+
+    div.stButton > button[kind="primary"] span {
+        color: #ffffff !important;
+    }
+
+    /* Hover */
+
+    div.stButton > button[kind="primary"]:hover {
+        background-color: #34495e !important;
+        color: #ffffff !important;
+        border-color: #34495e !important;
+    }
+
+    div.stButton > button[kind="primary"]:hover p {
+        color: #ffffff !important;
+    }
+
+    div.stButton > button[kind="primary"]:hover span {
+        color: #ffffff !important;
+    }
+
+    /* ========================================================
+       BOTÕES NORMAIS
+       ======================================================== */
+
+    div.stButton > button {
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+    }
+
+    div.stButton > button p {
+        font-weight: 700 !important;
+    }
+
+    /* ========================================================
+       CAMPOS
+       ======================================================== */
+
+    div[data-baseweb="input"] input {
+        font-weight: 500 !important;
+    }
+
+    /* ========================================================
+       MOBILE / TABLET
+       ======================================================== */
+
+    @media (max-width: 768px) {
+
+        .block-container {
+            padding-top: 1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        div[data-testid="stVerticalBlock"] > div:has(h1) {
+            padding: 25px 20px 22px 20px;
+            border-radius: 14px;
+        }
+
+        div[data-testid="stVerticalBlock"] h1 {
+            font-size: 2.2rem !important;
+        }
+
+        div[data-testid="stVerticalBlock"] h1 + p {
+            font-size: 1rem !important;
+        }
+
+        div.stButton > button[kind="primary"] {
+            height: 58px !important;
+            font-size: 1.05rem !important;
+        }
     }
 
     </style>
@@ -197,6 +294,7 @@ qtd_tela = area_total / 40.0
 qtd_adesivo = area_total / 15.0
 
 # Manta somente para paredes
+
 qtd_manta = area_total / 50.0
 
 
@@ -298,12 +396,21 @@ if calcular_projeto:
 
     for mat in lista_materiais:
 
-        quantidade = float(round(mat["qtd"], 1))
-        preco = float(mat["preco"])
+        quantidade = float(
+            round(mat["qtd"], 1)
+        )
 
-        subtotal = quantidade * preco
+        preco = float(
+            mat["preco"]
+        )
 
-        total_materiais_calculado += subtotal
+        subtotal = (
+            quantidade * preco
+        )
+
+        total_materiais_calculado += (
+            subtotal
+        )
 
         dados_calculados.append(
             {
@@ -317,29 +424,52 @@ if calcular_projeto:
     mao_de_obra_calculada = 11635.0
 
     total_geral_calculado = (
-        total_materiais_calculado +
+        total_materiais_calculado
+        +
         mao_de_obra_calculada
     )
 
     st.session_state["projeto_calculado"] = {
 
         "cliente": cliente,
+
         "data_projeto": data_projeto,
-        "comprimento_paredes": comprimento_paredes,
-        "pe_direito": pe_direito,
-        "area_total": area_total,
 
-        "dados_atualizados": dados_calculados,
-        "lista_materiais": dados_calculados,
+        "comprimento_paredes":
+            comprimento_paredes,
 
-        "total_materiais": total_materiais_calculado,
-        "mao_de_obra": mao_de_obra_calculada,
-        "total_geral": total_geral_calculado,
+        "pe_direito":
+            pe_direito,
+
+        "area_total":
+            area_total,
+
+        "dados_atualizados":
+            dados_calculados,
+
+        "lista_materiais":
+            dados_calculados,
+
+        "total_materiais":
+            total_materiais_calculado,
+
+        "mao_de_obra":
+            mao_de_obra_calculada,
+
+        "total_geral":
+            total_geral_calculado,
 
         "dimensoes": {
-            "comprimento_paredes": comprimento_paredes,
-            "pe_direito": pe_direito,
-            "area_paredes": area_total
+
+            "comprimento_paredes":
+                comprimento_paredes,
+
+            "pe_direito":
+                pe_direito,
+
+            "area_paredes":
+                area_total
+
         },
 
         "calculado": True
@@ -354,7 +484,9 @@ if calcular_projeto:
 # INSUMOS
 # ============================================================
 
-st.header("📋 Insumos Calculados Automaticamente")
+st.header(
+    "📋 Insumos Calculados Automaticamente"
+)
 
 st.markdown(
     "As quantidades e os valores unitários podem ser ajustados."
@@ -388,7 +520,9 @@ for idx, mat in enumerate(lista_materiais):
             nova_qtd = st.number_input(
                 f"{mat['nome']} (Qtd)",
                 min_value=0.0,
-                value=float(round(mat["qtd"], 1)),
+                value=float(
+                    round(mat["qtd"], 1)
+                ),
                 key=f"q_{idx}"
             )
 
@@ -397,13 +531,19 @@ for idx, mat in enumerate(lista_materiais):
             novo_prc = st.number_input(
                 f"{mat['nome']} (Preço R$)",
                 min_value=0.0,
-                value=float(mat["preco"]),
+                value=float(
+                    mat["preco"]
+                ),
                 key=f"p_{idx}"
             )
 
-        subtotal_calculado = nova_qtd * novo_prc
+        subtotal_calculado = (
+            nova_qtd * novo_prc
+        )
 
-        total_materiais += subtotal_calculado
+        total_materiais += (
+            subtotal_calculado
+        )
 
         dados_atualizados.append(
             {
@@ -438,7 +578,11 @@ mao_de_obra = st.sidebar.number_input(
 # TOTAL
 # ============================================================
 
-total_geral = total_materiais + mao_de_obra
+total_geral = (
+    total_materiais
+    +
+    mao_de_obra
+)
 
 
 # ============================================================
@@ -454,29 +598,51 @@ if st.button(
 
     st.session_state["projeto_calculado"] = {
 
-        "cliente": cliente,
-        "data_projeto": data_projeto,
+        "cliente":
+            cliente,
 
-        "comprimento_paredes": comprimento_paredes,
-        "pe_direito": pe_direito,
-        "area_total": area_total,
+        "data_projeto":
+            data_projeto,
 
-        "dados_atualizados": dados_atualizados,
-        "lista_materiais": dados_atualizados,
+        "comprimento_paredes":
+            comprimento_paredes,
 
-        "total_materiais": total_materiais,
-        "mao_de_obra": mao_de_obra,
-        "total_geral": total_geral,
+        "pe_direito":
+            pe_direito,
+
+        "area_total":
+            area_total,
+
+        "dados_atualizados":
+            dados_atualizados,
+
+        "lista_materiais":
+            dados_atualizados,
+
+        "total_materiais":
+            total_materiais,
+
+        "mao_de_obra":
+            mao_de_obra,
+
+        "total_geral":
+            total_geral,
 
         "dimensoes": {
 
-            "comprimento_paredes": comprimento_paredes,
-            "pe_direito": pe_direito,
-            "area_paredes": area_total
+            "comprimento_paredes":
+                comprimento_paredes,
+
+            "pe_direito":
+                pe_direito,
+
+            "area_paredes":
+                area_total
 
         },
 
-        "calculado": True
+        "calculado":
+            True
 
     }
 
@@ -500,8 +666,11 @@ df_resumo = pd.DataFrame(
 st.dataframe(
     df_resumo.style.format(
         {
-            "Preço Unitário": "R$ {:.2f}",
-            "Total Item": "R$ {:.2f}"
+            "Preço Unitário":
+                "R$ {:.2f}",
+
+            "Total Item":
+                "R$ {:.2f}"
         }
     ),
     use_container_width=True
@@ -734,16 +903,8 @@ def gerar_excel():
                 str(caminho_logo)
             )
 
-            # ----------------------------------------------
-            # TAMANHO DA ÁREA A4:B8
-            # ----------------------------------------------
-
             logo.width = 230
             logo.height = 125
-
-            # ----------------------------------------------
-            # POSIÇÃO
-            # ----------------------------------------------
 
             logo.anchor = "A4"
 
@@ -881,7 +1042,9 @@ def gerar_excel():
 
         (
             "Data do Orçamento",
-            data_projeto.strftime("%d/%m/%Y")
+            data_projeto.strftime(
+                "%d/%m/%Y"
+            )
         ),
 
         (
@@ -1038,7 +1201,9 @@ def gerar_excel():
         ws.cell(
             linha,
             6
-        ).value = "Quantidade e preço editáveis"
+        ).value = (
+            "Quantidade e preço editáveis"
+        )
 
 
         for col in range(1, 7):
@@ -1061,12 +1226,16 @@ def gerar_excel():
         ws.cell(
             linha,
             4
-        ).number_format = 'R$ #,##0.00'
+        ).number_format = (
+            'R$ #,##0.00'
+        )
 
         ws.cell(
             linha,
             5
-        ).number_format = 'R$ #,##0.00'
+        ).number_format = (
+            'R$ #,##0.00'
+        )
 
 
         linha += 1
@@ -1105,7 +1274,10 @@ def gerar_excel():
     ).fill = fundo_total
 
 
-    primeira_linha = linha_cabecalho + 1
+    primeira_linha = (
+        linha_cabecalho + 1
+    )
+
     ultima_linha = linha - 1
 
 
@@ -1113,7 +1285,8 @@ def gerar_excel():
         linha_total_materiais,
         5
     ).value = (
-        f"=SUM(E{primeira_linha}:E{ultima_linha})"
+        f"=SUM(E{primeira_linha}:"
+        f"E{ultima_linha})"
     )
 
     ws.cell(
@@ -1129,14 +1302,18 @@ def gerar_excel():
     ws.cell(
         linha_total_materiais,
         5
-    ).number_format = 'R$ #,##0.00'
+    ).number_format = (
+        'R$ #,##0.00'
+    )
 
 
     # ========================================================
     # MÃO DE OBRA
     # ========================================================
 
-    linha_mao_obra = linha_total_materiais + 1
+    linha_mao_obra = (
+        linha_total_materiais + 1
+    )
 
 
     ws.merge_cells(
@@ -1183,14 +1360,18 @@ def gerar_excel():
     ws.cell(
         linha_mao_obra,
         5
-    ).number_format = 'R$ #,##0.00'
+    ).number_format = (
+        'R$ #,##0.00'
+    )
 
 
     # ========================================================
     # TOTAL GERAL
     # ========================================================
 
-    linha_total_geral = linha_mao_obra + 1
+    linha_total_geral = (
+        linha_mao_obra + 1
+    )
 
 
     ws.merge_cells(
@@ -1236,7 +1417,9 @@ def gerar_excel():
     ws.cell(
         linha_total_geral,
         5
-    ).number_format = 'R$ #,##0.00'
+    ).number_format = (
+        'R$ #,##0.00'
+    )
 
 
     for col in range(1, 6):
@@ -1254,7 +1437,9 @@ def gerar_excel():
     # CONDIÇÕES COMERCIAIS
     # ========================================================
 
-    linha_condicoes = linha_total_geral + 3
+    linha_condicoes = (
+        linha_total_geral + 3
+    )
 
 
     ws.merge_cells(
@@ -1287,7 +1472,9 @@ def gerar_excel():
 
     for i in range(1, 4):
 
-        linha_obs = linha_condicoes + i
+        linha_obs = (
+            linha_condicoes + i
+        )
 
 
         ws.merge_cells(
@@ -1360,16 +1547,31 @@ def gerar_excel():
     )
 
 
-    memoria.column_dimensions["A"].width = 35
-    memoria.column_dimensions["B"].width = 20
-    memoria.column_dimensions["C"].width = 45
-    memoria.column_dimensions["D"].width = 20
+    memoria.column_dimensions[
+        "A"
+    ].width = 35
+
+    memoria.column_dimensions[
+        "B"
+    ].width = 20
+
+    memoria.column_dimensions[
+        "C"
+    ].width = 45
+
+    memoria.column_dimensions[
+        "D"
+    ].width = 20
 
 
-    memoria.merge_cells("A1:D2")
+    memoria.merge_cells(
+        "A1:D2"
+    )
 
 
-    memoria["A1"] = "MEMÓRIA DE CÁLCULO"
+    memoria["A1"] = (
+        "MEMÓRIA DE CÁLCULO"
+    )
 
     memoria["A1"].font = fonte_titulo
 
@@ -1548,13 +1750,22 @@ def gerar_excel():
         linha += 1
 
 
-    memoria["A22"] = "TOTAL MATERIAIS"
+    memoria["A22"] = (
+        "TOTAL MATERIAIS"
+    )
+
     memoria["B22"] = total_materiais
 
-    memoria["A23"] = "MÃO DE OBRA"
+    memoria["A23"] = (
+        "MÃO DE OBRA"
+    )
+
     memoria["B23"] = mao_de_obra
 
-    memoria["A24"] = "TOTAL GERAL"
+    memoria["A24"] = (
+        "TOTAL GERAL"
+    )
+
     memoria["B24"] = total_geral
 
 
@@ -1573,7 +1784,9 @@ def gerar_excel():
         memoria.cell(
             linha_total,
             2
-        ).number_format = 'R$ #,##0.00'
+        ).number_format = (
+            'R$ #,##0.00'
+        )
 
 
     memoria.sheet_view.showGridLines = False
