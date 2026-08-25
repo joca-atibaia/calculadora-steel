@@ -534,36 +534,92 @@ st.sidebar.subheader(
 
 
 # ============================================================
-# FUNÇÃO — LOCALIZAR LOGO AUTOMATICAMENTE
+# FUNÇÃO — LOCALIZAR LOGO DO SISTEMA
 # ============================================================
 
 def localizar_logo():
 
+    """
+    Localiza o logo que pertence ao próprio projeto.
+
+    IMPORTANTE:
+    Este arquivo é utilizado pelo servidor Streamlit.
+    O usuário final não precisa possuir o logo.
+
+    Como este código está dentro da pasta 'pages',
+    procuramos primeiro na pasta 'assets' da raiz
+    do projeto.
+    """
+
+    try:
+
+        diretorio_atual = Path(__file__).resolve().parent
+
+    except Exception:
+
+        diretorio_atual = Path.cwd()
+
+
+    # ========================================================
+    # RAIZ DO PROJETO
+    # ========================================================
+
+    raiz_projeto = diretorio_atual.parent
+
+
     caminhos = [
 
-        Path("assets/logo.png"),
-        Path("assets/logo.jpg"),
-        Path("assets/logo.jpeg"),
-        Path("assets/logo.webp"),
+        # ----------------------------------------------------
+        # LOCAL PRINCIPAL RECOMENDADO
+        # ----------------------------------------------------
 
-        Path("logo.png"),
-        Path("logo.jpg"),
-        Path("logo.jpeg"),
-        Path("logo.webp"),
+        raiz_projeto / "assets" / "logo.png",
+        raiz_projeto / "assets" / "logo.jpg",
+        raiz_projeto / "assets" / "logo.jpeg",
+        raiz_projeto / "assets" / "logo.webp",
+
+        # ----------------------------------------------------
+        # Caso o código esteja em outra estrutura
+        # ----------------------------------------------------
+
+        diretorio_atual / "assets" / "logo.png",
+        diretorio_atual / "assets" / "logo.jpg",
+        diretorio_atual / "assets" / "logo.jpeg",
+        diretorio_atual / "assets" / "logo.webp",
+
+        # ----------------------------------------------------
+        # Logo na raiz do projeto
+        # ----------------------------------------------------
+
+        raiz_projeto / "logo.png",
+        raiz_projeto / "logo.jpg",
+        raiz_projeto / "logo.jpeg",
+        raiz_projeto / "logo.webp",
+
+        # ----------------------------------------------------
+        # Logo ao lado do arquivo Python
+        # ----------------------------------------------------
+
+        diretorio_atual / "logo.png",
+        diretorio_atual / "logo.jpg",
+        diretorio_atual / "logo.jpeg",
+        diretorio_atual / "logo.webp",
 
     ]
 
+
     for caminho in caminhos:
 
-        if caminho.exists():
+        if caminho.is_file():
 
             return caminho
+
 
     return None
 
 
 # ============================================================
-# FUNÇÃO PARA GERAR EXCEL
+# FUNÇÃO — GERAR EXCEL
 # ============================================================
 
 def gerar_excel():
@@ -706,10 +762,15 @@ def gerar_excel():
 
 
     # ========================================================
-    # LOGO — A4:B8
+    # LOGO — ÁREA A4:B8
     # ========================================================
 
     ws.merge_cells("A4:B8")
+
+
+    # --------------------------------------------------------
+    # FORMATAÇÃO DA ÁREA DO LOGO
+    # --------------------------------------------------------
 
     for row in ws["A4:B8"]:
 
@@ -723,8 +784,35 @@ def gerar_excel():
             )
 
 
+    # --------------------------------------------------------
+    # ALTURA DAS LINHAS 4 ATÉ 8
+    # --------------------------------------------------------
+
+    for numero_linha in range(4, 9):
+
+        ws.row_dimensions[
+            numero_linha
+        ].height = 25
+
+
+    # --------------------------------------------------------
+    # LARGURA DAS COLUNAS A E B
+    # --------------------------------------------------------
+
+    ws.column_dimensions["A"].width = 28
+    ws.column_dimensions["B"].width = 18
+
+
+    # --------------------------------------------------------
+    # LOCALIZAR LOGO DO PRÓPRIO SISTEMA
+    # --------------------------------------------------------
+
     caminho_logo = localizar_logo()
 
+
+    # --------------------------------------------------------
+    # INSERIR LOGO NO EXCEL
+    # --------------------------------------------------------
 
     if caminho_logo is not None:
 
@@ -734,18 +822,22 @@ def gerar_excel():
                 str(caminho_logo)
             )
 
-            # ----------------------------------------------
-            # TAMANHO DA ÁREA A4:B8
-            # ----------------------------------------------
+            # ------------------------------------------------
+            # TAMANHO DO LOGO
+            # ------------------------------------------------
 
             logo.width = 230
             logo.height = 125
 
-            # ----------------------------------------------
+            # ------------------------------------------------
             # POSIÇÃO
-            # ----------------------------------------------
+            # ------------------------------------------------
 
             logo.anchor = "A4"
+
+            # ------------------------------------------------
+            # INSERIR DENTRO DO ARQUIVO XLSX
+            # ------------------------------------------------
 
             ws.add_image(
                 logo
@@ -759,32 +851,29 @@ def gerar_excel():
 
             ws["A4"].font = Font(
                 size=10,
+                bold=True,
                 color="CC0000"
+            )
+
+            ws["A4"].alignment = Alignment(
+                horizontal="center",
+                vertical="center",
+                wrap_text=True
             )
 
     else:
 
-        ws["A4"] = (
-            "LOGO NÃO ENCONTRADO\n\n"
-            "Coloque o arquivo do logo em:\n"
-            "assets/logo.png"
+        ws["A4"] = "LOGO"
+
+        ws["A4"].font = Font(
+            size=14,
+            bold=True,
+            color="808080"
         )
 
         ws["A4"].alignment = Alignment(
             horizontal="center",
-            vertical="center",
-            wrap_text=True
-        )
-
-        ws["A4"].font = Font(
-            size=10,
-            bold=True,
-            color="666666"
-        )
-
-        ws["A4"].fill = PatternFill(
-            "solid",
-            fgColor="F2F2F2"
+            vertical="center"
         )
 
 
@@ -1327,9 +1416,7 @@ def gerar_excel():
 
     ws.page_setup.orientation = "landscape"
 
-    ws.page_setup.paperSize = (
-        ws.PAPERSIZE_A4
-    )
+    ws.page_setup.paperSize = ws.PAPERSIZE_A4
 
     ws.page_setup.fitToWidth = 1
 
@@ -1345,6 +1432,11 @@ def gerar_excel():
     ws.page_margins.bottom = 0.40
     ws.page_margins.header = 0.20
     ws.page_margins.footer = 0.20
+
+    # --------------------------------------------------------
+    # ÁREA DE IMPRESSÃO
+    # --------------------------------------------------------
+    # Inclui A4:B8, onde está o logo.
 
     ws.print_area = (
         f"A1:F{linha_condicoes + 3}"
@@ -1580,7 +1672,7 @@ def gerar_excel():
 
 
     # ========================================================
-    # ARQUIVO
+    # ARQUIVO EXCEL
     # ========================================================
 
     output = BytesIO()
@@ -1603,26 +1695,38 @@ st.subheader(
 )
 
 
+# ============================================================
+# VERIFICAÇÃO DO LOGO NO SERVIDOR
+# ============================================================
+
 caminho_logo_teste = localizar_logo()
 
 
 if caminho_logo_teste:
 
     st.success(
-        f"✅ Logo encontrado: "
-        f"`{caminho_logo_teste}`"
+        "✅ Logo do sistema carregado e pronto "
+        "para ser incorporado ao Excel."
     )
 
 else:
 
     st.warning(
-        "⚠️ Logo não encontrado. "
-        "Coloque o arquivo em `assets/logo.png`."
+        "⚠️ O logo do sistema não foi encontrado "
+        "no servidor."
     )
 
 
+# ============================================================
+# GERAR EXCEL
+# ============================================================
+
 excel_data = gerar_excel()
 
+
+# ============================================================
+# NOME DO ARQUIVO
+# ============================================================
 
 nome_cliente = (
     cliente
@@ -1639,6 +1743,10 @@ nome_arquivo = (
     f"{data_projeto.strftime('%Y-%m-%d')}.xlsx"
 )
 
+
+# ============================================================
+# DOWNLOAD
+# ============================================================
 
 st.download_button(
 
@@ -1662,6 +1770,7 @@ st.download_button(
 
 
 st.caption(
-    "O logo é inserido automaticamente na área A4:B8 "
-    "do Excel e acompanha a área de impressão."
+    "O logo da empresa é incorporado automaticamente "
+    "ao arquivo Excel na área A4:B8 e acompanha "
+    "a área de impressão."
 )
