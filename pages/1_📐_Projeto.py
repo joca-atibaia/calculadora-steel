@@ -2,10 +2,15 @@ import streamlit as st
 import pandas as pd
 from datetime import date
 from io import BytesIO
-from pathlib import Path
 
 from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
+from openpyxl.styles import (
+    Font,
+    PatternFill,
+    Border,
+    Side,
+    Alignment
+)
 from openpyxl.drawing.image import Image as XLImage
 
 
@@ -122,6 +127,47 @@ with col_cli2:
 
 
 # ============================================================
+# LOGO DA EMPRESA
+# ============================================================
+
+st.header("🏢 Identidade da Empresa")
+
+st.markdown(
+    "Envie o logo da sua empresa. "
+    "Ele será inserido automaticamente no orçamento Excel "
+    "e aparecerá na área de impressão."
+)
+
+logo_upload = st.file_uploader(
+    "Logo da empresa",
+    type=["png", "jpg", "jpeg"],
+    help=(
+        "Envie o logo que deseja utilizar no orçamento. "
+        "O arquivo não precisa estar no projeto nem na pasta assets."
+    )
+)
+
+if logo_upload is not None:
+
+    st.success(
+        f"✅ Logo carregado: **{logo_upload.name}**"
+    )
+
+    st.image(
+        logo_upload,
+        caption="Pré-visualização do logo",
+        width=220
+    )
+
+else:
+
+    st.info(
+        "ℹ️ Nenhum logo foi enviado. "
+        "O orçamento continuará funcionando normalmente."
+    )
+
+
+# ============================================================
 # DIMENSÕES
 # ============================================================
 
@@ -195,8 +241,6 @@ qtd_parafuso = area_total * 0.5
 qtd_massa = area_total / 30.0
 qtd_tela = area_total / 40.0
 qtd_adesivo = area_total / 15.0
-
-# Manta somente para paredes
 qtd_manta = area_total / 50.0
 
 
@@ -534,95 +578,43 @@ st.sidebar.subheader(
 
 
 # ============================================================
-# FUNÇÃO — LOCALIZAR LOGO DO SISTEMA
+# FUNÇÃO — PREPARAR LOGO PARA O EXCEL
 # ============================================================
 
-def localizar_logo():
-
+def preparar_logo(logo_upload):
     """
-    Localiza o logo que pertence ao próprio projeto.
+    Converte o arquivo enviado pelo usuário para BytesIO.
 
-    IMPORTANTE:
-    Este arquivo é utilizado pelo servidor Streamlit.
-    O usuário final não precisa possuir o logo.
-
-    Como este código está dentro da pasta 'pages',
-    procuramos primeiro na pasta 'assets' da raiz
-    do projeto.
+    Não depende de assets, caminhos locais ou arquivos
+    existentes no servidor.
     """
+
+    if logo_upload is None:
+        return None
 
     try:
 
-        diretorio_atual = Path(__file__).resolve().parent
+        logo_bytes = logo_upload.getvalue()
+
+        if not logo_bytes:
+            return None
+
+        logo_stream = BytesIO(logo_bytes)
+
+        logo_stream.seek(0)
+
+        return logo_stream
 
     except Exception:
 
-        diretorio_atual = Path.cwd()
-
-
-    # ========================================================
-    # RAIZ DO PROJETO
-    # ========================================================
-
-    raiz_projeto = diretorio_atual.parent
-
-
-    caminhos = [
-
-        # ----------------------------------------------------
-        # LOCAL PRINCIPAL RECOMENDADO
-        # ----------------------------------------------------
-
-        raiz_projeto / "assets" / "logo.png",
-        raiz_projeto / "assets" / "logo.jpg",
-        raiz_projeto / "assets" / "logo.jpeg",
-        raiz_projeto / "assets" / "logo.webp",
-
-        # ----------------------------------------------------
-        # Caso o código esteja em outra estrutura
-        # ----------------------------------------------------
-
-        diretorio_atual / "assets" / "logo.png",
-        diretorio_atual / "assets" / "logo.jpg",
-        diretorio_atual / "assets" / "logo.jpeg",
-        diretorio_atual / "assets" / "logo.webp",
-
-        # ----------------------------------------------------
-        # Logo na raiz do projeto
-        # ----------------------------------------------------
-
-        raiz_projeto / "logo.png",
-        raiz_projeto / "logo.jpg",
-        raiz_projeto / "logo.jpeg",
-        raiz_projeto / "logo.webp",
-
-        # ----------------------------------------------------
-        # Logo ao lado do arquivo Python
-        # ----------------------------------------------------
-
-        diretorio_atual / "logo.png",
-        diretorio_atual / "logo.jpg",
-        diretorio_atual / "logo.jpeg",
-        diretorio_atual / "logo.webp",
-
-    ]
-
-
-    for caminho in caminhos:
-
-        if caminho.is_file():
-
-            return caminho
-
-
-    return None
+        return None
 
 
 # ============================================================
-# FUNÇÃO — GERAR EXCEL
+# FUNÇÃO PARA GERAR EXCEL
 # ============================================================
 
-def gerar_excel():
+def gerar_excel(logo_upload=None):
 
     wb = Workbook()
 
@@ -762,15 +754,10 @@ def gerar_excel():
 
 
     # ========================================================
-    # LOGO — ÁREA A4:B8
+    # LOGO — A4:B8
     # ========================================================
 
     ws.merge_cells("A4:B8")
-
-
-    # --------------------------------------------------------
-    # FORMATAÇÃO DA ÁREA DO LOGO
-    # --------------------------------------------------------
 
     for row in ws["A4:B8"]:
 
@@ -784,42 +771,21 @@ def gerar_excel():
             )
 
 
-    # --------------------------------------------------------
-    # ALTURA DAS LINHAS 4 ATÉ 8
-    # --------------------------------------------------------
+    # ========================================================
+    # INSERIR LOGO ENVIADO PELO USUÁRIO
+    # ========================================================
 
-    for numero_linha in range(4, 9):
-
-        ws.row_dimensions[
-            numero_linha
-        ].height = 25
+    logo_stream = preparar_logo(
+        logo_upload
+    )
 
 
-    # --------------------------------------------------------
-    # LARGURA DAS COLUNAS A E B
-    # --------------------------------------------------------
-
-    ws.column_dimensions["A"].width = 28
-    ws.column_dimensions["B"].width = 18
-
-
-    # --------------------------------------------------------
-    # LOCALIZAR LOGO DO PRÓPRIO SISTEMA
-    # --------------------------------------------------------
-
-    caminho_logo = localizar_logo()
-
-
-    # --------------------------------------------------------
-    # INSERIR LOGO NO EXCEL
-    # --------------------------------------------------------
-
-    if caminho_logo is not None:
+    if logo_stream is not None:
 
         try:
 
             logo = XLImage(
-                str(caminho_logo)
+                logo_stream
             )
 
             # ------------------------------------------------
@@ -835,23 +801,18 @@ def gerar_excel():
 
             logo.anchor = "A4"
 
-            # ------------------------------------------------
-            # INSERIR DENTRO DO ARQUIVO XLSX
-            # ------------------------------------------------
-
             ws.add_image(
                 logo
             )
 
-        except Exception:
+        except Exception as erro_logo:
 
             ws["A4"] = (
-                "Não foi possível carregar o logo."
+                "Não foi possível inserir o logo."
             )
 
             ws["A4"].font = Font(
                 size=10,
-                bold=True,
                 color="CC0000"
             )
 
@@ -863,17 +824,28 @@ def gerar_excel():
 
     else:
 
-        ws["A4"] = "LOGO"
-
-        ws["A4"].font = Font(
-            size=14,
-            bold=True,
-            color="808080"
+        ws["A4"] = (
+            "LOGO DA EMPRESA\n\n"
+            "Nenhum logo foi enviado.\n"
+            "O usuário poderá enviar um logo "
+            "no aplicativo."
         )
 
         ws["A4"].alignment = Alignment(
             horizontal="center",
-            vertical="center"
+            vertical="center",
+            wrap_text=True
+        )
+
+        ws["A4"].font = Font(
+            size=10,
+            bold=True,
+            color="666666"
+        )
+
+        ws["A4"].fill = PatternFill(
+            "solid",
+            fgColor="F2F2F2"
         )
 
 
@@ -1416,7 +1388,9 @@ def gerar_excel():
 
     ws.page_setup.orientation = "landscape"
 
-    ws.page_setup.paperSize = ws.PAPERSIZE_A4
+    ws.page_setup.paperSize = (
+        ws.PAPERSIZE_A4
+    )
 
     ws.page_setup.fitToWidth = 1
 
@@ -1432,11 +1406,6 @@ def gerar_excel():
     ws.page_margins.bottom = 0.40
     ws.page_margins.header = 0.20
     ws.page_margins.footer = 0.20
-
-    # --------------------------------------------------------
-    # ÁREA DE IMPRESSÃO
-    # --------------------------------------------------------
-    # Inclui A4:B8, onde está o logo.
 
     ws.print_area = (
         f"A1:F{linha_condicoes + 3}"
@@ -1672,7 +1641,7 @@ def gerar_excel():
 
 
     # ========================================================
-    # ARQUIVO EXCEL
+    # ARQUIVO
     # ========================================================
 
     output = BytesIO()
@@ -1696,32 +1665,12 @@ st.subheader(
 
 
 # ============================================================
-# VERIFICAÇÃO DO LOGO NO SERVIDOR
+# GERAR EXCEL COM O LOGO DO USUÁRIO
 # ============================================================
 
-caminho_logo_teste = localizar_logo()
-
-
-if caminho_logo_teste:
-
-    st.success(
-        "✅ Logo do sistema carregado e pronto "
-        "para ser incorporado ao Excel."
-    )
-
-else:
-
-    st.warning(
-        "⚠️ O logo do sistema não foi encontrado "
-        "no servidor."
-    )
-
-
-# ============================================================
-# GERAR EXCEL
-# ============================================================
-
-excel_data = gerar_excel()
+excel_data = gerar_excel(
+    logo_upload=logo_upload
+)
 
 
 # ============================================================
@@ -1735,6 +1684,11 @@ nome_cliente = (
     .replace("/", "_")
     .replace("\\", "_")
 )
+
+
+if not nome_cliente:
+
+    nome_cliente = "cliente"
 
 
 nome_arquivo = (
@@ -1769,8 +1723,20 @@ st.download_button(
 )
 
 
-st.caption(
-    "O logo da empresa é incorporado automaticamente "
-    "ao arquivo Excel na área A4:B8 e acompanha "
-    "a área de impressão."
-)
+# ============================================================
+# INFORMAÇÃO SOBRE O LOGO
+# ============================================================
+
+if logo_upload is not None:
+
+    st.success(
+        "✅ O logo enviado será incorporado automaticamente "
+        "na área A4:B8 do Excel e acompanhará a impressão."
+    )
+
+else:
+
+    st.caption(
+        "💡 Envie o logo da empresa acima para que ele seja "
+        "incorporado automaticamente na área A4:B8 do orçamento."
+    )
