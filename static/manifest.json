@@ -1,23 +1,23 @@
 {
   "name": "Calculadora Steel Framing",
-  "short_name": "Steel Framing",
-  "description": "Sistema profissional para orcamento, quantitativos de materiais e mao de obra em Steel Framing.",
-  "start_url": "/",
-  "scope": "/",
+  "short_name": "CalcSteel",
+  "description": "Sistema profissional para orçamento, quantitativos de materiais e mão de obra em Steel Framing.",
+  "start_url": "https://calculadora-steel-umexttf92r8dxf8p3f5rco.streamlit.app/",
+  "scope": "https://calculadora-steel-umexttf92r8dxf8p3f5rco.streamlit.app/",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#1f4e79",
+  "orientation": "portrait",
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "/app/static/icon-192.png",
+      "src": "https://calculadora-steel-umexttf92r8dxf8p3f5rco.streamlit.app/app/static/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/app/static/icon-512.png",
+      "src": "https://calculadora-steel-umexttf92r8dxf8p3f5rco.streamlit.app/app/static/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
