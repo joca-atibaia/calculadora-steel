@@ -135,6 +135,7 @@ st.markdown(
     div[data-testid="stTextArea"] label,
     div[data-testid="stRadio"] label,
     div[data-testid="stCheckbox"] label {
+
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         opacity: 1 !important;
@@ -150,6 +151,7 @@ st.markdown(
     div[data-testid="stTextArea"] label p,
     div[data-testid="stRadio"] label p,
     div[data-testid="stCheckbox"] label p {
+
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         opacity: 1 !important;
@@ -512,6 +514,20 @@ st.markdown(
 
 
 # ============================================================
+# AVISO DE PROJETO CALCULADO
+# ============================================================
+
+if st.session_state.get("mostrar_sucesso", False):
+
+    st.toast(
+        "PROJETO CALCULADO COM SUCESSO!",
+        icon="✅"
+    )
+
+    st.session_state["mostrar_sucesso"] = False
+
+
+# ============================================================
 # TÍTULO
 # ============================================================
 
@@ -532,12 +548,14 @@ st.header("📋 Informações Gerais")
 col_cli1, col_cli2 = st.columns(2)
 
 with col_cli1:
+
     cliente = st.text_input(
         "Nome do Cliente",
         value="João Silva"
     )
 
 with col_cli2:
+
     data_projeto = st.date_input(
         "Data do Orçamento",
         date.today()
@@ -553,6 +571,7 @@ st.header("🏠 Dimensões da Estrutura")
 col_dim1, col_dim2 = st.columns(2)
 
 with col_dim1:
+
     comprimento_paredes = st.number_input(
         "Comprimento Total das Paredes (m linear)",
         min_value=1.0,
@@ -561,6 +580,7 @@ with col_dim1:
     )
 
 with col_dim2:
+
     pe_direito = st.number_input(
         "Pé Direito (m)",
         min_value=1.0,
@@ -573,7 +593,10 @@ with col_dim2:
 # ÁREA
 # ============================================================
 
-area_total = comprimento_paredes * pe_direito
+area_total = (
+    comprimento_paredes
+    * pe_direito
+)
 
 st.info(
     f"📐 Área total calculada das paredes: "
@@ -586,6 +609,7 @@ st.info(
 # ============================================================
 
 PRECOS_BASE = {
+
     "perfil": 50.0,
     "guia": 50.0,
     "plywood": 80.0,
@@ -688,7 +712,6 @@ lista_materiais = [
         "qtd": qtd_manta,
         "preco": PRECOS_BASE["manta"]
     },
-
 ]
 
 
@@ -709,7 +732,12 @@ calcular_projeto = st.button(
 
 if calcular_projeto:
 
+    # ========================================================
+    # NOVAS QUANTIDADES
+    # ========================================================
+
     novas_quantidades = [
+
         qtd_perfil,
         qtd_guia,
         qtd_plywood,
@@ -723,27 +751,53 @@ if calcular_projeto:
         qtd_manta
     ]
 
-    for idx, quantidade in enumerate(novas_quantidades):
 
-        st.session_state[f"q_{idx}"] = float(
-            round(quantidade, 1)
+    # ========================================================
+    # GRAVA AS 11 QUANTIDADES NO SESSION STATE
+    # ========================================================
+
+    for idx, quantidade in enumerate(
+        novas_quantidades
+    ):
+
+        st.session_state[
+            f"q_{idx}"
+        ] = float(
+            round(
+                quantidade,
+                1
+            )
         )
+
+
+    # ========================================================
+    # MONTA O RESULTADO
+    # ========================================================
 
     dados_calculados = []
 
     total_materiais_calculado = 0.0
 
-    for idx, mat in enumerate(lista_materiais):
+
+    for idx, mat in enumerate(
+        lista_materiais
+    ):
 
         quantidade = float(
-            round(novas_quantidades[idx], 1)
+            round(
+                novas_quantidades[idx],
+                1
+            )
         )
 
         preco = float(
             mat["preco"]
         )
 
-        subtotal = quantidade * preco
+        subtotal = (
+            quantidade
+            * preco
+        )
 
         total_materiais_calculado += subtotal
 
@@ -756,18 +810,39 @@ if calcular_projeto:
             }
         )
 
+
+    # ========================================================
+    # MÃO DE OBRA
+    # ========================================================
+
     mao_de_obra_calculada = 11635.0
 
+
+    # ========================================================
+    # TOTAL GERAL
+    # ========================================================
+
     total_geral_calculado = (
+
         total_materiais_calculado
         + mao_de_obra_calculada
+
     )
 
-    st.session_state["projeto_calculado"] = {
 
-        "cliente": cliente,
+    # ========================================================
+    # GRAVA PROJETO
+    # ========================================================
 
-        "data_projeto": data_projeto,
+    st.session_state[
+        "projeto_calculado"
+    ] = {
+
+        "cliente":
+            cliente,
+
+        "data_projeto":
+            data_projeto,
 
         "comprimento_paredes":
             comprimento_paredes,
@@ -805,17 +880,23 @@ if calcular_projeto:
                 area_total
         },
 
-        "calculado": True
+        "calculado":
+            True
     }
 
+
     # ========================================================
-    # ATUALIZA A TELA APÓS O CÁLCULO
+    # MARCA PARA MOSTRAR MENSAGEM APÓS O RERUN
     # ========================================================
 
-    st.toast(
-        "PROJETO CALCULADO COM SUCESSO!",
-        icon="✅"
-    )
+    st.session_state[
+        "mostrar_sucesso"
+    ] = True
+
+
+    # ========================================================
+    # RECARREGA A TELA
+    # ========================================================
 
     st.rerun()
 
@@ -832,6 +913,7 @@ st.markdown(
     "As quantidades e os valores unitários podem ser ajustados."
 )
 
+
 dados_atualizados = []
 
 total_materiais = 0.0
@@ -839,13 +921,18 @@ total_materiais = 0.0
 col_grid1, col_grid2 = st.columns(2)
 
 
-for idx, mat in enumerate(lista_materiais):
+for idx, mat in enumerate(
+    lista_materiais
+):
 
     coluna_painel = (
+
         col_grid1
         if idx % 2 == 0
         else col_grid2
+
     )
+
 
     with coluna_painel:
 
@@ -858,46 +945,79 @@ for idx, mat in enumerate(lista_materiais):
             unsafe_allow_html=True
         )
 
+
         c_qtd, c_prc = st.columns(2)
+
 
         with c_qtd:
 
             nova_qtd = st.number_input(
+
                 f"{mat['nome']} (Qtd)",
+
                 min_value=0.0,
+
                 value=float(
-                    round(mat["qtd"], 1)
+                    round(
+                        mat["qtd"],
+                        1
+                    )
                 ),
+
                 key=f"q_{idx}"
             )
+
 
         with c_prc:
 
             novo_prc = st.number_input(
+
                 f"{mat['nome']} (Preço R$)",
+
                 min_value=0.0,
+
                 value=float(
                     mat["preco"]
                 ),
+
                 key=f"p_{idx}"
             )
 
+
         subtotal_calculado = (
-            nova_qtd * novo_prc
+
+            nova_qtd
+            * novo_prc
+
         )
 
-        total_materiais += subtotal_calculado
+
+        total_materiais += (
+            subtotal_calculado
+        )
+
 
         dados_atualizados.append(
+
             {
-                "Item": mat["nome"],
-                "Quantidade": nova_qtd,
-                "Preço Unitário": novo_prc,
-                "Total Item": subtotal_calculado
+                "Item":
+                    mat["nome"],
+
+                "Quantidade":
+                    nova_qtd,
+
+                "Preço Unitário":
+                    novo_prc,
+
+                "Total Item":
+                    subtotal_calculado
             }
+
         )
 
+
         st.markdown(
+
             f"""
             <div style="
                 background:#eef3f7;
@@ -911,6 +1031,7 @@ for idx, mat in enumerate(lista_materiais):
                 R$ {subtotal_calculado:,.2f}
             </div>
             """,
+
             unsafe_allow_html=True
         )
 
@@ -920,9 +1041,13 @@ for idx, mat in enumerate(lista_materiais):
 # ============================================================
 
 mao_de_obra = st.sidebar.number_input(
+
     "Mão de Obra Geral (R$)",
+
     min_value=0.0,
+
     value=11635.0,
+
     step=100.0
 )
 
@@ -932,8 +1057,10 @@ mao_de_obra = st.sidebar.number_input(
 # ============================================================
 
 total_geral = (
+
     total_materiais
     + mao_de_obra
+
 )
 
 
@@ -943,16 +1070,24 @@ total_geral = (
 
 st.markdown("---")
 
+
 if st.button(
+
     "🔄 ATUALIZAR CÁLCULO",
+
     use_container_width=True
+
 ):
 
-    st.session_state["projeto_calculado"] = {
+    st.session_state[
+        "projeto_calculado"
+    ] = {
 
-        "cliente": cliente,
+        "cliente":
+            cliente,
 
-        "data_projeto": data_projeto,
+        "data_projeto":
+            data_projeto,
 
         "comprimento_paredes":
             comprimento_paredes,
@@ -990,11 +1125,13 @@ if st.button(
                 area_total
         },
 
-        "calculado": True
+        "calculado":
+            True
     }
 
-    st.success(
-        "✅ Cálculo atualizado."
+    st.toast(
+        "CÁLCULO ATUALIZADO!",
+        icon="🔄"
     )
 
 
@@ -1006,18 +1143,29 @@ st.header(
     "📊 Resumo Consolidado do Orçamento"
 )
 
+
 df_resumo = pd.DataFrame(
     dados_atualizados
 )
 
+
 st.dataframe(
+
     df_resumo.style.format(
+
         {
-            "Quantidade": "{:.2f}",
-            "Preço Unitário": "R$ {:.2f}",
-            "Total Item": "R$ {:.2f}"
+            "Quantidade":
+                "{:.2f}",
+
+            "Preço Unitário":
+                "R$ {:.2f}",
+
+            "Total Item":
+                "R$ {:.2f}"
         }
+
     ),
+
     use_container_width=True
 )
 
@@ -1032,18 +1180,27 @@ st.sidebar.header(
 
 st.sidebar.markdown("---")
 
+
 st.sidebar.metric(
+
     label="Total Materiais",
+
     value=f"R$ {total_materiais:,.2f}"
 )
 
+
 st.sidebar.metric(
+
     label="Total Mão de Obra",
+
     value=f"R$ {mao_de_obra:,.2f}"
 )
 
+
 st.sidebar.subheader(
+
     f"Total Geral: R$ {total_geral:,.2f}"
+
 )
 
 
@@ -1066,11 +1223,13 @@ def localizar_logo():
         Path("logo.webp"),
     ]
 
+
     for caminho in caminhos:
 
         if caminho.exists():
 
             return caminho
+
 
     return None
 
@@ -1101,6 +1260,7 @@ def gerar_excel():
         "E": 22,
         "F": 22,
     }
+
 
     for coluna, largura in larguras.items():
 
@@ -1212,6 +1372,7 @@ def gerar_excel():
         vertical="center"
     )
 
+
     for row in ws["A1:F2"]:
 
         for cell in row:
@@ -1224,6 +1385,7 @@ def gerar_excel():
     # ========================================================
 
     ws.merge_cells("A4:B8")
+
 
     for row in ws["A4:B8"]:
 
@@ -1342,6 +1504,7 @@ def gerar_excel():
         ws[f"C{linha}"].font = fonte_cabecalho
 
         ws.merge_cells(
+
             start_row=linha,
             start_column=4,
             end_row=linha,
@@ -1411,6 +1574,7 @@ def gerar_excel():
         ws[f"A{linha}"].font = fonte_cabecalho
 
         ws.merge_cells(
+
             start_row=linha,
             start_column=2,
             end_row=linha,
@@ -1430,27 +1594,33 @@ def gerar_excel():
 
     linha_inicio_materiais = 18
 
+
     ws.merge_cells(
+
         start_row=linha_inicio_materiais,
         start_column=1,
         end_row=linha_inicio_materiais,
         end_column=6
     )
 
+
     ws.cell(
         linha_inicio_materiais,
         1
     ).value = "QUANTITATIVO DE MATERIAIS"
+
 
     ws.cell(
         linha_inicio_materiais,
         1
     ).fill = fundo_secao
 
+
     ws.cell(
         linha_inicio_materiais,
         1
     ).font = fonte_secao
+
 
     ws.cell(
         linha_inicio_materiais,
@@ -1473,6 +1643,7 @@ def gerar_excel():
         "Total",
         "Observação",
     ]
+
 
     linha_cabecalho = (
         linha_inicio_materiais + 1
@@ -1506,7 +1677,9 @@ def gerar_excel():
     # ITENS
     # ========================================================
 
-    linha = linha_cabecalho + 1
+    linha = (
+        linha_cabecalho + 1
+    )
 
 
     for item in dados_atualizados:
@@ -1516,30 +1689,39 @@ def gerar_excel():
             1
         ).value = item["Item"]
 
+
         ws.cell(
             linha,
             2
         ).value = item["Quantidade"]
+
 
         ws.cell(
             linha,
             3
         ).value = "un."
 
+
         ws.cell(
             linha,
             4
         ).value = item["Preço Unitário"]
 
+
         ws.cell(
             linha,
             5
-        ).value = f"=B{linha}*D{linha}"
+        ).value = (
+            f"=B{linha}*D{linha}"
+        )
+
 
         ws.cell(
             linha,
             6
-        ).value = "Quantidade e preço editáveis"
+        ).value = (
+            "Quantidade e preço editáveis"
+        )
 
 
         for col in range(1, 7):
@@ -1559,15 +1741,21 @@ def gerar_excel():
             2
         ).number_format = "0.00"
 
+
         ws.cell(
             linha,
             4
-        ).number_format = 'R$ #,##0.00'
+        ).number_format = (
+            'R$ #,##0.00'
+        )
+
 
         ws.cell(
             linha,
             5
-        ).number_format = 'R$ #,##0.00'
+        ).number_format = (
+            'R$ #,##0.00'
+        )
 
 
         linha += 1
@@ -1577,10 +1765,13 @@ def gerar_excel():
     # TOTAL MATERIAIS
     # ========================================================
 
-    linha_total_materiais = linha + 1
+    linha_total_materiais = (
+        linha + 1
+    )
 
 
     ws.merge_cells(
+
         start_row=linha_total_materiais,
         start_column=1,
         end_row=linha_total_materiais,
@@ -1593,10 +1784,12 @@ def gerar_excel():
         1
     ).value = "TOTAL DE MATERIAIS"
 
+
     ws.cell(
         linha_total_materiais,
         1
     ).font = fonte_total
+
 
     ws.cell(
         linha_total_materiais,
@@ -1608,7 +1801,10 @@ def gerar_excel():
         linha_cabecalho + 1
     )
 
-    ultima_linha = linha - 1
+
+    ultima_linha = (
+        linha - 1
+    )
 
 
     ws.cell(
@@ -1618,20 +1814,25 @@ def gerar_excel():
         f"=SUM(E{primeira_linha}:E{ultima_linha})"
     )
 
+
     ws.cell(
         linha_total_materiais,
         5
     ).font = fonte_total
+
 
     ws.cell(
         linha_total_materiais,
         5
     ).fill = fundo_total
 
+
     ws.cell(
         linha_total_materiais,
         5
-    ).number_format = 'R$ #,##0.00'
+    ).number_format = (
+        'R$ #,##0.00'
+    )
 
 
     # ========================================================
@@ -1644,6 +1845,7 @@ def gerar_excel():
 
 
     ws.merge_cells(
+
         start_row=linha_mao_obra,
         start_column=1,
         end_row=linha_mao_obra,
@@ -1656,10 +1858,12 @@ def gerar_excel():
         1
     ).value = "MÃO DE OBRA"
 
+
     ws.cell(
         linha_mao_obra,
         1
     ).font = fonte_total
+
 
     ws.cell(
         linha_mao_obra,
@@ -1672,20 +1876,25 @@ def gerar_excel():
         5
     ).value = mao_de_obra
 
+
     ws.cell(
         linha_mao_obra,
         5
     ).font = fonte_total
+
 
     ws.cell(
         linha_mao_obra,
         5
     ).fill = fundo_total
 
+
     ws.cell(
         linha_mao_obra,
         5
-    ).number_format = 'R$ #,##0.00'
+    ).number_format = (
+        'R$ #,##0.00'
+    )
 
 
     # ========================================================
@@ -1698,6 +1907,7 @@ def gerar_excel():
 
 
     ws.merge_cells(
+
         start_row=linha_total_geral,
         start_column=1,
         end_row=linha_total_geral,
@@ -1709,6 +1919,7 @@ def gerar_excel():
         linha_total_geral,
         1
     ).value = "TOTAL GERAL"
+
 
     ws.cell(
         linha_total_geral,
@@ -1724,9 +1935,12 @@ def gerar_excel():
         linha_total_geral,
         5
     ).value = (
+
         f"=E{linha_total_materiais}"
         f"+E{linha_mao_obra}"
+
     )
+
 
     ws.cell(
         linha_total_geral,
@@ -1737,10 +1951,13 @@ def gerar_excel():
         color="17202A"
     )
 
+
     ws.cell(
         linha_total_geral,
         5
-    ).number_format = 'R$ #,##0.00'
+    ).number_format = (
+        'R$ #,##0.00'
+    )
 
 
     for col in range(1, 6):
@@ -1764,6 +1981,7 @@ def gerar_excel():
 
 
     ws.merge_cells(
+
         start_row=linha_condicoes,
         start_column=1,
         end_row=linha_condicoes,
@@ -1778,10 +1996,12 @@ def gerar_excel():
         "CONDIÇÕES COMERCIAIS / OBSERVAÇÕES"
     )
 
+
     ws.cell(
         linha_condicoes,
         1
     ).fill = fundo_secao
+
 
     ws.cell(
         linha_condicoes,
@@ -1797,6 +2017,7 @@ def gerar_excel():
 
 
         ws.merge_cells(
+
             start_row=linha_obs,
             start_column=1,
             end_row=linha_obs,
@@ -1812,10 +2033,12 @@ def gerar_excel():
             "comerciais e observações."
         )
 
+
         ws.cell(
             linha_obs,
             1
         ).font = fonte_normal
+
 
         ws.cell(
             linha_obs,
@@ -1873,13 +2096,16 @@ def gerar_excel():
         "A"
     ].width = 35
 
+
     memoria.column_dimensions[
         "B"
     ].width = 20
 
+
     memoria.column_dimensions[
         "C"
     ].width = 45
+
 
     memoria.column_dimensions[
         "D"
@@ -1894,6 +2120,7 @@ def gerar_excel():
     memoria["A1"] = (
         "MEMÓRIA DE CÁLCULO"
     )
+
 
     memoria["A1"].font = fonte_titulo
 
@@ -2052,15 +2279,18 @@ def gerar_excel():
             1
         ).value = parametro
 
+
         memoria.cell(
             linha,
             2
         ).value = valor
 
+
         memoria.cell(
             linha,
             3
         ).value = criterio
+
 
         memoria.cell(
             linha,
@@ -2089,12 +2319,17 @@ def gerar_excel():
     # ========================================================
 
     memoria["A22"] = "TOTAL MATERIAIS"
+
     memoria["B22"] = total_materiais
 
+
     memoria["A23"] = "MÃO DE OBRA"
+
     memoria["B23"] = mao_de_obra
 
+
     memoria["A24"] = "TOTAL GERAL"
+
     memoria["B24"] = total_geral
 
 
@@ -2105,10 +2340,12 @@ def gerar_excel():
             1
         ).font = fonte_total
 
+
         memoria.cell(
             linha_total,
             2
         ).font = fonte_total
+
 
         memoria.cell(
             linha_total,
@@ -2196,6 +2433,7 @@ nome_arquivo = (
     f"orcamento_steel_framing_"
     f"{nome_cliente}_"
     f"{data_projeto.strftime('%Y-%m-%d')}.xlsx"
+
 )
 
 
