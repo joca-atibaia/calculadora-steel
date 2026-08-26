@@ -28,10 +28,6 @@ st.markdown(
     """
     <style>
 
-    /* ========================================================
-       CONFIGURAÇÃO GERAL
-       ======================================================== */
-
     html,
     body,
     [data-testid="stAppViewContainer"],
@@ -48,11 +44,6 @@ st.markdown(
         padding-top: 2rem;
         padding-bottom: 4rem;
     }
-
-
-    /* ========================================================
-       CABEÇALHO PRINCIPAL
-       ======================================================== */
 
     div[data-testid="stVerticalBlock"] > div:has(h1) {
         background: linear-gradient(
@@ -86,11 +77,6 @@ st.markdown(
         line-height: 1.6 !important;
         font-weight: 500 !important;
     }
-
-
-    /* ========================================================
-       TÍTULOS E TEXTOS
-       ======================================================== */
 
     h1,
     h2,
@@ -142,12 +128,6 @@ st.markdown(
         visibility: visible !important;
     }
 
-
-    /* ========================================================
-       LABELS DOS CAMPOS
-       CORREÇÃO PRINCIPAL
-       ======================================================== */
-
     div[data-testid="stTextInput"] label,
     div[data-testid="stNumberInput"] label,
     div[data-testid="stDateInput"] label,
@@ -155,7 +135,6 @@ st.markdown(
     div[data-testid="stTextArea"] label,
     div[data-testid="stRadio"] label,
     div[data-testid="stCheckbox"] label {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         opacity: 1 !important;
@@ -171,7 +150,6 @@ st.markdown(
     div[data-testid="stTextArea"] label p,
     div[data-testid="stRadio"] label p,
     div[data-testid="stCheckbox"] label p {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         opacity: 1 !important;
@@ -180,15 +158,9 @@ st.markdown(
         font-weight: 600 !important;
     }
 
-
-    /* ========================================================
-       INPUTS
-       ======================================================== */
-
     input,
     textarea,
     select {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         background-color: #ffffff !important;
@@ -198,7 +170,6 @@ st.markdown(
 
     input::placeholder,
     textarea::placeholder {
-
         color: #7f8c8d !important;
         -webkit-text-fill-color: #7f8c8d !important;
         opacity: 1 !important;
@@ -207,15 +178,9 @@ st.markdown(
     input:focus,
     textarea:focus,
     select:focus {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
     }
-
-
-    /* ========================================================
-       NUMBER INPUT
-       ======================================================== */
 
     div[data-testid="stNumberInput"] {
         background: #ffffff !important;
@@ -223,7 +188,6 @@ st.markdown(
     }
 
     div[data-testid="stNumberInput"] input {
-
         color: #17202a !important;
         background-color: #ffffff !important;
         caret-color: #17202a !important;
@@ -234,28 +198,20 @@ st.markdown(
     }
 
     div[data-testid="stNumberInput"] button {
-
         color: #17202a !important;
         background-color: #ffffff !important;
     }
 
     div[data-testid="stNumberInput"] button:hover {
-
         color: #17202a !important;
         background-color: #e9eef2 !important;
     }
-
-
-    /* ========================================================
-       TEXT INPUT
-       ======================================================== */
 
     div[data-testid="stTextInput"] {
         background: #ffffff !important;
     }
 
     div[data-testid="stTextInput"] input {
-
         color: #17202a !important;
         background-color: #ffffff !important;
         caret-color: #17202a !important;
@@ -264,13 +220,7 @@ st.markdown(
         visibility: visible !important;
     }
 
-
-    /* ========================================================
-       DATE INPUT
-       ======================================================== */
-
     div[data-testid="stDateInput"] input {
-
         color: #17202a !important;
         background-color: #ffffff !important;
         -webkit-text-fill-color: #17202a !important;
@@ -278,18 +228,11 @@ st.markdown(
         visibility: visible !important;
     }
 
-
-    /* ========================================================
-       BASEWEB INPUT
-       ======================================================== */
-
     div[data-baseweb="input"] {
-
         background-color: #ffffff !important;
     }
 
     div[data-baseweb="input"] input {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         background-color: #ffffff !important;
@@ -299,60 +242,35 @@ st.markdown(
         font-weight: 500 !important;
     }
 
-
-    /* ========================================================
-       SELECTBOX
-       ======================================================== */
-
     div[data-baseweb="select"] {
-
         background-color: #ffffff !important;
         color: #17202a !important;
     }
 
     div[data-baseweb="select"] * {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         opacity: 1 !important;
     }
 
-
-    /* ========================================================
-       RADIO / CHECKBOX
-       ======================================================== */
-
     div[data-testid="stRadio"] label,
     div[data-testid="stRadio"] label p,
     div[data-testid="stCheckbox"] label,
     div[data-testid="stCheckbox"] label p {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         opacity: 1 !important;
         visibility: visible !important;
     }
 
-
-    /* ========================================================
-       TEXTAREA
-       ======================================================== */
-
     div[data-testid="stTextArea"] textarea {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         background-color: #ffffff !important;
         opacity: 1 !important;
     }
 
-
-    /* ========================================================
-       NOMES DOS MATERIAIS
-       ======================================================== */
-
     .nome-material {
-
         color: #17202A !important;
         background-color: #ffffff !important;
         font-size: 1.25rem !important;
@@ -366,22 +284,11 @@ st.markdown(
         border-left: 5px solid #6fa8c9 !important;
     }
 
-
-    /* ========================================================
-       SUBTOTAIS
-       ======================================================== */
-
     .stWrite {
         color: #17202a !important;
     }
 
-
-    /* ========================================================
-       BOTÕES NORMAIS
-       ======================================================== */
-
     div.stButton > button {
-
         color: #17202a !important;
         background-color: #ffffff !important;
         border: 1px solid #b7c3cc !important;
@@ -390,19 +297,12 @@ st.markdown(
     }
 
     div.stButton > button:hover {
-
         color: #17202a !important;
         background-color: #e9eef2 !important;
         border-color: #6fa8c9 !important;
     }
 
-
-    /* ========================================================
-       BOTÃO CALCULAR
-       ======================================================== */
-
     div.stButton > button[kind="primary"] {
-
         height: 60px;
         color: #ffffff !important;
         background: linear-gradient(
@@ -420,13 +320,11 @@ st.markdown(
 
     div.stButton > button[kind="primary"] p,
     div.stButton > button[kind="primary"] span {
-
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
     }
 
     div.stButton > button[kind="primary"]:hover {
-
         color: #ffffff !important;
         background: linear-gradient(
             135deg,
@@ -435,13 +333,7 @@ st.markdown(
         ) !important;
     }
 
-
-    /* ========================================================
-       BOTÃO EXCEL
-       ======================================================== */
-
     div[data-testid="stDownloadButton"] button {
-
         color: #ffffff !important;
         background: linear-gradient(
             135deg,
@@ -458,13 +350,11 @@ st.markdown(
 
     div[data-testid="stDownloadButton"] button p,
     div[data-testid="stDownloadButton"] button span {
-
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
     }
 
     div[data-testid="stDownloadButton"] button:hover {
-
         color: #ffffff !important;
         background: linear-gradient(
             135deg,
@@ -473,177 +363,111 @@ st.markdown(
         ) !important;
     }
 
-
-    /* ========================================================
-       EXPANDER
-       ======================================================== */
-
     details,
     [data-testid="stExpander"] {
-
         background-color: #ffffff !important;
         border-radius: 10px !important;
     }
 
     [data-testid="stExpander"] summary {
-
         color: #17202a !important;
         background-color: #ffffff !important;
         font-weight: 700 !important;
     }
 
     [data-testid="stExpander"] summary p {
-
         color: #17202a !important;
         font-weight: 700 !important;
     }
 
     [data-testid="stExpander"] summary span {
-
         color: #17202a !important;
     }
 
-
-    /* ========================================================
-       TABS
-       ======================================================== */
-
     button[data-baseweb="tab"] {
-
         color: #17202a !important;
         font-weight: 700 !important;
     }
 
     button[data-baseweb="tab"][aria-selected="true"] {
-
         color: #17202a !important;
         font-weight: 800 !important;
     }
 
-
-    /* ========================================================
-       SIDEBAR
-       ======================================================== */
-
     section[data-testid="stSidebar"] {
-
         background-color: #ffffff !important;
     }
 
     section[data-testid="stSidebar"] * {
-
         color: #17202a !important;
     }
 
     section[data-testid="stSidebar"] label,
     section[data-testid="stSidebar"] label p {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
         opacity: 1 !important;
     }
 
     section[data-testid="stSidebar"] input {
-
         color: #17202a !important;
         background-color: #ffffff !important;
         -webkit-text-fill-color: #17202a !important;
     }
-
-
-    /* ========================================================
-       MÉTRICAS
-       ======================================================== */
 
     [data-testid="stMetricLabel"],
     [data-testid="stMetricLabel"] p,
     [data-testid="stMetricValue"],
     [data-testid="stMetricDelta"] {
-
         color: #17202a !important;
         -webkit-text-fill-color: #17202a !important;
     }
 
-
-    /* ========================================================
-       ALERTAS
-       ======================================================== */
-
     [data-testid="stAlert"],
     [data-testid="stAlert"] p {
-
         color: #17202a !important;
     }
 
-
-    /* ========================================================
-       TABELA
-       ======================================================== */
-
     [data-testid="stDataFrame"] {
-
         background-color: #ffffff !important;
         border-radius: 10px !important;
     }
 
-
-    /* ========================================================
-       FILE UPLOADER
-       ======================================================== */
-
     [data-testid="stFileUploader"] {
-
         background-color: #ffffff !important;
         color: #17202a !important;
     }
 
     [data-testid="stFileUploader"] * {
-
         color: #17202a !important;
     }
 
-
-    /* ========================================================
-       LINKS
-       ======================================================== */
-
     a {
-
         color: #1f5f8b !important;
     }
-
-
-    /* ========================================================
-       WEBVIEW / ANDROID / TABLET
-       ======================================================== */
 
     @media (max-width: 768px) {
 
         .block-container {
-
             padding-top: 1rem;
             padding-left: 1rem;
             padding-right: 1rem;
         }
 
         div[data-testid="stVerticalBlock"] > div:has(h1) {
-
             padding: 25px 20px 22px 20px;
             border-radius: 14px;
         }
 
         div[data-testid="stVerticalBlock"] h1 {
-
             font-size: 2.2rem !important;
         }
 
         div[data-testid="stVerticalBlock"] h1 + p {
-
             font-size: 1rem !important;
         }
 
         div.stButton > button[kind="primary"] {
-
             height: 58px !important;
             font-size: 1.05rem !important;
         }
@@ -653,7 +477,6 @@ st.markdown(
         div[data-testid="stDateInput"] label,
         div[data-testid="stSelectbox"] label,
         div[data-testid="stTextArea"] label {
-
             color: #17202a !important;
             -webkit-text-fill-color: #17202a !important;
             opacity: 1 !important;
@@ -666,7 +489,6 @@ st.markdown(
         div[data-testid="stDateInput"] label p,
         div[data-testid="stSelectbox"] label p,
         div[data-testid="stTextArea"] label p {
-
             color: #17202a !important;
             -webkit-text-fill-color: #17202a !important;
             opacity: 1 !important;
@@ -677,7 +499,6 @@ st.markdown(
         div[data-testid="stTextInput"] input,
         div[data-testid="stNumberInput"] input,
         div[data-testid="stDateInput"] input {
-
             color: #17202a !important;
             -webkit-text-fill-color: #17202a !important;
             background-color: #ffffff !important;
@@ -888,10 +709,6 @@ calcular_projeto = st.button(
 
 if calcular_projeto:
 
-    # ========================================================
-    # ATUALIZA OS CAMPOS DE QUANTIDADE COM O NOVO CÁLCULO
-    # ========================================================
-
     novas_quantidades = [
         qtd_perfil,
         qtd_guia,
@@ -911,10 +728,6 @@ if calcular_projeto:
         st.session_state[f"q_{idx}"] = float(
             round(quantidade, 1)
         )
-
-    # ========================================================
-    # MONTA O RESULTADO DO NOVO CÁLCULO
-    # ========================================================
 
     dados_calculados = []
 
@@ -995,10 +808,16 @@ if calcular_projeto:
         "calculado": True
     }
 
-    st.success(
-        "✅ PROJETO CALCULADO COM SUCESSO!"
+    # ========================================================
+    # ATUALIZA A TELA APÓS O CÁLCULO
+    # ========================================================
+
+    st.toast(
+        "PROJETO CALCULADO COM SUCESSO!",
+        icon="✅"
     )
-       
+
+    st.rerun()
 
 
 # ============================================================
