@@ -888,14 +888,42 @@ calcular_projeto = st.button(
 
 if calcular_projeto:
 
+    # ========================================================
+    # ATUALIZA OS CAMPOS DE QUANTIDADE COM O NOVO CÁLCULO
+    # ========================================================
+
+    novas_quantidades = [
+        qtd_perfil,
+        qtd_guia,
+        qtd_plywood,
+        qtd_placa_st,
+        qtd_cimenticia,
+        qtd_la,
+        qtd_parafuso,
+        qtd_massa,
+        qtd_tela,
+        qtd_adesivo,
+        qtd_manta
+    ]
+
+    for idx, quantidade in enumerate(novas_quantidades):
+
+        st.session_state[f"q_{idx}"] = float(
+            round(quantidade, 1)
+        )
+
+    # ========================================================
+    # MONTA O RESULTADO DO NOVO CÁLCULO
+    # ========================================================
+
     dados_calculados = []
 
     total_materiais_calculado = 0.0
 
-    for mat in lista_materiais:
+    for idx, mat in enumerate(lista_materiais):
 
         quantidade = float(
-            round(mat["qtd"], 1)
+            round(novas_quantidades[idx], 1)
         )
 
         preco = float(
@@ -968,6 +996,8 @@ if calcular_projeto:
     }
 
     st.success(
+        "✅ PROJETO CALCULADO COM SUCESSO!"
+    )
         "✅ PROJETO CALCULADO COM SUCESSO!"
     )
 
