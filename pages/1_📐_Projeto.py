@@ -998,8 +998,7 @@ if calcular_projeto:
     st.success(
         "✅ PROJETO CALCULADO COM SUCESSO!"
     )
-        "✅ PROJETO CALCULADO COM SUCESSO!"
-    )
+       
 
 
 # ============================================================
