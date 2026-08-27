@@ -483,7 +483,7 @@ st.markdown(
         color: #17202a !important;
         font-size: 1.2rem !important;
         font-weight: 800 !important;
-        margin-top: 10px;
+        margin-top: 10px !important;
     }
 
     @media (max-width: 768px) {
@@ -852,17 +852,20 @@ if calcular_projeto:
     # ========================================================
     # MÃO DE OBRA
     # ========================================================
-    #
-    # Mantém o valor padrão anterior de R$ 11.635,00.
-    # A quantidade de dias e o valor diário são editáveis
-    # na tela principal.
-    #
-    # 7 dias x R$ 1.662,14 = R$ 11.635,00
-    # ========================================================
 
-    dias_mao_de_obra = 7.0
+    dias_mao_de_obra = float(
+        st.session_state.get(
+            "dias_mao_de_obra",
+            7.0
+        )
+    )
 
-    valor_dia_mao_de_obra = 1662.14
+    valor_dia_mao_de_obra = float(
+        st.session_state.get(
+            "valor_dia_mao_de_obra",
+            1662.14
+        )
+    )
 
     mao_de_obra_calculada = (
         dias_mao_de_obra
@@ -1107,22 +1110,12 @@ st.markdown("---")
 
 st.header("👷 Mão de Obra")
 
+st.write("💰 Cálculo da Mão de Obra")
 
-st.markdown(
-    """
-    <div class="painel-mao-obra">
-        <div class="titulo-mao-obra">
-            💰 Cálculo da Mão de Obra
-        </div>
-
-        <div class="descricao-mao-obra">
-            Informe quantos dias serão necessários e quanto será
-            cobrado por dia. O sistema calcula automaticamente
-            o valor total da mão de obra.
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
+st.write(
+    "Informe quantos dias serão necessários e quanto será "
+    "cobrado por dia. O sistema calcula automaticamente "
+    "o valor total da mão de obra."
 )
 
 
