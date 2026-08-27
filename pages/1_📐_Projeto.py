@@ -1,3 +1,4 @@
+```python
 import streamlit as st
 import pandas as pd
 from datetime import date
@@ -716,6 +717,139 @@ lista_materiais = [
 
 
 # ============================================================
+# INSUMOS
+# ============================================================
+
+st.header(
+    "📋 Insumos Calculados Automaticamente"
+)
+
+st.markdown(
+    "As quantidades e os valores unitários podem ser ajustados."
+)
+
+dados_atualizados = []
+
+total_materiais = 0.0
+
+col_grid1, col_grid2 = st.columns(2)
+
+
+for idx, mat in enumerate(lista_materiais):
+
+    coluna_painel = (
+        col_grid1
+        if idx % 2 == 0
+        else col_grid2
+    )
+
+    with coluna_painel:
+
+        st.markdown(
+            f"""
+            <div class="nome-material">
+                🔹 {mat["nome"]}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        c_qtd, c_prc = st.columns(2)
+
+        with c_qtd:
+
+            nova_qtd = st.number_input(
+                f"{mat['nome']} (Qtd)",
+                min_value=0.0,
+                value=float(
+                    round(
+                        mat["qtd"],
+                        1
+                    )
+                ),
+                key=f"q_{idx}"
+            )
+
+        with c_prc:
+
+            novo_prc = st.number_input(
+                f"{mat['nome']} (Preço R$)",
+                min_value=0.0,
+                value=float(
+                    mat["preco"]
+                ),
+                key=f"p_{idx}"
+            )
+
+        subtotal_calculado = (
+            nova_qtd
+            * novo_prc
+        )
+
+        total_materiais += (
+            subtotal_calculado
+        )
+
+        dados_atualizados.append(
+            {
+                "Item": mat["nome"],
+                "Quantidade": nova_qtd,
+                "Preço Unitário": novo_prc,
+                "Total Item": subtotal_calculado
+            }
+        )
+
+        st.markdown(
+            f"""
+            <div style="
+                background:#eef3f7;
+                padding:10px 14px;
+                border-radius:8px;
+                margin:6px 0 12px 0;
+                color:#17202a;
+                font-weight:700;
+            ">
+                Subtotal do Item:
+                R$ {subtotal_calculado:,.2f}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+# ============================================================
+# MÃO DE OBRA
+# ============================================================
+
+st.markdown("---")
+
+st.header("👷 Mão de Obra")
+
+mao_de_obra = st.number_input(
+    "Mão de Obra Geral (R$)",
+    min_value=0.0,
+    value=11635.0,
+    step=100.0,
+    key="mao_de_obra_input"
+)
+
+st.info(
+    f"💰 Valor da mão de obra: "
+    f"**R$ {mao_de_obra:,.2f}**"
+)
+
+
+# ============================================================
+# TOTAL
+# ============================================================
+
+total_geral = (
+    total_materiais
+    + mao_de_obra
+)
+
+
+# ============================================================
 # CÁLCULO DO PROJETO
 # ============================================================
 
@@ -815,7 +949,9 @@ if calcular_projeto:
     # MÃO DE OBRA
     # ========================================================
 
-    mao_de_obra_calculada = 11635.0
+    mao_de_obra_calculada = float(
+        mao_de_obra
+    )
 
 
     # ========================================================
@@ -823,10 +959,8 @@ if calcular_projeto:
     # ========================================================
 
     total_geral_calculado = (
-
         total_materiais_calculado
         + mao_de_obra_calculada
-
     )
 
 
@@ -902,169 +1036,6 @@ if calcular_projeto:
 
 
 # ============================================================
-# INSUMOS
-# ============================================================
-
-st.header(
-    "📋 Insumos Calculados Automaticamente"
-)
-
-st.markdown(
-    "As quantidades e os valores unitários podem ser ajustados."
-)
-
-
-dados_atualizados = []
-
-total_materiais = 0.0
-
-col_grid1, col_grid2 = st.columns(2)
-
-
-for idx, mat in enumerate(
-    lista_materiais
-):
-
-    coluna_painel = (
-
-        col_grid1
-        if idx % 2 == 0
-        else col_grid2
-
-    )
-
-
-    with coluna_painel:
-
-        st.markdown(
-            f"""
-            <div class="nome-material">
-                🔹 {mat["nome"]}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-        c_qtd, c_prc = st.columns(2)
-
-
-        with c_qtd:
-
-            nova_qtd = st.number_input(
-
-                f"{mat['nome']} (Qtd)",
-
-                min_value=0.0,
-
-                value=float(
-                    round(
-                        mat["qtd"],
-                        1
-                    )
-                ),
-
-                key=f"q_{idx}"
-            )
-
-
-        with c_prc:
-
-            novo_prc = st.number_input(
-
-                f"{mat['nome']} (Preço R$)",
-
-                min_value=0.0,
-
-                value=float(
-                    mat["preco"]
-                ),
-
-                key=f"p_{idx}"
-            )
-
-
-        subtotal_calculado = (
-
-            nova_qtd
-            * novo_prc
-
-        )
-
-
-        total_materiais += (
-            subtotal_calculado
-        )
-
-
-        dados_atualizados.append(
-
-            {
-                "Item":
-                    mat["nome"],
-
-                "Quantidade":
-                    nova_qtd,
-
-                "Preço Unitário":
-                    novo_prc,
-
-                "Total Item":
-                    subtotal_calculado
-            }
-
-        )
-
-
-        st.markdown(
-
-            f"""
-            <div style="
-                background:#eef3f7;
-                padding:10px 14px;
-                border-radius:8px;
-                margin:6px 0 12px 0;
-                color:#17202a;
-                font-weight:700;
-            ">
-                Subtotal do Item:
-                R$ {subtotal_calculado:,.2f}
-            </div>
-            """,
-
-            unsafe_allow_html=True
-        )
-
-
-# ============================================================
-# MÃO DE OBRA
-# ============================================================
-
-mao_de_obra = st.sidebar.number_input(
-
-    "Mão de Obra Geral (R$)",
-
-    min_value=0.0,
-
-    value=11635.0,
-
-    step=100.0
-)
-
-
-# ============================================================
-# TOTAL
-# ============================================================
-
-total_geral = (
-
-    total_materiais
-    + mao_de_obra
-
-)
-
-
-# ============================================================
 # ATUALIZAR CÁLCULO
 # ============================================================
 
@@ -1072,11 +1043,8 @@ st.markdown("---")
 
 
 if st.button(
-
     "🔄 ATUALIZAR CÁLCULO",
-
     use_container_width=True
-
 ):
 
     st.session_state[
@@ -1171,7 +1139,7 @@ st.dataframe(
 
 
 # ============================================================
-# SIDEBAR
+# SIDEBAR — CUSTOS
 # ============================================================
 
 st.sidebar.header(
@@ -1182,25 +1150,19 @@ st.sidebar.markdown("---")
 
 
 st.sidebar.metric(
-
     label="Total Materiais",
-
     value=f"R$ {total_materiais:,.2f}"
 )
 
 
 st.sidebar.metric(
-
     label="Total Mão de Obra",
-
     value=f"R$ {mao_de_obra:,.2f}"
 )
 
 
 st.sidebar.subheader(
-
     f"Total Geral: R$ {total_geral:,.2f}"
-
 )
 
 
@@ -2465,3 +2427,4 @@ st.caption(
     "O logo é inserido automaticamente na área A4:B8 "
     "do Excel e acompanha a área de impressão."
 )
+```
