@@ -21,18 +21,262 @@ st.markdown(
     """
     <style>
 
-    html, body, [data-testid="stAppViewContainer"], .stApp {
+    /* ========================================================
+       CONFIGURAÇÃO GERAL
+       ======================================================== */
+
+    html,
+    body,
+    [data-testid="stAppViewContainer"],
+    .stApp {
         font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+        background-color: #f5f7fa !important;
+        color: #17202a !important;
     }
 
-    .stApp {
-        background: #f5f7fa;
-    }
 
     .block-container {
-        max-width: 1400px;
-        padding-top: 2rem;
-        padding-bottom: 4rem;
+        max-width: 1400px !important;
+        padding-top: 2rem !important;
+        padding-bottom: 4rem !important;
+    }
+
+
+    /* ========================================================
+       TEXTOS GERAIS
+       ======================================================== */
+
+    p,
+    span,
+    div,
+    label,
+    small {
+        opacity: 1 !important;
+    }
+
+
+    [data-testid="stMarkdownContainer"],
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] span,
+    [data-testid="stCaptionContainer"],
+    [data-testid="stCaptionContainer"] p {
+        color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+
+    /* ========================================================
+       TÍTULOS
+       ======================================================== */
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        -webkit-text-fill-color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       MÉTRICAS
+       ======================================================== */
+
+    [data-testid="stMetric"] {
+        background-color: #ffffff !important;
+        border: 1px solid #d8e0e7 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.05) !important;
+    }
+
+
+    [data-testid="stMetricLabel"],
+    [data-testid="stMetricLabel"] p,
+    [data-testid="stMetricLabel"] span {
+        color: #566573 !important;
+        -webkit-text-fill-color: #566573 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        font-weight: 700 !important;
+    }
+
+
+    [data-testid="stMetricValue"],
+    [data-testid="stMetricValue"] div,
+    [data-testid="stMetricValue"] p {
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        font-weight: 800 !important;
+    }
+
+
+    [data-testid="stMetricDelta"],
+    [data-testid="stMetricDelta"] div,
+    [data-testid="stMetricDelta"] p,
+    [data-testid="stMetricDelta"] span {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+
+    /* ========================================================
+       AVISOS
+       ======================================================== */
+
+    [data-testid="stAlert"] {
+        opacity: 1 !important;
+        visibility: visible !important;
+        border-radius: 10px !important;
+    }
+
+
+    [data-testid="stAlert"] p,
+    [data-testid="stAlert"] span,
+    [data-testid="stAlert"] div {
+        opacity: 1 !important;
+        visibility: visible !important;
+        color: #17202a !important;
+        -webkit-text-fill-color: #17202a !important;
+    }
+
+
+    /* ========================================================
+       CAPTION
+       ======================================================== */
+
+    [data-testid="stCaptionContainer"],
+    [data-testid="stCaptionContainer"] p {
+        color: #566573 !important;
+        -webkit-text-fill-color: #566573 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+
+    /* ========================================================
+       DATAFRAME / TABELAS
+       ======================================================== */
+
+    [data-testid="stDataFrame"] {
+        background-color: #ffffff !important;
+        border-radius: 10px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+
+    [data-testid="stDataFrame"] * {
+        opacity: 1 !important;
+    }
+
+
+    /* ========================================================
+       PROGRESS
+       ======================================================== */
+
+    [data-testid="stProgress"] {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+
+    /* ========================================================
+       GRÁFICOS
+       ======================================================== */
+
+    [data-testid="stArrowVegaLiteChart"],
+    [data-testid="stVegaLiteChart"],
+    [data-testid="stGraphVizChart"],
+    [data-testid="stPydeckChart"] {
+        opacity: 1 !important;
+        visibility: visible !important;
+        background-color: #ffffff !important;
+        border-radius: 10px !important;
+    }
+
+
+    /* ========================================================
+       SEPARADORES
+       ======================================================== */
+
+    hr {
+        border: none !important;
+        border-top: 1px solid #d8e0e7 !important;
+        opacity: 1 !important;
+    }
+
+
+    /* ========================================================
+       MOBILE
+       ======================================================== */
+
+    @media (max-width: 768px) {
+
+        .block-container {
+            padding-top: 1rem !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+
+        h1 {
+            font-size: 2rem !important;
+            line-height: 1.2 !important;
+        }
+
+
+        h2 {
+            font-size: 1.55rem !important;
+        }
+
+
+        h3 {
+            font-size: 1.25rem !important;
+        }
+
+
+        [data-testid="stMetric"] {
+            padding: 13px !important;
+            margin-bottom: 10px !important;
+        }
+
+
+        [data-testid="stMetricLabel"],
+        [data-testid="stMetricLabel"] p {
+            font-size: 0.85rem !important;
+        }
+
+
+        [data-testid="stMetricValue"] {
+            font-size: 1.45rem !important;
+        }
+
+
+        [data-testid="stMetricDelta"] {
+            font-size: 0.78rem !important;
+        }
+
+
+        [data-testid="stDataFrame"] {
+            width: 100% !important;
+            overflow-x: auto !important;
+        }
+
+
+        [data-testid="stCaptionContainer"],
+        [data-testid="stCaptionContainer"] p {
+            font-size: 0.85rem !important;
+            line-height: 1.4 !important;
+        }
     }
 
     </style>
@@ -183,11 +427,6 @@ else:
 
 # ============================================================
 # IDENTIFICA MASSAS E TELAS
-#
-# IMPORTANTE:
-# Massas e Telas já estão incluídas em total_materiais.
-# Portanto, serão mostradas apenas como composição interna
-# dos materiais e NÃO serão somadas novamente ao custo geral.
 # ============================================================
 
 massas_telas = 0.0
@@ -216,13 +455,7 @@ for item in dados_atualizados:
 
 
 # ============================================================
-# PERCENTUAIS CORRETOS
-#
-# O custo geral é:
-#
-# MATERIAIS + MÃO DE OBRA
-#
-# Massas e Telas NÃO entram novamente aqui.
+# PERCENTUAIS
 # ============================================================
 
 if total_geral > 0:
