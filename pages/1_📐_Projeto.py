@@ -448,6 +448,44 @@ st.markdown(
         color: #1f5f8b !important;
     }
 
+    /* ========================================================
+       PAINEL DE MÃO DE OBRA
+       ======================================================== */
+
+    .painel-mao-obra {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 20px 22px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #d8e0e7;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .titulo-mao-obra {
+        color: #17202a !important;
+        font-size: 1.35rem !important;
+        font-weight: 800 !important;
+        margin-bottom: 5px !important;
+    }
+
+    .descricao-mao-obra {
+        color: #566573 !important;
+        font-size: 0.95rem !important;
+        margin-bottom: 15px !important;
+    }
+
+    .total-mao-obra {
+        background: #e2f0d9;
+        border-left: 5px solid #70ad47;
+        border-radius: 8px;
+        padding: 13px 16px;
+        color: #17202a !important;
+        font-size: 1.2rem !important;
+        font-weight: 800 !important;
+        margin-top: 10px;
+    }
+
     @media (max-width: 768px) {
 
         .block-container {
@@ -716,15 +754,6 @@ lista_materiais = [
 
 
 # ============================================================
-# MÃO DE OBRA — VALOR PADRÃO
-# ============================================================
-
-if "mao_de_obra" not in st.session_state:
-
-    st.session_state["mao_de_obra"] = 11635.0
-
-
-# ============================================================
 # CÁLCULO DO PROJETO
 # ============================================================
 
@@ -823,9 +852,26 @@ if calcular_projeto:
     # ========================================================
     # MÃO DE OBRA
     # ========================================================
+    #
+    # Mantém o valor padrão anterior de R$ 11.635,00.
+    # A quantidade de dias e o valor diário são editáveis
+    # na tela principal.
+    #
+    # 7 dias x R$ 1.662,14 = R$ 11.635,00
+    # ========================================================
 
-    mao_de_obra_calculada = float(
-        st.session_state["mao_de_obra"]
+    dias_mao_de_obra = 7.0
+
+    valor_dia_mao_de_obra = 1662.14
+
+    mao_de_obra_calculada = (
+        dias_mao_de_obra
+        * valor_dia_mao_de_obra
+    )
+
+    mao_de_obra_calculada = round(
+        mao_de_obra_calculada,
+        2
     )
 
 
@@ -872,6 +918,12 @@ if calcular_projeto:
 
         "total_materiais":
             total_materiais_calculado,
+
+        "dias_mao_de_obra":
+            dias_mao_de_obra,
+
+        "valor_dia_mao_de_obra":
+            valor_dia_mao_de_obra,
 
         "mao_de_obra":
             mao_de_obra_calculada,
@@ -1048,23 +1100,134 @@ for idx, mat in enumerate(
 
 
 # ============================================================
-# MÃO DE OBRA
+# MÃO DE OBRA — VISÍVEL NA TELA PRINCIPAL
 # ============================================================
 
 st.markdown("---")
 
 st.header("👷 Mão de Obra")
 
-mao_de_obra = st.number_input(
 
-    "Mão de Obra Geral (R$)",
+st.markdown(
+    """
+    <div class="painel-mao-obra">
+        <div class="titulo-mao-obra">
+            💰 Cálculo da Mão de Obra
+        </div>
 
-    min_value=0.0,
-
-    step=100.0,
-
-    key="mao_de_obra"
+        <div class="descricao-mao-obra">
+            Informe quantos dias serão necessários e quanto será
+            cobrado por dia. O sistema calcula automaticamente
+            o valor total da mão de obra.
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
+
+
+# ============================================================
+# RECUPERA VALORES DO SESSION STATE
+# ============================================================
+
+if "dias_mao_de_obra" not in st.session_state:
+
+    st.session_state[
+        "dias_mao_de_obra"
+    ] = 7.0
+
+
+if "valor_dia_mao_de_obra" not in st.session_state:
+
+    st.session_state[
+        "valor_dia_mao_de_obra"
+    ] = 1662.14
+
+
+# ============================================================
+# CAMPOS DE MÃO DE OBRA
+# ============================================================
+
+col_mao1, col_mao2, col_mao3 = st.columns(3)
+
+
+with col_mao1:
+
+    dias_mao_de_obra = st.number_input(
+
+        "📅 Dias de trabalho",
+
+        min_value=0.0,
+
+        value=float(
+            st.session_state[
+                "dias_mao_de_obra"
+            ]
+        ),
+
+        step=1.0,
+
+        key="dias_mao_de_obra_input"
+    )
+
+
+with col_mao2:
+
+    valor_dia_mao_de_obra = st.number_input(
+
+        "💵 Valor cobrado por dia (R$)",
+
+        min_value=0.0,
+
+        value=float(
+            st.session_state[
+                "valor_dia_mao_de_obra"
+            ]
+        ),
+
+        step=100.0,
+
+        key="valor_dia_mao_de_obra_input"
+    )
+
+
+with col_mao3:
+
+    mao_de_obra = (
+
+        dias_mao_de_obra
+        * valor_dia_mao_de_obra
+
+    )
+
+    mao_de_obra = round(
+        mao_de_obra,
+        2
+    )
+
+    st.markdown(
+        f"""
+        <div class="total-mao-obra">
+            TOTAL MÃO DE OBRA<br>
+            R$ {mao_de_obra:,.2f}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+# ============================================================
+# SALVA OS VALORES ATUAIS DA MÃO DE OBRA
+# ============================================================
+
+st.session_state[
+    "dias_mao_de_obra"
+] = dias_mao_de_obra
+
+
+st.session_state[
+    "valor_dia_mao_de_obra"
+] = valor_dia_mao_de_obra
 
 
 # ============================================================
@@ -1121,6 +1284,12 @@ if st.button(
 
         "total_materiais":
             total_materiais,
+
+        "dias_mao_de_obra":
+            dias_mao_de_obra,
+
+        "valor_dia_mao_de_obra":
+            valor_dia_mao_de_obra,
 
         "mao_de_obra":
             mao_de_obra,
@@ -1186,11 +1355,42 @@ st.dataframe(
 
 
 # ============================================================
+# RESUMO DA MÃO DE OBRA NA TELA
+# ============================================================
+
+col_resumo1, col_resumo2, col_resumo3 = st.columns(3)
+
+
+with col_resumo1:
+
+    st.metric(
+        "Dias de Trabalho",
+        f"{dias_mao_de_obra:.0f} dias"
+    )
+
+
+with col_resumo2:
+
+    st.metric(
+        "Valor por Dia",
+        f"R$ {valor_dia_mao_de_obra:,.2f}"
+    )
+
+
+with col_resumo3:
+
+    st.metric(
+        "Total Mão de Obra",
+        f"R$ {mao_de_obra:,.2f}"
+    )
+
+
+# ============================================================
 # SIDEBAR
 # ============================================================
 
 st.sidebar.header(
-    "💰 Custos de Instalação"
+    "💰 Resumo dos Custos"
 )
 
 st.sidebar.markdown("---")
@@ -1871,7 +2071,11 @@ def gerar_excel():
     ws.cell(
         linha_mao_obra,
         1
-    ).value = "MÃO DE OBRA"
+    ).value = (
+        "MÃO DE OBRA "
+        f"({dias_mao_de_obra:.0f} dias × "
+        f"R$ {valor_dia_mao_de_obra:,.2f}/dia)"
+    )
 
 
     ws.cell(
@@ -2098,9 +2302,9 @@ def gerar_excel():
     )
 
 
-    # ========================================================
+    # ============================================================
     # ABA MEMÓRIA DE CÁLCULO
-    # ========================================================
+    # ============================================================
 
     memoria = wb.create_sheet(
         "Memória de Cálculo"
@@ -2281,6 +2485,27 @@ def gerar_excel():
             "Área das Paredes ÷ 50",
             "un."
         ),
+
+        (
+            "Dias de Mão de Obra",
+            dias_mao_de_obra,
+            "Informado pelo usuário",
+            "dias"
+        ),
+
+        (
+            "Valor da Mão de Obra por Dia",
+            valor_dia_mao_de_obra,
+            "Informado pelo usuário",
+            "R$/dia"
+        ),
+
+        (
+            "Total Mão de Obra",
+            mao_de_obra,
+            "Dias × Valor por Dia",
+            "R$"
+        ),
     ]
 
 
@@ -2333,22 +2558,52 @@ def gerar_excel():
     # TOTAIS MEMÓRIA
     # ========================================================
 
-    memoria["A22"] = "TOTAL MATERIAIS"
-
-    memoria["B22"] = total_materiais
+    linha_total_memoria = linha + 1
 
 
-    memoria["A23"] = "MÃO DE OBRA"
-
-    memoria["B23"] = mao_de_obra
-
-
-    memoria["A24"] = "TOTAL GERAL"
-
-    memoria["B24"] = total_geral
+    memoria.cell(
+        linha_total_memoria,
+        1
+    ).value = "TOTAL MATERIAIS"
 
 
-    for linha_total in [22, 23, 24]:
+    memoria.cell(
+        linha_total_memoria,
+        2
+    ).value = total_materiais
+
+
+    memoria.cell(
+        linha_total_memoria + 1,
+        1
+    ).value = "MÃO DE OBRA"
+
+
+    memoria.cell(
+        linha_total_memoria + 1,
+        2
+    ).value = mao_de_obra
+
+
+    memoria.cell(
+        linha_total_memoria + 2,
+        1
+    ).value = "TOTAL GERAL"
+
+
+    memoria.cell(
+        linha_total_memoria + 2,
+        2
+    ).value = total_geral
+
+
+    for linha_total in [
+
+        linha_total_memoria,
+        linha_total_memoria + 1,
+        linha_total_memoria + 2
+
+    ]:
 
         memoria.cell(
             linha_total,
